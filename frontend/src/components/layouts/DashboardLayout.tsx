@@ -16,7 +16,7 @@ export default function DashboardLayout() {
 
   return (
     <div id="dashboard-root" className="h-screen flex">
-      <Sidebar className={`${sidebarIsOpen ? "flex" : "hidden md:flex"}`} />
+      <Sidebar sidebarIsOpen={sidebarIsOpen} className={`${sidebarIsOpen ? "flex" : "hidden md:flex"}`} />
       <div id="dashboard-body" className="flex-1 flex flex-col">
         <DashboardNavbar toggleSidebar={toggleSidebar} />
         <div id="notifications" />
