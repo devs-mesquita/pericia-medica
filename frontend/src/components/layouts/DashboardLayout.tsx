@@ -15,14 +15,17 @@ export default function DashboardLayout() {
   };
 
   return (
-    <div id="dashboard-root" className="h-screen flex">
-      <Sidebar sidebarIsOpen={sidebarIsOpen} className={`${sidebarIsOpen ? "flex" : "hidden md:flex"}`} />
-      <div id="dashboard-body" className="flex-1 flex flex-col">
+    <div id="dashboard-root" className="flex h-screen">
+      <Sidebar
+        sidebarIsOpen={sidebarIsOpen}
+        className={`${sidebarIsOpen ? "flex" : "hidden md:flex"}`}
+      />
+      <div id="dashboard-body" className="flex flex-1 flex-col">
         <DashboardNavbar toggleSidebar={toggleSidebar} />
         <div id="notifications" />
         <main
           id="content"
-          className="flex-1 bg-slate-200 flex items-center justify-center"
+          className="flex flex-1 items-center justify-center bg-slate-200"
         >
           <Outlet />
         </main>

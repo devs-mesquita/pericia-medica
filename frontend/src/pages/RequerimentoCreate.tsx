@@ -1,5 +1,3 @@
 export default function RequerimentoCreate() {
-  return (
-    <div>RequerimentoCreate</div>
-  )
+  return <div>RequerimentoCreate</div>;
 }

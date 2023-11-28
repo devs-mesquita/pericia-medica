@@ -9,32 +9,32 @@ export default function DashboardNavbar({
 }: DashboardNavbarProps) {
   return (
     <header id="navbar" className="relative">
-      <div className="bg-slate-500 border-b border-slate-300/50 h-[48px] text-xs md:text-sm flex items-center relative shadow-[1px_2px_2px_0px_rgb(0,0,0,0.75)] shadow-black/30 z-20">
-        <div className="p-2 flex">
+      <div className="relative z-20 flex h-[48px] items-center border-b border-slate-300/50 bg-slate-500 text-xs shadow-[1px_2px_2px_0px_rgb(0,0,0,0.75)] shadow-black/30 md:text-sm">
+        <div className="flex p-2">
           <button
             id="toggle-sidebar"
-            className="text-slate-400 rounded bg-slate-200 shadow shadow-slate-800/20"
+            className="rounded bg-slate-200 text-slate-400 shadow shadow-slate-800/20"
             onClick={toggleSidebar}
           >
             <Menu />
           </button>
         </div>
-        <h1 className="text-center flex-1">Header</h1>
+        <h1 className="flex-1 text-center">Header</h1>
         <div className="group p-2 hover:cursor-pointer">
           <button
             id="toggle-dropdown"
-            className="text-slate-400 bg-slate-200 rounded-full p-[2px]"
+            className="rounded-full bg-slate-200 p-[2px] text-slate-400"
           >
             <UserCircle2 />
             <div
               id="dropdown-menu"
-              className="absolute hidden group-hover:flex group-hover:flex-col text-slate-600 bg-slate-300 right-0 top-full text-md md:text-lg min-w-[192px] z-10"
+              className="text-md absolute right-0 top-full z-10 hidden min-w-[192px] bg-slate-300 text-slate-600 group-hover:flex group-hover:flex-col md:text-lg"
             >
-              <a className="hover:bg-slate-400 flex justify-between items-center border-b px-2 py-1">
-                Alterar Senha <KeyRound className="w-4 h-4" />
+              <a className="flex items-center justify-between border-b px-2 py-1 hover:bg-slate-400">
+                Alterar Senha <KeyRound className="h-4 w-4" />
               </a>
-              <button className="hover:bg-slate-400 flex items-center justify-between px-2 py-1">
-                Sair <LogOut className="w-4 h-4" />
+              <button className="flex items-center justify-between px-2 py-1 hover:bg-slate-400">
+                Sair <LogOut className="h-4 w-4" />
               </button>
             </div>
           </button>

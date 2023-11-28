@@ -6,12 +6,12 @@ import Footer from "../partials/Footer";
 
 export default function RegularLayout() {
   return (
-    <div className="min-h-[100vh] flex flex-col">
+    <div className="flex min-h-[100vh] flex-col">
       <RegularNavbar />
       <div id="notifications" />
       <main
         id="content"
-        className="flex-1 flex items-center justify-center bg-blue-200"
+        className="flex flex-1 items-center justify-center bg-blue-200"
       >
         <Outlet />
       </main>
