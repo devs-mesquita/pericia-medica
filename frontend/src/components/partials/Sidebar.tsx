@@ -49,7 +49,7 @@ export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
       linkList: [
         {
           title: "Link 1",
-          path: "/somewhere",
+          path: "/home",
           logo: <TvIcon className="h-5 w-5" />,
           sidebarIsOpen,
         },

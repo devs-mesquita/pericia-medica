@@ -28,7 +28,7 @@ export default function DashboardNavbar({
             <UserCircle2 />
             <div
               id="dropdown-menu"
-              className="text-md absolute right-0 top-full z-10 hidden min-w-[192px] bg-slate-300 text-slate-600 group-hover:flex group-hover:flex-col md:text-lg"
+              className="text-md absolute right-0 top-full hidden min-w-[192px] bg-slate-300 text-slate-600 group-hover:flex group-hover:flex-col md:text-lg"
             >
               <a className="flex items-center justify-between border-b px-2 py-1 hover:bg-slate-400">
                 Alterar Senha <KeyRound className="h-4 w-4" />

@@ -18,9 +18,13 @@ export default function SidebarLink({
   return (
     <NavLink
       to={path}
-      className={`flex ${className || ""} ${
-        sidebarIsOpen ? "w-[208px] px-2 py-4" : "w-[64px] flex-col p-2 text-xs"
-      } items-center hover:bg-slate-400`}
+      className={({ isActive }) =>
+        `flex ${className || ""} ${
+          sidebarIsOpen
+            ? "w-[208px] px-2 py-4"
+            : "w-[64px] flex-col p-2 text-xs"
+        } items-center ${isActive ? "bg-slate-300" : "hover:bg-slate-400"}`
+      }
     >
       {logo}{" "}
       <span className={`${sidebarIsOpen ? "ml-2" : "mt-1"}`}>{title}</span>
