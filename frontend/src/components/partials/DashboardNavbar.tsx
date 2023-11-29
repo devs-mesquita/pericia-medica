@@ -21,7 +21,7 @@ export default function DashboardNavbar({
         </div>
         <h1 className="flex-1 text-center">Header</h1>
         <div className="group p-2 hover:cursor-pointer">
-          <button
+          <nav
             id="toggle-dropdown"
             className="rounded-full bg-slate-200 p-[2px] text-slate-400"
           >
@@ -37,7 +37,7 @@ export default function DashboardNavbar({
                 Sair <LogOut className="h-4 w-4" />
               </button>
             </div>
-          </button>
+          </nav>
         </div>
       </div>
     </header>

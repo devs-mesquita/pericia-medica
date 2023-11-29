@@ -67,7 +67,7 @@ export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
       } z-20 flex flex-col bg-slate-500 text-xs shadow-[2px_38px_2px_0px_rgb(0,0,0,0.75)] shadow-black/30 md:text-sm`}
     >
       <div className="z-20 flex h-[48px] items-center justify-center border-b border-slate-300/50 p-2 shadow-[1px_2px_2px_0px_rgb(0,0,0,0.75)] shadow-black/30">
-        {sidebarIsOpen && <h2 className="text-sm">App Title</h2>}
+        <h2 className="hidden text-sm md:block">App Title</h2>
       </div>
       <div className="flex-1">
         {sidebarLinkList.map((link) => (
@@ -88,7 +88,7 @@ export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
           alt="Banner da Prefeitura de Mesquita"
           src="./banner192x64.png"
           className={`rounded-md shadow shadow-black/30 ${
-            sidebarIsOpen ? "" : "hidden"
+            sidebarIsOpen ? "hidden md:block" : "hidden"
           }`}
         />
       </div>
