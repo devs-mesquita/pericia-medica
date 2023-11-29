@@ -10,9 +10,9 @@ import RequerimentoCreate from "./pages/RequerimentoCreate";
 export default function App() {
   return (
     <Routes>
+      <Route index element={<RequerimentoCreate />} />
       {/* Regular Layout */}
       <Route path="/" element={<RegularLayout />}>
-        <Route index element={<RequerimentoCreate />} />
         <Route path="login" element={<Login />} />
       </Route>
       {/* Dashboard */}
