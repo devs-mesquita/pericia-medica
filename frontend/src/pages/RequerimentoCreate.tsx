@@ -23,7 +23,6 @@ export default function RequerimentoCreate() {
         </div>
         <div className="md:w-1/3"></div>
       </header>
-      ;
       <div id="notifications" />
       <main
         id="content"
