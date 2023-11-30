@@ -19,13 +19,11 @@ export default function SidebarLink({
     <NavLink
       to={path}
       className={({ isActive }) =>
-        `flex ${className || ""} ${
+        `flex hover:bg-black/10 ${className || ""} ${
           sidebarIsOpen
             ? "w-[80px] flex-col p-2 text-xs md:w-[208px] md:flex-row md:px-2 md:py-4"
             : "w-[80px] flex-col p-2 text-xs"
-        } items-center ${
-          isActive ? "bg-slate-300 hover:bg-slate-200" : "hover:bg-slate-400"
-        }`
+        } items-center ${isActive ? "bg-white/10 hover:bg-white/20" : ""}`
       }
     >
       {logo}{" "}

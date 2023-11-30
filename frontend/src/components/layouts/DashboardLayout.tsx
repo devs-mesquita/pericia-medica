@@ -8,7 +8,7 @@ import Footer from "../partials/Footer";
 // Navbar, Main, Footer.
 
 export default function DashboardLayout() {
-  const [sidebarIsOpen, setSidebarIsOpen] = React.useState<boolean>(false);
+  const [sidebarIsOpen, setSidebarIsOpen] = React.useState<boolean>(true);
 
   const toggleSidebar = () => {
     setSidebarIsOpen((st) => !st);

@@ -20,13 +20,11 @@ export default function App() {
         <Route
           path="home"
           element={
-            <RequireAuth loginPath="/login">
-              <Home />
-            </RequireAuth>
+            <Home />
           }
         />
       </Route>
-      <Route path="*" element={<p>Not Found</p>} />
+      <Route path="*" element={<p>404 - Página não encontrada.</p>} />
     </Routes>
   );
 }

@@ -64,9 +64,9 @@ export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
       id="sidebar"
       className={`${
         className ? className : ""
-      } z-20 flex flex-col bg-slate-500 text-xs shadow-[2px_38px_2px_0px_rgb(0,0,0,0.75)] shadow-black/30 md:text-sm`}
+      } z-20 flex flex-col bg-roxo text-xs text-white shadow-[2px_38px_2px_0px_rgb(0,0,0,0.75)] shadow-black/30 md:text-sm`}
     >
-      <div className="z-20 flex h-[48px] items-center justify-center border-b border-slate-300/50 p-2 shadow-[1px_2px_2px_0px_rgb(0,0,0,0.75)] shadow-black/30">
+      <div className="z-20 flex h-[48px] items-center justify-center border-b border-black/20 p-2 shadow-[1px_2px_2px_0px_rgb(0,0,0,0.75)] shadow-black/30">
         {sidebarIsOpen && (
           <h2 className="hidden text-sm md:block">App Title</h2>
         )}

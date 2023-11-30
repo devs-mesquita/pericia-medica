@@ -26,7 +26,7 @@ export default function SidebarLinkList({
         sidebarIsOpen
           ? "w-[80px] flex-col py-2 md:w-[208px] md:py-0"
           : "w-[64px] text-xs md:py-2"
-      } relative flex border-b border-slate-600/70 hover:bg-slate-400 md:w-full`}
+      } relative flex border-b border-black/20 hover:bg-black/10 md:w-full`}
       onClick={() => {
         setDropdownOpen((st) => {
           return st === listID ? -1 : listID;
@@ -59,20 +59,18 @@ export default function SidebarLinkList({
         ${dropdownIsOpen ? "block" : "hidden"}
         ${
           sidebarIsOpen
-            ? "absolute left-full top-0 md:static"
-            : "absolute left-full top-0"
-        }
-         bg-slate-500
-        `}
+            ? "absolute left-full top-0 bg-white/5 md:static"
+            : "absolute left-full top-0 md:bg-roxo"
+        }`}
       >
         {linkList.map((link, i) => (
           <SidebarLink
             className={`py-2 
-            ${i === linkList.length - 1 ? "" : "border-b border-slate-600/70"}
+            ${i === linkList.length - 1 ? "" : "border-b border-black/20"}
             ${
               i === 0 && sidebarIsOpen
                 ? "md:border-t"
-                : "border-slate-600/70 md:border-l"
+                : "border-black/20 md:border-l"
             }
             ${
               sidebarIsOpen
@@ -90,7 +88,7 @@ export default function SidebarLinkList({
     </button>
   ) : (
     <SidebarLink
-      className="border-b border-slate-600/70"
+      className="border-b border-black/20"
       sidebarIsOpen={sidebarIsOpen}
       logo={linkList[0].logo}
       path={linkList[0].path}
