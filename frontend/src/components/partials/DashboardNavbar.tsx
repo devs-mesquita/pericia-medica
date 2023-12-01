@@ -41,18 +41,18 @@ export default function DashboardNavbar({
             <UserCircle2 />
             <div
               id="dropdown-menu"
-              className="text-md absolute right-0 top-full hidden min-w-[192px] bg-slate-300 text-slate-600 group-hover:flex group-hover:flex-col md:text-lg"
+              className="text-md absolute right-0 top-full hidden min-w-[192px] border border-black/20 bg-slate-200 text-slate-600 shadow shadow-black/20 group-hover:flex group-hover:flex-col md:text-lg"
             >
               <Link
                 to="/changepassword"
-                className="flex items-center justify-between border-b px-2 py-1 hover:bg-slate-400"
+                className="flex items-center justify-between border-b px-2 py-1 hover:bg-slate-300"
                 title="Alterar senha."
               >
                 Alterar Senha <KeyRound className="h-4 w-4" />
               </Link>
               <button
                 onClick={handleSignOut}
-                className="flex items-center justify-between px-2 py-1 hover:bg-slate-400"
+                className="flex items-center justify-between px-2 py-1 hover:bg-slate-300"
                 title="Sair do sistema."
               >
                 Sair <LogOut className="h-4 w-4" />
