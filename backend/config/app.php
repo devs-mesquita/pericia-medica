@@ -184,5 +184,5 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
-
+    'user_default_password' => env('USER_DEFAULT_PASSWORD', ''),
 ];
