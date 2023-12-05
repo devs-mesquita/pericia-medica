@@ -26,7 +26,7 @@ class AuthController extends Controller
           ], 401);
       }
 
-      $user = User::with('setor')->find(Auth::id());
+      $user = User::find(Auth::id());
       return response()->json([
           'user' => $user,
           'default_password' => Hash::check(config('app.user_default_password', ''), $user->password),
@@ -97,7 +97,7 @@ class AuthController extends Controller
   public function refresh()
   {
       return response()->json([
-          'user' => User::with('setor')->find(Auth::id()),
+          'user' => User::find(Auth::id()),
           'authorization' => [
               'token' => auth()->refresh(),
               'type' => 'bearer',
@@ -107,7 +107,7 @@ class AuthController extends Controller
   }
 
   public function resetPassword(Request $request) {
-    $user = User::with('setor')->find($request?->user_id);
+    $user = User::find($request?->user_id);
 
     if ($user->nivel === "Super-Admin" && in_array(auth()->user()->nivel(), ["Admin", "User"])) {
       return response()->json([
@@ -143,7 +143,7 @@ class AuthController extends Controller
       ], 400);
     }
     
-    $user = User::with('setor')->find(auth()->user()->id);
+    $user = User::find(auth()->user()->id);
 
     if ($user === null) {
       return response()->json([
