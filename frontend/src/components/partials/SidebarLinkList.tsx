@@ -59,7 +59,7 @@ export default function SidebarLinkList({
         ${dropdownIsOpen ? "block" : "hidden"}
         ${
           sidebarIsOpen
-            ? "absolute left-full top-0 bg-white/5 md:static"
+            ? "absolute left-full top-0 bg-roxo md:static"
             : "absolute left-full top-0 md:bg-roxo"
         }`}
       >

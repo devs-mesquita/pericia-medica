@@ -18,9 +18,11 @@ export default function App() {
       {/* Dashboard */}
       <Route path="/" element={<DashboardLayout />}>
         <Route
-          path="home"
+          path="/home"
           element={
-            <Home />
+            <RequireAuth loginPath="/login">
+              <Home />
+            </RequireAuth>
           }
         />
       </Route>
