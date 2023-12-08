@@ -1,24 +1,24 @@
-version: '3.8'
+version: "3.8"
 services:
-  mysql:
-    image: mysql:8
-    environment:
-      - MYSQL_ROOT_PASSWORD=secret
-    volumes:
-      - ponto_db:/var/lib/mysql
-    ports:
-      - "3306:3306"
-    restart: always
+    mysql:
+        image: mysql:8
+        environment:
+            - MYSQL_ROOT_PASSWORD=secret
+        volumes:
+            - pericia_medica_db:/var/lib/mysql
+        ports:
+            - "3306:3306"
+        restart: always
 
-  backend:
-    depends_on:
-      - mysql
-    build: ./
-    ports:
-      - "3001:80"
-    volumes:
-      - ./storage:/var/www/html/storage:delegated
-    restart: always
+    backend:
+        depends_on:
+            - mysql
+        build: ./
+        ports:
+            - "3001:80"
+        volumes:
+            - ./storage:/var/www/html/storage:delegated
+        restart: always
 
 volumes:
-  ponto_db:
+    pericia_medica_db:

@@ -1,14 +1,43 @@
+import React from "react";
 import InputMask from "react-input-mask";
 import Footer from "@/components/partials/Footer";
 
+type RequerimentoForm = {
+  nome: string;
+  matricula: string;
+  lotacao: string;
+  email: string;
+  inicio_expediente: string;
+  fim_expediente: string;
+  data_atestado: string;
+  acumula_matricula: string;
+};
+
 export default function RequerimentoCreate() {
+  const [form, setForm] = React.useState<RequerimentoForm>({
+    nome: "",
+    lotacao: "",
+    inicio_expediente: "",
+    fim_expediente: "",
+    email: "",
+    data_atestado: "",
+    matricula: "",
+    acumula_matricula: "",
+  });
+
+  const handleChange = (
+    evt: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    setForm((st) => ({ ...st, [evt.target.name]: evt.target.value }));
+  };
+
   return (
     <div className="flex min-h-[100vh] flex-col">
       <header
         id="navbar"
         className="relative z-20 flex items-center justify-between bg-slate-100 p-2 text-xs shadow-[1px_2px_2px_0px_rgb(0,0,0,0.75)] shadow-black/20 md:text-sm"
       >
-        <div className="w-1/2 md:w-1/3">
+        <div className="flex w-1/2 justify-center md:w-1/3">
           <img
             src="/banner192x64.png"
             alt="Banner da Prefeitura de Mesquita"
@@ -28,7 +57,7 @@ export default function RequerimentoCreate() {
       <div id="notifications" />
       <main
         id="content"
-        className="flex flex-1 items-center justify-center bg-slate-100"
+        className="flex flex-1 items-start justify-center bg-slate-100 py-6"
       >
         <form className="flex w-[325px] flex-col rounded-lg shadow-sm shadow-black/30 md:w-[850px]">
           <div className="rounded-t-md border border-b-0 border-black/20 bg-slate-200 p-2">
@@ -36,19 +65,26 @@ export default function RequerimentoCreate() {
               Requerimento de Perícia Médica
             </h1>
           </div>
-          <div className="border border-black/20 bg-slate-100 p-2">
-            <div>
-              <div className="flex flex-col">
+          <div className="flex flex-col gap-4 border border-black/20 bg-slate-100 px-3 py-2 md:gap-5">
+            <div className="flex flex-col gap-4 md:flex-row">
+              <div className="flex flex-1 flex-col gap-1">
                 <label htmlFor="">Nome Completo:</label>
                 <input
+                  onChange={handleChange}
+                  className="rounded border border-slate-300 p-2 outline-none focus:border-slate-500"
                   type="text"
+                  name="nome"
                   placeholder="Nome Completo do Servidor"
                   required
                 />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-1 flex-col gap-1">
                 <label htmlFor="">Matrícula (6 dígitos):</label>
                 <InputMask
+                  onChange={handleChange}
+                  maskChar=""
+                  name="matricula"
+                  className="rounded border border-slate-300 p-2 outline-none focus:border-slate-500"
                   mask="999.999"
                   type="text"
                   placeholder="000.000"
@@ -56,10 +92,16 @@ export default function RequerimentoCreate() {
                 />
               </div>
             </div>
-            <div>
-              <div className="flex flex-col">
-                <label htmlFor="">Local de Lotação</label>
-                <select name="" id="" required>
+            <div className="flex flex-col gap-4 md:flex-row">
+              <div className="flex flex-1 flex-col gap-1">
+                <label htmlFor="lotacao">Local de Lotação</label>
+                <select
+                  name="lotacao"
+                  id="lotacao"
+                  className="w-full rounded border border-slate-300 p-2 outline-none focus:border-slate-500"
+                  onChange={handleChange}
+                  required
+                >
                   <option value="" selected>
                     Selecione a Unidade Organizacional
                   </option>
@@ -188,103 +230,149 @@ export default function RequerimentoCreate() {
                   </option>
                 </select>
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-1 flex-col gap-1">
                 <label htmlFor="">Horário de Trabalho no Município:</label>
-                <select name="" id="" required>
-                  <option value="">Início do Expediente</option>
-                  <option value="00:00">00:00</option>
-                  <option value="01:00">01:00</option>
-                  <option value="02:00">02:00</option>
-                  <option value="03:00">03:00</option>
-                  <option value="04:00">04:00</option>
-                  <option value="05:00">05:00</option>
-                  <option value="06:00">06:00</option>
-                  <option value="07:00">07:00</option>
-                  <option value="08:00">08:00</option>
-                  <option value="09:00">09:00</option>
-                  <option value="10:00">10:00</option>
-                  <option value="11:00">11:00</option>
-                  <option value="12:00">12:00</option>
-                  <option value="13:00">13:00</option>
-                  <option value="14:00">14:00</option>
-                  <option value="15:00">15:00</option>
-                  <option value="16:00">16:00</option>
-                  <option value="17:00">17:00</option>
-                  <option value="18:00">18:00</option>
-                  <option value="19:00">19:00</option>
-                  <option value="20:00">20:00</option>
-                  <option value="21:00">21:00</option>
-                  <option value="22:00">22:00</option>
-                  <option value="23:00">23:00</option>
-                </select>
-                <select name="" id="" required>
-                  <option value="">Fim do Expediente</option>
-                  <option value="00:00">00:00</option>
-                  <option value="01:00">01:00</option>
-                  <option value="02:00">02:00</option>
-                  <option value="03:00">03:00</option>
-                  <option value="04:00">04:00</option>
-                  <option value="05:00">05:00</option>
-                  <option value="06:00">06:00</option>
-                  <option value="07:00">07:00</option>
-                  <option value="08:00">08:00</option>
-                  <option value="09:00">09:00</option>
-                  <option value="10:00">10:00</option>
-                  <option value="11:00">11:00</option>
-                  <option value="12:00">12:00</option>
-                  <option value="13:00">13:00</option>
-                  <option value="14:00">14:00</option>
-                  <option value="15:00">15:00</option>
-                  <option value="16:00">16:00</option>
-                  <option value="17:00">17:00</option>
-                  <option value="18:00">18:00</option>
-                  <option value="19:00">19:00</option>
-                  <option value="20:00">20:00</option>
-                  <option value="21:00">21:00</option>
-                  <option value="22:00">22:00</option>
-                  <option value="23:00">23:00</option>
-                </select>
+                <div className="flex flex-col gap-2 md:flex-row">
+                  <select
+                    name="inicio_expediente"
+                    required
+                    className="w-full rounded border border-slate-300 p-2 outline-none focus:border-slate-500"
+                    onChange={handleChange}
+                  >
+                    <option value="">Início do Expediente</option>
+                    <option value="00:00">00:00</option>
+                    <option value="01:00">01:00</option>
+                    <option value="02:00">02:00</option>
+                    <option value="03:00">03:00</option>
+                    <option value="04:00">04:00</option>
+                    <option value="05:00">05:00</option>
+                    <option value="06:00">06:00</option>
+                    <option value="07:00">07:00</option>
+                    <option value="08:00">08:00</option>
+                    <option value="09:00">09:00</option>
+                    <option value="10:00">10:00</option>
+                    <option value="11:00">11:00</option>
+                    <option value="12:00">12:00</option>
+                    <option value="13:00">13:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="15:00">15:00</option>
+                    <option value="16:00">16:00</option>
+                    <option value="17:00">17:00</option>
+                    <option value="18:00">18:00</option>
+                    <option value="19:00">19:00</option>
+                    <option value="20:00">20:00</option>
+                    <option value="21:00">21:00</option>
+                    <option value="22:00">22:00</option>
+                    <option value="23:00">23:00</option>
+                  </select>
+                  <select
+                    name="fim_expediente"
+                    required
+                    className="w-full rounded border border-slate-300 p-2 outline-none focus:border-slate-500"
+                    onChange={handleChange}
+                  >
+                    <option value="">Fim do Expediente</option>
+                    <option value="00:00">00:00</option>
+                    <option value="01:00">01:00</option>
+                    <option value="02:00">02:00</option>
+                    <option value="03:00">03:00</option>
+                    <option value="04:00">04:00</option>
+                    <option value="05:00">05:00</option>
+                    <option value="06:00">06:00</option>
+                    <option value="07:00">07:00</option>
+                    <option value="08:00">08:00</option>
+                    <option value="09:00">09:00</option>
+                    <option value="10:00">10:00</option>
+                    <option value="11:00">11:00</option>
+                    <option value="12:00">12:00</option>
+                    <option value="13:00">13:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="15:00">15:00</option>
+                    <option value="16:00">16:00</option>
+                    <option value="17:00">17:00</option>
+                    <option value="18:00">18:00</option>
+                    <option value="19:00">19:00</option>
+                    <option value="20:00">20:00</option>
+                    <option value="21:00">21:00</option>
+                    <option value="22:00">22:00</option>
+                    <option value="23:00">23:00</option>
+                  </select>
+                </div>
               </div>
             </div>
-            <div>
-              <div className="flex flex-col">
+            <div className="flex flex-col gap-4 md:flex-row">
+              <div className="flex flex-1 flex-col gap-1">
                 <label htmlFor="">Data Inicial do Atestado:</label>
-                <input type="text" placeholder="dd/mm/aaaa" required />
-              </div>
-              <div className="flex flex-col">
-                <label htmlFor="">E-mail:</label>
                 <input
-                  type="email"
-                  placeholder="E-mail para contato"
+                  onChange={handleChange}
+                  name="data_atestado"
+                  className="rounded border border-slate-300 p-2 outline-none focus:border-slate-500"
+                  type="date"
+                  placeholder="dd/mm/aaaa"
                   required
                 />
               </div>
+              <div className="flex flex-1 flex-col gap-1">
+                <label htmlFor="">E-mail:</label>
+                <input
+                  onChange={handleChange}
+                  name="email"
+                  type="email"
+                  placeholder="E-mail para contato"
+                  required
+                  className="rounded border border-slate-300 p-2 outline-none focus:border-slate-500"
+                />
+              </div>
             </div>
-            <div>
-              <div>
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col">
                 <label htmlFor="">Imagem/Documento do Atestado Médico:</label>
-                <span>
+                <span className="text-xs text-red-500">
                   * Certifique-se de que a foto/documento do atestado é legível.
                 </span>
                 <input type="file" name="" id="" />
               </div>
-              <div>
+              <div className="flex flex-col gap-2 md:flex-row md:gap-8">
                 <label htmlFor="">
-                  Possui outro vínculo, ou acumula matrícula em outro loca?
+                  Possui outro vínculo, ou acumula matrícula em outro local?
                 </label>
-                <input type="radio" name="acumula_matricula" value="0" id="" />
-                <input type="radio" name="acumula_matricula" value="1" id="" />
+                <div className="flex gap-8">
+                  <div className="flex gap-2">
+                    <input
+                      onChange={handleChange}
+                      type="radio"
+                      id="acumua_matricula_nao"
+                      name="acumula_matricula"
+                      checked={form.acumula_matricula === "nao"}
+                      value="nao"
+                    />
+                    <label htmlFor="acumua_matricula_nao">Não</label>
+                  </div>
+                  <div className="flex gap-2">
+                    <input
+                      onChange={handleChange}
+                      value="sim"
+                      type="radio"
+                      id="acumua_matricula_sim"
+                      name="acumula_matricula"
+                      checked={form.acumula_matricula === "sim"}
+                    />
+                    <label htmlFor="acumua_matricula_sim">Sim</label>
+                  </div>
+                </div>
               </div>
-              <div>
-                <label htmlFor="">
-                  Imagem/Documento do Comprovante de Afastamento:
-                </label>
-                <span>
-                  * Caso o servidor possua outro vínculo ou acumule matrícula,
-                  incluir comprovante de afastamento.
-                </span>
-                <input type="file" name="" id="" />
-              </div>
+              {form.acumula_matricula === "sim" && (
+                <div className="flex flex-col">
+                  <label htmlFor="">
+                    Imagem/Documento do Comprovante de Afastamento:
+                  </label>
+                  <span className="text-xs text-red-500">
+                    * Caso o servidor possua outro vínculo ou acumule matrícula,
+                    incluir comprovante de afastamento.
+                  </span>
+                  <input type="file" name="" id="" />
+                </div>
+              )}
             </div>
           </div>
           <div className="flex justify-center rounded-b-md border border-t-0 border-black/20 bg-slate-200 p-2">
