@@ -41,7 +41,7 @@ export default function RequerimentoCreate() {
           <img
             src="/banner192x64.png"
             alt="Banner da Prefeitura de Mesquita"
-            className="rounded-lg shadow shadow-black/20"
+            className="w-[180px] rounded-lg shadow shadow-black/20 md:w-[192px] md:rounded-lg"
           />
         </div>
         <div className="flex w-1/2 justify-center md:w-1/3">

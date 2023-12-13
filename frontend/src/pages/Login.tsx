@@ -6,6 +6,7 @@ import { useSignIn, useIsAuthenticated } from "react-auth-kit";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useAtom } from "jotai";
 import { notificationAtom } from "@/store";
+import { LoaderIcon } from "lucide-react";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -24,10 +25,14 @@ type AuthData = {
   user: User;
 };
 
-const defaultMessageKeys = ["wrong-credentials"];
+const defaultMessageKeys = ["unauthorized"];
 const defaultMessages: Record<string, AppNotification> = {
-  "invalid-credentials": {
+  unauthorized: {
     message: "Credenciais inválidas.",
+    type: "error",
+  },
+  error: {
+    message: "Ocorreu um erro.",
     type: "error",
   },
 };
@@ -49,6 +54,12 @@ export default function Login() {
           Accept: "application/json",
         },
       });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw err;
+      }
+
       return (await res.json()) as AuthData;
     },
     onError: (error) => {
@@ -107,6 +118,7 @@ export default function Login() {
         <div className="mb-4 flex flex-col">
           <label htmlFor="email">Email:</label>
           <input
+            disabled={loginMutation.isPending}
             required
             onChange={handleChange}
             type="email"
@@ -119,6 +131,7 @@ export default function Login() {
         <div className="mb-2 flex flex-col">
           <label htmlFor="password">Senha:</label>
           <input
+            disabled={loginMutation.isPending}
             required
             onChange={handleChange}
             type="password"
@@ -129,9 +142,16 @@ export default function Login() {
           />
         </div>
       </div>
-      <div className="flex justify-center rounded-b-xl border-t border-black/10 p-2 shadow shadow-black/20">
-        <button className="rounded-3xl border border-slate-600/20 bg-slate-600/20 px-4 py-1 text-center shadow shadow-black/30 outline-none hover:bg-slate-700/30 focus:border-indigo-600">
-          Login
+      <div className="shadow-black20 flex justify-center rounded-b-xl border-t border-black/10 p-2 shadow">
+        <button
+          disabled={loginMutation.isPending}
+          className="rounded-3xl border border-slate-600/20 bg-slate-400/20 px-4 py-1 text-center shadow shadow-black/30 outline-none hover:bg-slate-500/30 focus:border-indigo-600 disabled:cursor-not-allowed disabled:hover:bg-red-100/50"
+        >
+          {loginMutation.isPending ? (
+            <LoaderIcon className="duration-2000 animate-spin text-slate-700" />
+          ) : (
+            "Login"
+          )}
         </button>
       </div>
     </form>

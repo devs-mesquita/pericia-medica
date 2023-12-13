@@ -20,7 +20,7 @@ export default function DashboardNavbar({
 
   return (
     <header id="navbar" className="relative">
-      <div className="relative z-20 flex h-[48px] items-center border-b border-black/20 bg-slate-200 text-xs shadow-[1px_2px_2px_0px_rgb(0,0,0,0.75)] shadow-black/30 md:text-sm">
+      <div className="relative z-20 flex h-[48px] items-center justify-between border-b border-black/20 bg-slate-200 text-xs shadow-[1px_2px_2px_0px_rgb(0,0,0,0.75)] shadow-black/30 md:text-sm">
         <div className="flex p-2">
           <button
             id="toggle-sidebar"
@@ -31,8 +31,7 @@ export default function DashboardNavbar({
             <Menu />
           </button>
         </div>
-        <h1 className="flex-1 text-center">Header</h1>
-        <div className="group p-2 hover:cursor-pointer">
+        <div className="group flex h-full items-center p-2 hover:cursor-pointer">
           <nav
             title="Configurações de usuário."
             id="toggle-dropdown"

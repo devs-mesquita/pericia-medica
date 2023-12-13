@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "../partials/Sidebar";
 import DashboardNavbar from "../partials/DashboardNavbar";
 import Footer from "../partials/Footer";
+import TopNotification from "../ui/TopNotification";
 
 // Sidebar.
 // Navbar, Main, Footer.
@@ -22,7 +23,7 @@ export default function DashboardLayout() {
       />
       <div id="dashboard-body" className="flex flex-1 flex-col">
         <DashboardNavbar toggleSidebar={toggleSidebar} />
-        <div id="notifications" />
+        <TopNotification />
         <main
           id="content"
           className="flex flex-1 items-center justify-center bg-slate-200"

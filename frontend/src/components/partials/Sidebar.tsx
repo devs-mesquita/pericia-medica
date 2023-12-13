@@ -68,7 +68,9 @@ export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
     >
       <div className="z-20 flex h-[48px] items-center justify-center border-b border-black/20 p-2 shadow-[1px_2px_2px_0px_rgb(0,0,0,0.75)] shadow-black/30">
         {sidebarIsOpen && (
-          <h2 className="hidden text-sm md:block">App Title</h2>
+          <h2 className="hidden text-sm font-bold tracking-wide md:block">
+            Perícia Médica
+          </h2>
         )}
       </div>
       <div className="flex-1">

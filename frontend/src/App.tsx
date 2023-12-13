@@ -16,15 +16,15 @@ export default function App() {
         <Route path="login" element={<Login />} />
       </Route>
       {/* Dashboard */}
-      <Route path="/" element={<DashboardLayout />}>
-        <Route
-          path="/home"
-          element={
-            <RequireAuth loginPath="/login">
-              <Home />
-            </RequireAuth>
-          }
-        />
+      <Route
+        path="/"
+        element={
+          <RequireAuth loginPath="/login">
+            <DashboardLayout />
+          </RequireAuth>
+        }
+      >
+        <Route path="home" element={<Home />} />
       </Route>
       <Route path="*" element={<p>404 - Página não encontrada.</p>} />
     </Routes>
