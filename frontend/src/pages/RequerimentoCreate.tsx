@@ -1,9 +1,10 @@
 import React from "react";
 import InputMask from "react-input-mask";
 import Footer from "@/components/partials/Footer";
+import FileInput from "@/components/ui/FileInput";
 
 type RequerimentoForm = {
-  nome: string;
+  name: string;
   matricula: string;
   lotacao: string;
   email: string;
@@ -15,7 +16,7 @@ type RequerimentoForm = {
 
 export default function RequerimentoCreate() {
   const [form, setForm] = React.useState<RequerimentoForm>({
-    nome: "",
+    name: "",
     lotacao: "",
     inicio_expediente: "",
     fim_expediente: "",
@@ -70,10 +71,11 @@ export default function RequerimentoCreate() {
               <div className="flex flex-1 flex-col gap-1">
                 <label htmlFor="">Nome Completo:</label>
                 <input
+                  value={form.name}
                   onChange={handleChange}
                   className="rounded border border-slate-300 p-2 outline-none focus:border-slate-500"
                   type="text"
-                  name="nome"
+                  name="name"
                   placeholder="Nome Completo do Servidor"
                   required
                 />
@@ -81,6 +83,7 @@ export default function RequerimentoCreate() {
               <div className="flex flex-1 flex-col gap-1">
                 <label htmlFor="">Matrícula (6 dígitos):</label>
                 <InputMask
+                  value={form.matricula}
                   onChange={handleChange}
                   maskChar=""
                   name="matricula"
@@ -96,15 +99,14 @@ export default function RequerimentoCreate() {
               <div className="flex flex-1 flex-col gap-1">
                 <label htmlFor="lotacao">Local de Lotação</label>
                 <select
+                  defaultValue={form.lotacao}
                   name="lotacao"
                   id="lotacao"
                   className="w-full rounded border border-slate-300 p-2 outline-none focus:border-slate-500"
                   onChange={handleChange}
                   required
                 >
-                  <option value="" selected>
-                    Selecione a Unidade Organizacional
-                  </option>
+                  <option value="">Selecione a Unidade Organizacional</option>
                   <option value="Arquivo Público Municipal">
                     Arquivo Público Municipal
                   </option>
@@ -235,6 +237,7 @@ export default function RequerimentoCreate() {
                 <div className="flex flex-col gap-2 md:flex-row">
                   <select
                     name="inicio_expediente"
+                    defaultValue={form.inicio_expediente}
                     required
                     className="w-full rounded border border-slate-300 p-2 outline-none focus:border-slate-500"
                     onChange={handleChange}
@@ -266,6 +269,7 @@ export default function RequerimentoCreate() {
                     <option value="23:00">23:00</option>
                   </select>
                   <select
+                    defaultValue={form.fim_expediente}
                     name="fim_expediente"
                     required
                     className="w-full rounded border border-slate-300 p-2 outline-none focus:border-slate-500"
@@ -305,6 +309,7 @@ export default function RequerimentoCreate() {
                 <label htmlFor="">Data Inicial do Atestado:</label>
                 <input
                   onChange={handleChange}
+                  value={form.data_atestado}
                   name="data_atestado"
                   className="rounded border border-slate-300 p-2 outline-none focus:border-slate-500"
                   type="date"
@@ -315,6 +320,7 @@ export default function RequerimentoCreate() {
               <div className="flex flex-1 flex-col gap-1">
                 <label htmlFor="">E-mail:</label>
                 <input
+                  value={form.email}
                   onChange={handleChange}
                   name="email"
                   type="email"
@@ -330,7 +336,11 @@ export default function RequerimentoCreate() {
                 <span className="text-xs text-red-500">
                   * Certifique-se de que a foto/documento do atestado é legível.
                 </span>
-                <input type="file" name="" id="" />
+                <FileInput
+                  inputName="documento_atestado"
+                  fileTypes={["image"]}
+                  maxFileSizeKb={8000}
+                />
               </div>
               <div className="flex flex-col gap-2 md:flex-row md:gap-8">
                 <label htmlFor="">
