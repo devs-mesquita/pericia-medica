@@ -5,49 +5,88 @@ type FileInputProps = {
   fileTypes?: string[];
   maxFileSizeKb?: number;
   inputName: string;
+  files: File[];
+  setFiles: React.Dispatch<React.SetStateAction<File[]>>;
 };
-
-const errorMessages = {
-  maxSize: "Arquivo ultrapassa o limite de tamanho permitido:",
-  fileType: "Tipo de arquivo inválido, insira apenas imagem ou documento:",
-} as const;
 
 export default function FileInput({
   maxFileSizeKb = 8000,
+  files,
+  setFiles,
   fileTypes = [
-    "image",
-    "png",
-    "jpg",
-    "jpeg",
-    "doc",
-    "docx",
-    "xml",
+    "image/*",
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".doc",
+    ".docx",
+    ".xml",
+    ".pdf",
     "application/msword",
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    "pdf",
   ],
   inputName,
 }: FileInputProps) {
-  const [errorMessageKey, setErrorMessageKey] = React.useState<
-    "" | "maxSize" | "fileType"
-  >("");
+  const [errorMessages, setErrorMessages] = React.useState<
+    Set<"maxSize" | "fileType">
+  >(new Set([]));
 
-  const [files, setFiles] = React.useState<File[]>([]);
-  const [failedFilenames, setFailedFilenames] = React.useState<string[]>([
-    "teste.exe",
-  ]);
+  const [failedFilenames, setFailedFilenames] = React.useState<string[]>([]);
 
-  const handleChange = (evt: React.ChangeEvent) => {
+  const ERROR_MESSAGES = {
+    maxSize: `O arquivo ultrapassa o limite de tamanho permitido (${
+      maxFileSizeKb / 1000
+    }Mb).`,
+    fileType: "O tipo do arquivo é inválido.",
+  } as const;
+
+  const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     evt.preventDefault();
-    // todo: handle input file logic (check against max size, file types, add to the files list).
+    if (!evt.target.files || !evt.target.files[0]) return;
+
+    // Check against max size
+    // Check allowed file types
+    // Append to the files list
+    setErrorMessages(new Set([]));
+    for (let file of evt.target.files) {
+      if (file.size > maxFileSizeKb * 1000) {
+        setFailedFilenames((st) => [...st, file.name]);
+        setErrorMessages((st) => {
+          return new Set([...st, "maxSize"]);
+        });
+        continue;
+      }
+      if (
+        !fileTypes.some((fileType) => {
+          return file.type.match(fileType);
+        })
+      ) {
+        console.log(file.type);
+        setFailedFilenames((st) => [...st, file.name]);
+        setErrorMessages((st) => {
+          return new Set([...st, "fileType"]);
+        });
+        continue;
+      }
+      setFiles((st) => [...st, file]);
+    }
+  };
+
+  const removeFileAt = (idx: number) => {
+    setFiles((st) => st.filter((_v, i) => idx !== i));
+    setErrorMessages(new Set([]));
+  };
+  const removeFailedFileAt = (idx: number) => {
+    setFailedFilenames((st) => st.filter((_v, i) => idx !== i));
+    setErrorMessages(new Set([]));
   };
 
   return (
     <div className="flex flex-col justify-start">
-      <div className="mb-2 flex">
+      <div className="flex">
         <label
           htmlFor={inputName}
-          className="flex items-center justify-center gap-2 rounded bg-blue-500 px-2 py-1 text-white"
+          className="flex items-center justify-center gap-2 rounded bg-blue-500 px-2 py-1 text-white hover:bg-blue-600"
           role="button"
         >
           <FileInputIcon className="h-5 w-5" />
@@ -57,38 +96,68 @@ export default function FileInput({
           onChange={handleChange}
           type="file"
           name="atestado[]"
-          id="atestado"
+          id={inputName}
           className="invisible absolute"
           accept={fileTypes.join(",")}
         />
       </div>
-      {failedFilenames.length > 0 && (
-        <div>
-          <div className="text-red-500">
-            {errorMessageKey && errorMessages[errorMessageKey]}
-            {failedFilenames.map((failedFilename) => (
-              <div className="flex items-center gap-2 rounded border border-red-600 px-2 py-1">
-                {failedFilename} <XIcon className="h-4 w-4" />
-              </div>
-            ))}
-            <p className="mb-2 text-xs text-red-500">
-              * Atenção: Os arquivos destacados em vermelho não serão enviados.
-            </p>
-          </div>
-        </div>
-      )}
-      {files.length > 0 && (
-        <div
-          id="atestados-list"
-          className="rounded border border-slate-300 bg-slate-200 p-2"
-        >
-          {files.map((file) => (
-            <div className="flex items-center gap-2 rounded border border-slate-300 px-2 py-1">
-              {file.name} <XIcon className="h-4 w-4" />
-            </div>
+      {[...errorMessages.entries()].length > 0 && (
+        <>
+          {[...errorMessages.values()].map((msg) => (
+            <span
+              key={crypto.randomUUID()}
+              className="my-2 rounded bg-red-200 p-2 text-sm text-red-500"
+            >
+              {ERROR_MESSAGES[msg]}
+            </span>
           ))}
-        </div>
+        </>
       )}
+      {failedFilenames.length > 0 && (
+        <p className="text-xs text-red-500">
+          * Atenção: Os arquivos destacados em vermelho não serão enviados.
+        </p>
+      )}
+      <div className="mt-2 flex items-center gap-2">
+        {files.length > 0 && (
+          <>
+            {files.map((file, i) => (
+              <span
+                key={crypto.randomUUID()}
+                className="flex items-center gap-2 rounded border border-slate-400 p-1 pl-2 text-sm"
+              >
+                {file.name}{" "}
+                <button
+                  onClick={() => removeFileAt(i)}
+                  type="button"
+                  className="rounded p-1 hover:bg-slate-300"
+                >
+                  <XIcon className="h-4 w-4" />
+                </button>
+              </span>
+            ))}
+          </>
+        )}
+        {failedFilenames.length > 0 && (
+          <>
+            {failedFilenames.map((failedFilename, i) => (
+              <span
+                key={crypto.randomUUID()}
+                className="flex items-center gap-2 rounded border border-red-600 p-1 pl-2 text-sm text-red-500"
+              >
+                {failedFilename}{" "}
+                <button
+                  onClick={() => removeFailedFileAt(i)}
+                  type="button"
+                  className="rounded p-1 hover:bg-red-200"
+                >
+                  <XIcon className="h-4 w-4" />
+                </button>
+              </span>
+            ))}
+          </>
+        )}
+      </div>
     </div>
   );
 }

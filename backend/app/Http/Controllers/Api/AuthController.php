@@ -99,7 +99,7 @@ class AuthController extends Controller
       return response()->json([
           'user' => User::find(Auth::id()),
           'authorization' => [
-              'token' => auth()->refresh(),
+              'token' => Auth::refresh(),
               'type' => 'bearer',
               'expires_in' => 60 * 24 * 365.25
           ]
@@ -109,7 +109,7 @@ class AuthController extends Controller
   public function resetPassword(Request $request) {
     $user = User::find($request?->user_id);
 
-    if ($user->nivel === "Super-Admin" && in_array(auth()->user()->nivel(), ["Admin", "User"])) {
+    if ($user->nivel === "Super-Admin" && in_array(Auth::user()->nivel(), ["Admin", "User"])) {
       return response()->json([
         'message' => 'unauthorized',
       ], 403);
@@ -123,7 +123,7 @@ class AuthController extends Controller
     
     $user->password = Hash::make(config('app.user_default_password', ''));
     
-    if(auth()->user()->setor_id !== $user->setor_id && auth()->user()->nivel !== 'Super-Admin') {
+    if(Auth::user()->setor_id !== $user->setor_id && Auth::user()->nivel !== 'Super-Admin') {
       return response()->json([
         'message' => 'unauthorized'
       ], 403);
@@ -143,7 +143,7 @@ class AuthController extends Controller
       ], 400);
     }
     
-    $user = User::find(auth()->user()->id);
+    $user = User::find(Auth::user()->id);
 
     if ($user === null) {
       return response()->json([
@@ -151,7 +151,7 @@ class AuthController extends Controller
       ], 400);
     }
 
-    if (!Hash::check($request->currentPassword, auth()->user()->password)) {
+    if (!Hash::check($request->currentPassword, Auth::user()->password)) {
       return response()->json([
         'message' => 'wrong-current-password',
       ], 403);
@@ -167,7 +167,7 @@ class AuthController extends Controller
 
   public function checkDefaultPassword(Request $request)
   {
-    $user = User::find(auth()?->user()?->id);
+    $user = User::find(Auth::user()?->id);
       
     if ($user === null) {
       return response()->json([

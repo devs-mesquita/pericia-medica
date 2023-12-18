@@ -26,6 +26,8 @@ export default function RequerimentoCreate() {
     acumula_matricula: "",
   });
 
+  const [atestadoFiles, setAtestadoFiles] = React.useState<File[]>([]);
+
   const handleChange = (
     evt: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
@@ -48,7 +50,7 @@ export default function RequerimentoCreate() {
         <div className="flex w-1/2 justify-center md:w-1/3">
           <a
             href="#"
-            className="rounded-3xl bg-sky-500 p-2 text-base text-white shadow-md shadow-black/20 hover:bg-sky-600"
+            className="rounded-3xl bg-blue-500 px-4 py-2 text-base text-white shadow-md shadow-black/20 hover:bg-blue-600"
           >
             Manual de Utilização
           </a>
@@ -58,15 +60,15 @@ export default function RequerimentoCreate() {
       <div id="notifications" />
       <main
         id="content"
-        className="flex flex-1 items-start justify-center bg-slate-100 py-6"
+        className="flex flex-1 items-start justify-center bg-slate-100 px-8 py-6 md:px-0"
       >
-        <form className="flex w-[325px] flex-col rounded-lg shadow-sm shadow-black/30 md:w-[850px]">
+        <form className="flex max-w-[750px] flex-col rounded-lg shadow-sm shadow-black/30 md:w-[700px] lg:w-[975px] xl:w-[1152px]">
           <div className="rounded-t-md border border-b-0 border-black/20 bg-slate-200 p-2">
             <h1 className="text-center text-xl font-thin text-black">
               Requerimento de Perícia Médica
             </h1>
           </div>
-          <div className="flex flex-col gap-4 border border-black/20 bg-slate-100 px-3 py-2 md:gap-5">
+          <div className="flex flex-col gap-4 border border-black/20 bg-slate-100 p-4 md:gap-5">
             <div className="flex flex-col gap-4 md:flex-row">
               <div className="flex flex-1 flex-col gap-1">
                 <label htmlFor="">Nome Completo:</label>
@@ -97,7 +99,7 @@ export default function RequerimentoCreate() {
             </div>
             <div className="flex flex-col gap-4 md:flex-row">
               <div className="flex flex-1 flex-col gap-1">
-                <label htmlFor="lotacao">Local de Lotação</label>
+                <label htmlFor="lotacao">Local de Lotação:</label>
                 <select
                   defaultValue={form.lotacao}
                   name="lotacao"
@@ -333,12 +335,25 @@ export default function RequerimentoCreate() {
             <div className="flex flex-col gap-4">
               <div className="flex flex-col">
                 <label htmlFor="">Imagem/Documento do Atestado Médico:</label>
-                <span className="text-xs text-red-500">
+                <span className="mb-1 text-xs text-red-500">
                   * Certifique-se de que a foto/documento do atestado é legível.
                 </span>
                 <FileInput
+                  files={atestadoFiles}
+                  setFiles={setAtestadoFiles}
                   inputName="documento_atestado"
-                  fileTypes={["image"]}
+                  fileTypes={[
+                    "image/*",
+                    ".png",
+                    ".jpg",
+                    ".jpeg",
+                    ".doc",
+                    ".docx",
+                    ".xml",
+                    ".pdf",
+                    "application/msword",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                  ]}
                   maxFileSizeKb={8000}
                 />
               </div>
