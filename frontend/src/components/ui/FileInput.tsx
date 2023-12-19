@@ -7,6 +7,8 @@ type FileInputProps = {
   inputName: string;
   files: File[];
   setFiles: React.Dispatch<React.SetStateAction<File[]>>;
+  disabled?: boolean;
+  className?: string;
 };
 
 export default function FileInput({
@@ -26,6 +28,8 @@ export default function FileInput({
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   ],
   inputName,
+  disabled,
+  className,
 }: FileInputProps) {
   const [errorMessages, setErrorMessages] = React.useState<
     Set<"maxSize" | "fileType">
@@ -61,7 +65,6 @@ export default function FileInput({
           return file.type.match(fileType);
         })
       ) {
-        console.log(file.type);
         setFailedFilenames((st) => [...st, file.name]);
         setErrorMessages((st) => {
           return new Set([...st, "fileType"]);
@@ -86,13 +89,16 @@ export default function FileInput({
       <div className="flex">
         <label
           htmlFor={inputName}
-          className="flex items-center justify-center gap-2 rounded bg-blue-500 px-2 py-1 text-white hover:bg-blue-600"
+          className={`${
+            className || ""
+          } flex items-center justify-center gap-2 rounded bg-blue-500 px-2 py-1 text-white hover:bg-blue-600`}
           role="button"
         >
           <FileInputIcon className="h-5 w-5" />
           Adicionar Arquivo
         </label>
         <input
+          disabled={disabled}
           onChange={handleChange}
           type="file"
           name="atestado[]"
@@ -126,7 +132,8 @@ export default function FileInput({
                 key={crypto.randomUUID()}
                 className="flex items-center gap-2 rounded border border-slate-400 p-1 pl-2 text-sm"
               >
-                {file.name}{" "}
+                {file.name.slice(0, 10)}...
+                {file.name.split(".")[file.name.split(".").length - 1]}{" "}
                 <button
                   onClick={() => removeFileAt(i)}
                   type="button"
@@ -145,7 +152,12 @@ export default function FileInput({
                 key={crypto.randomUUID()}
                 className="flex items-center gap-2 rounded border border-red-600 p-1 pl-2 text-sm text-red-500"
               >
-                {failedFilename}{" "}
+                {failedFilename.slice(0, 10)}...
+                {
+                  failedFilename.split(".")[
+                    failedFilename.split(".").length - 1
+                  ]
+                }{" "}
                 <button
                   onClick={() => removeFailedFileAt(i)}
                   type="button"

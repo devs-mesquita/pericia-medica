@@ -8,7 +8,7 @@ export default function TopNotification() {
     <>
       {notification.message.length > 0 ? (
         <div
-          className={`grid grid-cols-3 px-4 py-1 font-bold ${
+          className={`grid grid-cols-[1fr_2fr_1fr] px-4 py-1 font-bold ${
             notification.type === "error"
               ? "bg-red-400 text-red-900"
               : notification.type === "success"

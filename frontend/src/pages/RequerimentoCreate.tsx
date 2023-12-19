@@ -2,6 +2,13 @@ import React from "react";
 import InputMask from "react-input-mask";
 import Footer from "@/components/partials/Footer";
 import FileInput from "@/components/ui/FileInput";
+import { useMutation } from "@tanstack/react-query";
+
+import { notificationAtom } from "@/store";
+import { useAtom } from "jotai";
+import TopNotification from "@/components/ui/TopNotification";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 type RequerimentoForm = {
   name: string;
@@ -14,7 +21,68 @@ type RequerimentoForm = {
   acumula_matricula: string;
 };
 
+type RequerimentoData = {
+  form: RequerimentoForm;
+  atestadoFiles: File[];
+  afastamentoFiles: File[];
+};
+
+type RequerimentoResponse = {
+  message: "string";
+};
+
 export default function RequerimentoCreate() {
+  document.title = "Requerimento de Perícia Médica";
+
+  const setNotification = useAtom(notificationAtom)[1];
+
+  const requerimentoMutation = useMutation({
+    mutationFn: async ({
+      form,
+      atestadoFiles,
+      afastamentoFiles,
+    }: RequerimentoData) => {
+      const formData = new FormData();
+
+      const formKeys = Object.keys(form) as Array<keyof typeof form>;
+      for (let key of formKeys) {
+        formData.append(key, form[key]);
+      }
+
+      for (let file of atestadoFiles) {
+        formData.append("atestado_files[]", file);
+      }
+
+      if (form.acumula_matricula === "sim") {
+        for (let file of afastamentoFiles) {
+          formData.append("afastamento_files[]", file);
+        }
+      }
+
+      const res = await fetch(`${API_URL}/api/test`, {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (!res.ok) {
+        throw await res.json();
+      }
+
+      const data = await res.json();
+
+      return data as RequerimentoResponse;
+    },
+    onError: (err) => {
+      console.log("There was an error:", err);
+    },
+    onSuccess: (data) => {
+      console.log(data);
+    },
+  });
+
   const [form, setForm] = React.useState<RequerimentoForm>({
     name: "",
     lotacao: "",
@@ -27,11 +95,42 @@ export default function RequerimentoCreate() {
   });
 
   const [atestadoFiles, setAtestadoFiles] = React.useState<File[]>([]);
+  const [afastamentoFiles, setAfastamentoFiles] = React.useState<File[]>([]);
 
   const handleChange = (
     evt: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     setForm((st) => ({ ...st, [evt.target.name]: evt.target.value }));
+  };
+
+  const handleSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+    if (atestadoFiles.length === 0) {
+      location.hash = "";
+      setNotification({
+        type: "warning",
+        message: "Insira uma imagem ou documento do atestado médico.",
+      });
+      location.hash = "notifications";
+      return;
+    }
+
+    if (form.acumula_matricula === "sim" && afastamentoFiles.length === 0) {
+      location.hash = "";
+      setNotification({
+        type: "warning",
+        message:
+          "Insira uma imagem ou documento do comprovante de afastamento.",
+      });
+      location.hash = "notifications";
+      return;
+    }
+
+    requerimentoMutation.mutate({
+      form,
+      atestadoFiles,
+      afastamentoFiles,
+    });
   };
 
   return (
@@ -57,12 +156,17 @@ export default function RequerimentoCreate() {
         </div>
         <div className="md:w-1/3"></div>
       </header>
-      <div id="notifications" />
+      <div id="notifications">
+        <TopNotification />
+      </div>
       <main
         id="content"
-        className="flex flex-1 items-start justify-center bg-slate-100 px-8 py-6 md:px-0"
+        className="relative flex flex-1 items-start justify-center bg-slate-100 px-8 py-6 md:px-0"
       >
-        <form className="flex max-w-[750px] flex-col rounded-lg shadow-sm shadow-black/30 md:w-[700px] lg:w-[975px] xl:w-[1152px]">
+        <form
+          onSubmit={handleSubmit}
+          className="flex max-w-[750px] flex-col rounded-lg shadow-sm shadow-black/30 md:w-[700px] lg:w-[975px] xl:w-[1152px]"
+        >
           <div className="rounded-t-md border border-b-0 border-black/20 bg-slate-200 p-2">
             <h1 className="text-center text-xl font-thin text-black">
               Requerimento de Perícia Médica
@@ -73,6 +177,7 @@ export default function RequerimentoCreate() {
               <div className="flex flex-1 flex-col gap-1">
                 <label htmlFor="">Nome Completo:</label>
                 <input
+                  disabled={requerimentoMutation.isPending}
                   value={form.name}
                   onChange={handleChange}
                   className="rounded border border-slate-300 p-2 outline-none focus:border-slate-500"
@@ -85,6 +190,7 @@ export default function RequerimentoCreate() {
               <div className="flex flex-1 flex-col gap-1">
                 <label htmlFor="">Matrícula (6 dígitos):</label>
                 <InputMask
+                  disabled={requerimentoMutation.isPending}
                   value={form.matricula}
                   onChange={handleChange}
                   maskChar=""
@@ -101,10 +207,11 @@ export default function RequerimentoCreate() {
               <div className="flex flex-1 flex-col gap-1">
                 <label htmlFor="lotacao">Local de Lotação:</label>
                 <select
+                  disabled={requerimentoMutation.isPending}
                   defaultValue={form.lotacao}
                   name="lotacao"
                   id="lotacao"
-                  className="w-full rounded border border-slate-300 p-2 outline-none focus:border-slate-500"
+                  className="w-full rounded border border-slate-300 p-2 text-sm outline-none focus:border-slate-500"
                   onChange={handleChange}
                   required
                 >
@@ -238,10 +345,11 @@ export default function RequerimentoCreate() {
                 <label htmlFor="">Horário de Trabalho no Município:</label>
                 <div className="flex flex-col gap-2 md:flex-row">
                   <select
+                    disabled={requerimentoMutation.isPending}
                     name="inicio_expediente"
                     defaultValue={form.inicio_expediente}
                     required
-                    className="w-full rounded border border-slate-300 p-2 outline-none focus:border-slate-500"
+                    className="w-full rounded border border-slate-300 p-2 text-sm outline-none focus:border-slate-500"
                     onChange={handleChange}
                   >
                     <option value="">Início do Expediente</option>
@@ -271,10 +379,11 @@ export default function RequerimentoCreate() {
                     <option value="23:00">23:00</option>
                   </select>
                   <select
+                    disabled={requerimentoMutation.isPending}
                     defaultValue={form.fim_expediente}
                     name="fim_expediente"
                     required
-                    className="w-full rounded border border-slate-300 p-2 outline-none focus:border-slate-500"
+                    className="w-full rounded border border-slate-300 p-2 text-sm outline-none focus:border-slate-500"
                     onChange={handleChange}
                   >
                     <option value="">Fim do Expediente</option>
@@ -310,8 +419,10 @@ export default function RequerimentoCreate() {
               <div className="flex flex-1 flex-col gap-1">
                 <label htmlFor="">Data Inicial do Atestado:</label>
                 <input
+                  disabled={requerimentoMutation.isPending}
                   onChange={handleChange}
                   value={form.data_atestado}
+                  max={new Date().toISOString().split("T")[0]}
                   name="data_atestado"
                   className="rounded border border-slate-300 p-2 outline-none focus:border-slate-500"
                   type="date"
@@ -322,6 +433,7 @@ export default function RequerimentoCreate() {
               <div className="flex flex-1 flex-col gap-1">
                 <label htmlFor="">E-mail:</label>
                 <input
+                  disabled={requerimentoMutation.isPending}
                   value={form.email}
                   onChange={handleChange}
                   name="email"
@@ -339,9 +451,10 @@ export default function RequerimentoCreate() {
                   * Certifique-se de que a foto/documento do atestado é legível.
                 </span>
                 <FileInput
+                  disabled={requerimentoMutation.isPending}
                   files={atestadoFiles}
                   setFiles={setAtestadoFiles}
-                  inputName="documento_atestado"
+                  inputName="atestado_files"
                   fileTypes={[
                     "image/*",
                     ".png",
@@ -364,17 +477,20 @@ export default function RequerimentoCreate() {
                 <div className="flex gap-8">
                   <div className="flex gap-2">
                     <input
+                      disabled={requerimentoMutation.isPending}
                       onChange={handleChange}
                       type="radio"
                       id="acumua_matricula_nao"
                       name="acumula_matricula"
                       checked={form.acumula_matricula === "nao"}
                       value="nao"
+                      required
                     />
                     <label htmlFor="acumua_matricula_nao">Não</label>
                   </div>
                   <div className="flex gap-2">
                     <input
+                      disabled={requerimentoMutation.isPending}
                       onChange={handleChange}
                       value="sim"
                       type="radio"
@@ -391,11 +507,29 @@ export default function RequerimentoCreate() {
                   <label htmlFor="">
                     Imagem/Documento do Comprovante de Afastamento:
                   </label>
-                  <span className="text-xs text-red-500">
+                  <span className="mb-1 text-xs text-red-500">
                     * Caso o servidor possua outro vínculo ou acumule matrícula,
                     incluir comprovante de afastamento.
                   </span>
-                  <input type="file" name="" id="" />
+                  <FileInput
+                    disabled={requerimentoMutation.isPending}
+                    files={afastamentoFiles}
+                    setFiles={setAfastamentoFiles}
+                    inputName="afastamento_files"
+                    fileTypes={[
+                      "image/*",
+                      ".png",
+                      ".jpg",
+                      ".jpeg",
+                      ".doc",
+                      ".docx",
+                      ".xml",
+                      ".pdf",
+                      "application/msword",
+                      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                    ]}
+                    maxFileSizeKb={8000}
+                  />
                 </div>
               )}
             </div>

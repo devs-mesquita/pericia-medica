@@ -15,6 +15,7 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         // \App\Http\Middleware\TrustHosts::class,
+        \App\Http\Middleware\Cors::class,
         \App\Http\Middleware\TrustProxies::class,
         \Illuminate\Http\Middleware\HandleCors::class,
         \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
@@ -55,6 +56,7 @@ class Kernel extends HttpKernel
     protected $middlewareAliases = [
         'api-auth' => \App\Http\Middleware\EnsureUserIsAuthenticated::class,
         'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
+        'cors' => \App\Http\Middleware\Cors::class,
         'super-admin' => \App\Http\Middleware\EnsureUserIsSuperAdmin::class,
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,

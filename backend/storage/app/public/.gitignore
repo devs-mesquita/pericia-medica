@@ -1,2 +1,6 @@
 *
 !.gitignore
+!atestados
+!afastamentos
+atestados/*
+afastamentos/*
