@@ -6,6 +6,7 @@ import RegularLayout from "./components/layouts/RegularLayout";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import RequerimentoCreate from "./pages/RequerimentoCreate";
+import ConfirmationPage from "./pages/Confirmation";
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
       <Route index element={<RequerimentoCreate />} />
       {/* Regular Layout */}
       <Route path="/" element={<RegularLayout />}>
+        <Route path="confirmation" element={<ConfirmationPage />} />
         <Route path="login" element={<Login />} />
       </Route>
       {/* Dashboard */}

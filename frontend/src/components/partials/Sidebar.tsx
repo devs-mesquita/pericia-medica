@@ -2,6 +2,7 @@ import React from "react";
 import { HomeIcon, TvIcon } from "lucide-react";
 import { SidebarLinkProps } from "./SidebarLink";
 import SidebarLinkList from "./SidebarLinkList";
+import { nanoid } from "nanoid";
 
 interface SideBarProps {
   className?: string;
@@ -77,7 +78,7 @@ export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
         {sidebarLinkList.map((link) => (
           <SidebarLinkList
             sidebarIsOpen={sidebarIsOpen}
-            key={crypto.randomUUID()}
+            key={nanoid()}
             listID={link.listID}
             linkList={link.linkList}
             listLogo={link.listLogo}

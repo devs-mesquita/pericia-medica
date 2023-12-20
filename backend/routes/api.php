@@ -10,9 +10,8 @@ Route::controller(AuthController::class)->group(function () {
   Route::post('refresh', 'refresh');
 });
 
-Route::post('test', function (Request $request) {
+Route::post('requerimentos', function (Request $request) {
   $atestados = $request->file("atestado_files");
-  dd($request->file("afastamento_files"));
 
   if(!$atestados) {
     return response()->status(400)->json([ "message" => "missing-atestados" ]);
@@ -34,7 +33,10 @@ Route::post('test', function (Request $request) {
     };
   }
 
-  return response()->json($request->all());
+  return response()->json([
+    "protocolo" => "ABC123456789",
+    "message" => "new-requirement"
+  ]);
 });
 
 // Authenticated, >= User:

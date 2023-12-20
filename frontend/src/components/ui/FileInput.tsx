@@ -1,4 +1,5 @@
 import { FileInputIcon, XIcon } from "lucide-react";
+import { nanoid } from "nanoid";
 import React from "react";
 
 type FileInputProps = {
@@ -111,7 +112,7 @@ export default function FileInput({
         <>
           {[...errorMessages.values()].map((msg) => (
             <span
-              key={crypto.randomUUID()}
+              key={nanoid()}
               className="my-2 rounded bg-red-200 p-2 text-sm text-red-500"
             >
               {ERROR_MESSAGES[msg]}
@@ -129,7 +130,7 @@ export default function FileInput({
           <>
             {files.map((file, i) => (
               <span
-                key={crypto.randomUUID()}
+                key={nanoid()}
                 className="flex items-center gap-2 rounded border border-slate-400 p-1 pl-2 text-sm"
               >
                 {file.name.slice(0, 10)}...
@@ -149,7 +150,7 @@ export default function FileInput({
           <>
             {failedFilenames.map((failedFilename, i) => (
               <span
-                key={crypto.randomUUID()}
+                key={nanoid()}
                 className="flex items-center gap-2 rounded border border-red-600 p-1 pl-2 text-sm text-red-500"
               >
                 {failedFilename.slice(0, 10)}...

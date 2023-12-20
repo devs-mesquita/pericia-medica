@@ -1,5 +1,6 @@
 import { ChevronDown, ChevronRight } from "lucide-react";
 import SidebarLink, { SidebarLinkProps } from "./SidebarLink";
+import { nanoid } from "nanoid";
 
 interface SidebarLinkListProps {
   listID: number;
@@ -78,7 +79,7 @@ export default function SidebarLinkList({
                 : "justify-centertext-xs w-[104px] flex-col"
             }`}
             sidebarIsOpen={sidebarIsOpen}
-            key={crypto.randomUUID()}
+            key={nanoid()}
             logo={link.logo}
             path={link.path}
             title={link.title}

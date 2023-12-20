@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { notificationAtom } from "@/store";
 import { useAtom } from "jotai";
 import TopNotification from "@/components/ui/TopNotification";
+import { useNavigate } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -28,11 +29,14 @@ type RequerimentoData = {
 };
 
 type RequerimentoResponse = {
-  message: "string";
+  protocolo: string;
+  message: string;
 };
 
 export default function RequerimentoCreate() {
   document.title = "Requerimento de Perícia Médica";
+
+  const navigate = useNavigate();
 
   const setNotification = useAtom(notificationAtom)[1];
 
@@ -59,7 +63,7 @@ export default function RequerimentoCreate() {
         }
       }
 
-      const res = await fetch(`${API_URL}/api/test`, {
+      const res = await fetch(`${API_URL}/api/requerimentos`, {
         method: "POST",
         body: formData,
         headers: {
@@ -77,9 +81,21 @@ export default function RequerimentoCreate() {
     },
     onError: (err) => {
       console.log("There was an error:", err);
+      location.hash = "";
+      setNotification({
+        message: "Ocorreu um erro.",
+        type: "error",
+      });
+      location.hash = "notifications";
     },
     onSuccess: (data) => {
       console.log(data);
+      navigate("/confirmation", {
+        state: {
+          message: data.message,
+          protocolo: data.protocolo,
+        },
+      });
     },
   });
 
@@ -149,7 +165,7 @@ export default function RequerimentoCreate() {
         <div className="flex w-1/2 justify-center md:w-1/3">
           <a
             href="#"
-            className="rounded-3xl bg-blue-500 px-4 py-2 text-base text-white shadow-md shadow-black/20 hover:bg-blue-600"
+            className="rounded-3xl bg-blue-500 px-4 py-2 text-sm font-bold text-white shadow-md shadow-black/20 hover:bg-blue-600 sm:text-base"
           >
             Manual de Utilização
           </a>
@@ -180,7 +196,7 @@ export default function RequerimentoCreate() {
                   disabled={requerimentoMutation.isPending}
                   value={form.name}
                   onChange={handleChange}
-                  className="rounded border border-slate-300 p-2 outline-none focus:border-slate-500"
+                  className="rounded border border-slate-300 p-2 outline-none focus:border-slate-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-600/80"
                   type="text"
                   name="name"
                   placeholder="Nome Completo do Servidor"
@@ -195,7 +211,7 @@ export default function RequerimentoCreate() {
                   onChange={handleChange}
                   maskChar=""
                   name="matricula"
-                  className="rounded border border-slate-300 p-2 outline-none focus:border-slate-500"
+                  className="rounded border border-slate-300 p-2 outline-none focus:border-slate-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-600/80"
                   mask="999.999"
                   type="text"
                   placeholder="000.000"
@@ -211,7 +227,7 @@ export default function RequerimentoCreate() {
                   defaultValue={form.lotacao}
                   name="lotacao"
                   id="lotacao"
-                  className="w-full rounded border border-slate-300 p-2 text-sm outline-none focus:border-slate-500"
+                  className="w-full rounded border border-slate-300 p-2 text-sm outline-none focus:border-slate-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-600/80"
                   onChange={handleChange}
                   required
                 >
@@ -349,7 +365,7 @@ export default function RequerimentoCreate() {
                     name="inicio_expediente"
                     defaultValue={form.inicio_expediente}
                     required
-                    className="w-full rounded border border-slate-300 p-2 text-sm outline-none focus:border-slate-500"
+                    className="w-full rounded border border-slate-300 p-2 text-sm outline-none focus:border-slate-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-600/80"
                     onChange={handleChange}
                   >
                     <option value="">Início do Expediente</option>
@@ -383,7 +399,7 @@ export default function RequerimentoCreate() {
                     defaultValue={form.fim_expediente}
                     name="fim_expediente"
                     required
-                    className="w-full rounded border border-slate-300 p-2 text-sm outline-none focus:border-slate-500"
+                    className="w-full rounded border border-slate-300 p-2 text-sm outline-none focus:border-slate-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-600/80"
                     onChange={handleChange}
                   >
                     <option value="">Fim do Expediente</option>
@@ -424,7 +440,7 @@ export default function RequerimentoCreate() {
                   value={form.data_atestado}
                   max={new Date().toISOString().split("T")[0]}
                   name="data_atestado"
-                  className="rounded border border-slate-300 p-2 outline-none focus:border-slate-500"
+                  className="rounded border border-slate-300 p-2 outline-none focus:border-slate-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-600/80"
                   type="date"
                   placeholder="dd/mm/aaaa"
                   required
@@ -440,7 +456,7 @@ export default function RequerimentoCreate() {
                   type="email"
                   placeholder="E-mail para contato"
                   required
-                  className="rounded border border-slate-300 p-2 outline-none focus:border-slate-500"
+                  className="rounded border border-slate-300 p-2 outline-none focus:border-slate-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-600/80"
                 />
               </div>
             </div>
@@ -535,8 +551,13 @@ export default function RequerimentoCreate() {
             </div>
           </div>
           <div className="flex justify-center rounded-b-md border border-t-0 border-black/20 bg-slate-200 p-2">
-            <button className="rounded-lg bg-green-600 px-3 py-1 text-lg font-light text-white hover:bg-green-700">
-              Enviar Requerimento
+            <button
+              disabled={requerimentoMutation.isPending}
+              className="rounded-lg bg-green-600 px-3 py-1 text-lg font-light text-white hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-green-400"
+            >
+              {requerimentoMutation.isPending
+                ? "Enviando..."
+                : "Enviar Requerimento"}
             </button>
           </div>
         </form>
