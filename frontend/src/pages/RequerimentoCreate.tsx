@@ -33,7 +33,7 @@ type RequerimentoResponse = {
   message: string;
 };
 
-export default function RequerimentoCreate() {
+export default function RequerimentoCreatePage() {
   document.title = "Requerimento de Perícia Médica";
 
   const navigate = useNavigate();

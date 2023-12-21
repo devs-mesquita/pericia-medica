@@ -3,19 +3,20 @@ import { RequireAuth } from "react-auth-kit";
 
 import DashboardLayout from "./components/layouts/DashboardLayout";
 import RegularLayout from "./components/layouts/RegularLayout";
-import Login from "./pages/Login";
-import Home from "./pages/Home";
-import RequerimentoCreate from "./pages/RequerimentoCreate";
+import LoginPage from "./pages/Login";
+import HomePage from "./pages/Home";
+import RequerimentoCreatePage from "./pages/RequerimentoCreate";
 import ConfirmationPage from "./pages/Confirmation";
+import ChangePasswordPage from "./pages/ChangePassword";
 
 export default function App() {
   return (
     <Routes>
-      <Route index element={<RequerimentoCreate />} />
+      <Route index element={<RequerimentoCreatePage />} />
       {/* Regular Layout */}
       <Route path="/" element={<RegularLayout />}>
         <Route path="confirmation" element={<ConfirmationPage />} />
-        <Route path="login" element={<Login />} />
+        <Route path="login" element={<LoginPage />} />
       </Route>
       {/* Dashboard */}
       <Route
@@ -26,7 +27,8 @@ export default function App() {
           </RequireAuth>
         }
       >
-        <Route path="home" element={<Home />} />
+        <Route path="home" element={<HomePage />} />
+        <Route path="changepassword" element={<ChangePasswordPage />} />
       </Route>
       <Route path="*" element={<p>404 - Página não encontrada.</p>} />
     </Routes>

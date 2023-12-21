@@ -37,7 +37,7 @@ const defaultMessages: Record<string, AppNotification> = {
   },
 };
 
-export default function Login() {
+export default function LoginPage() {
   const navigate = useNavigate();
   const signIn = useSignIn();
   const isAuthenticated = useIsAuthenticated();
