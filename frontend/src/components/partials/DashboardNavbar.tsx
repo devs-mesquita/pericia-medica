@@ -24,7 +24,7 @@ export default function DashboardNavbar({
         <div className="flex p-2">
           <button
             id="toggle-sidebar"
-            className="rounded border border-slate-900/10 bg-slate-200 text-roxo/80 shadow shadow-black/30"
+            className="rounded border border-slate-900/10 bg-slate-200 text-roxo/80 shadow shadow-black/30 hover:bg-slate-50"
             onClick={toggleSidebar}
             title="Expandir/recolher menu lateral."
           >
@@ -35,7 +35,7 @@ export default function DashboardNavbar({
           <nav
             title="Configurações de usuário."
             id="toggle-dropdown"
-            className="rounded-full bg-slate-200 p-[2px] text-slate-400"
+            className="rounded-full bg-slate-200 p-[2px] text-slate-400 group-hover:bg-slate-50"
           >
             <UserCircle2 />
             <div
