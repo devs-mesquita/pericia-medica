@@ -81,10 +81,13 @@ export default function ChangePasswordPage() {
 
   return (
     <div className="mb-auto mt-16 rounded-lg shadow">
-      <div className="rounded-t-lg border border-black/5 bg-slate-600/10 p-2 text-center">
-        <h1>Alterar Senha</h1>
+      <div className="rounded-t-lg border border-black/10 bg-slate-100 p-2 text-center">
+        <h1 className="font-semibold">Alterar Senha</h1>
       </div>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-2 rounded-b-lg border border-t-0 border-black/10 bg-slate-100"
+      >
         <div className="flex flex-col gap-4 px-4 pb-2 pt-4">
           <div className="flex flex-1 flex-col gap-1">
             <label htmlFor="">Senha Atual:</label>
@@ -185,13 +188,13 @@ export default function ChangePasswordPage() {
             <>
               <button
                 type="submit"
-                className="col-start-2 flex justify-center rounded-full bg-roxo px-2 py-1 text-center text-sm font-semibold uppercase text-white"
+                className="hover:bg-roxo-lighter col-start-2 flex justify-center rounded-full bg-roxo px-4 py-1 text-center text-sm font-semibold uppercase text-white"
               >
                 Confirmar
               </button>
               <Link
                 to="/home"
-                className="col-start-3 rounded-full bg-slate-400 px-2 py-1 text-center text-sm font-semibold uppercase text-white"
+                className="col-start-3 rounded-full bg-slate-500 px-4 py-1 text-center text-sm font-semibold uppercase text-white hover:bg-slate-400"
               >
                 Cancelar
               </Link>

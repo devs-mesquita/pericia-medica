@@ -17,13 +17,15 @@ module.exports = {
     },
     extend: {
       transitionDuration: {
-        "2000": "2000ms",
+        2000: "2000ms",
       },
       fontFamily: {
         roboto: ["Roboto", "sans-serif"],
       },
       colors: {
         roxo: "#342a54",
+        "roxo-lighter": "	#5f4d99",
+        "roxo-darker": "#0b0911",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
