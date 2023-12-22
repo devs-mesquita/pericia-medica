@@ -42,6 +42,8 @@ type APIMessage =
   | "not-found";
 
 export default function ChangePasswordPage() {
+  document.title = "Alterar Senha";
+
   const setNotification = useAtom(notificationAtom)[1];
   const authHeader = useAuthHeader();
   const signOut = useSignOut();
