@@ -5,6 +5,8 @@ import React from "react";
 import { useAuthHeader, useSignOut } from "react-auth-kit";
 import { notificationAtom } from "@/store";
 import { useAtom } from "jotai";
+import { AppNotification } from "@/types/interfaces";
+import { errorFromApi } from "@/lib/utils";
 
 type ChangePasswordData = {
   currentPassword: string;
@@ -13,6 +15,31 @@ type ChangePasswordData = {
 };
 
 const API_URL = import.meta.env.VITE_API_URL;
+
+const notificationMessages: Record<string, AppNotification> = {
+  "wrong-confirm-password": {
+    message: "A confirmação deve ser igual à nova senha.",
+    type: "error",
+  },
+  "not-found": {
+    message: "O usuário não foi encontrado.",
+    type: "error",
+  },
+  "wrong-current-password": {
+    message: "A senha atual está incorreta.",
+    type: "error",
+  },
+  ok: {
+    message: "Senha alterada com sucesso, efetue o acesso novamente.",
+    type: "success",
+  },
+} as const;
+
+type APIMessage =
+  | "ok"
+  | "wrong-current-password"
+  | "wrong-confirm-password"
+  | "not-found";
 
 export default function ChangePasswordPage() {
   const setNotification = useAtom(notificationAtom)[1];
@@ -31,6 +58,7 @@ export default function ChangePasswordPage() {
           Accept: "application/json",
           Authorization: authHeader(),
         },
+        method: "POST",
         body: JSON.stringify({
           currentPassword,
           newPassword,
@@ -38,15 +66,26 @@ export default function ChangePasswordPage() {
         }),
       });
 
-      const data = await res.json();
-      return data;
+      if (!res.ok) {
+        throw await res.json();
+      }
+
+      return await res.json();
     },
-    onSuccess: () => {
+    onSuccess: ({ message }) => {
       signOut();
-      setNotification({
-        message: "Senha alterada com sucesso, efetue o acesso novamente.",
-        type: "success",
-      });
+      setNotification(notificationMessages[message]);
+    },
+    onError: (err) => {
+      console.log(err);
+      if (errorFromApi<{ message: APIMessage }>(err, "message")) {
+        setNotification(notificationMessages[err.message]);
+      } else {
+        setNotification({
+          message: "Ocorreu um erro.",
+          type: "error",
+        });
+      }
     },
   });
 
@@ -77,6 +116,11 @@ export default function ChangePasswordPage() {
 
   const handleSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
+    changePasswordMutation.mutate({
+      currentPassword: form.currentPassword,
+      newPassword: form.newPassword,
+      newPasswordConfirmation: form.newPasswordConfirmation,
+    });
   };
 
   return (
@@ -89,7 +133,7 @@ export default function ChangePasswordPage() {
         className="flex flex-col gap-2 rounded-b-lg border border-t-0 border-black/10 bg-slate-100"
       >
         <div className="flex flex-col gap-4 px-4 pb-2 pt-4">
-          <div className="flex flex-1 flex-col gap-1">
+          <div className="group flex flex-1 flex-col gap-1">
             <label htmlFor="">Senha Atual:</label>
             <div className="flex items-center gap-2 rounded border border-slate-300 bg-white p-2 text-slate-700 outline-none focus-within:border-indigo-600 focus:border-slate-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-600/80">
               <LockIcon className="h-5 w-5" />
@@ -97,8 +141,9 @@ export default function ChangePasswordPage() {
                 required
                 value={form.currentPassword}
                 onChange={handleChange}
+                disabled={changePasswordMutation.isPending}
                 name="currentPassword"
-                className="rounded outline-none"
+                className="rounded px-2 outline-none disabled:cursor-not-allowed disabled:bg-slate-300"
                 placeholder="••••••"
                 type={formUI.showCurrentPassword ? "text" : "password"}
               />
@@ -110,10 +155,10 @@ export default function ChangePasswordPage() {
                 )}
               </label>
               <input
-                required
                 type="checkbox"
                 name="showCurrentPassword"
                 id="showCurrentPassword"
+                disabled={changePasswordMutation.isPending}
                 onChange={handleUIToggle}
                 className="invisible absolute"
                 defaultChecked={formUI.showCurrentPassword}
@@ -125,10 +170,12 @@ export default function ChangePasswordPage() {
             <div className="flex items-center gap-2 rounded border border-slate-300 bg-white p-2 text-slate-700 outline-none focus-within:border-indigo-600 focus:border-slate-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-600/80">
               <LockIcon className="h-5 w-5" />
               <input
+                required
                 value={form.newPassword}
                 onChange={handleChange}
                 name="newPassword"
-                className="rounded outline-none"
+                className="rounded px-2 outline-none disabled:cursor-not-allowed disabled:bg-slate-300"
+                disabled={changePasswordMutation.isPending}
                 placeholder="••••••"
                 type={formUI.showNewPassword ? "text" : "password"}
               />
@@ -140,7 +187,6 @@ export default function ChangePasswordPage() {
                 )}
               </label>
               <input
-                required
                 type="checkbox"
                 name="showNewPassword"
                 id="showNewPassword"
@@ -155,10 +201,12 @@ export default function ChangePasswordPage() {
             <div className="flex items-center gap-2 rounded border border-slate-300 bg-white p-2 text-slate-700 outline-none focus-within:border-indigo-600 focus:border-slate-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-600/80">
               <LockIcon className="h-5 w-5" />
               <input
+                required
                 value={form.newPasswordConfirmation}
                 onChange={handleChange}
+                disabled={changePasswordMutation.isPending}
                 name="newPasswordConfirmation"
-                className="rounded outline-none"
+                className="rounded px-2 outline-none disabled:cursor-not-allowed disabled:bg-slate-300"
                 placeholder="••••••"
                 type={formUI.showNewPasswordConfirmation ? "text" : "password"}
               />
@@ -188,7 +236,7 @@ export default function ChangePasswordPage() {
             <>
               <button
                 type="submit"
-                className="hover:bg-roxo-lighter col-start-2 flex justify-center rounded-full bg-roxo px-4 py-1 text-center text-sm font-semibold uppercase text-white"
+                className="col-start-2 flex justify-center rounded-full bg-roxo px-4 py-1 text-center text-sm font-semibold uppercase text-white hover:bg-roxo-lighter"
               >
                 Confirmar
               </button>

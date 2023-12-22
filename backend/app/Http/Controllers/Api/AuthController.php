@@ -137,7 +137,7 @@ class AuthController extends Controller
   }
 
   public function changePassword(Request $request) {
-    if ($request->newPassword !== $request->confirmPassword) {
+    if ($request->newPassword !== $request->newPasswordConfirmation) {
       return response()->json([
         'message' => 'wrong-confirm-password',
       ], 400);
