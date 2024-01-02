@@ -29,7 +29,7 @@ class AuthController extends Controller
       $user = User::find(Auth::id());
       return response()->json([
           'user' => $user,
-          'default_password' => Hash::check(config('app.user_default_password', ''), $user->password),
+          'usingDefaultPassword' => Hash::check(config('app.user_default_password', ''), $user->password),
           'authorization' => [
               'token' => $token,
               'type' => 'bearer',

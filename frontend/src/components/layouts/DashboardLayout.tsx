@@ -11,7 +11,7 @@ import { useAtom } from "jotai";
 const API_URL = import.meta.env.VITE_API_URL;
 
 type CheckPasswordAPIResponse = {
-  resultado: "not-found" | "default-password" | "ok";
+  message: "not-found" | "default-password" | "ok";
 };
 
 export default function DashboardLayout() {
@@ -64,14 +64,14 @@ export default function DashboardLayout() {
 
           const data: CheckPasswordAPIResponse = await res.json();
 
-          if (data.resultado === "default-password") {
+          if (data.message === "default-password") {
             setNotification({
               message: "Altere sua senha para obter acesso ao sistema.",
               type: "warning",
             });
             setUsingDefaultPassword(true);
             navigate("/changepassword");
-          } else if (data.resultado === "not-found") {
+          } else if (data.message === "not-found") {
             setNotification({
               type: "error",
               message: "O usuário não foi encontrado.",
