@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  mysql_container:
+    image: mysql:8
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+    volumes:
+      - spm_db:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    restart: always
+    
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    restart: always
+
+  backend:
+    depends_on:
+      - mysql_container
+    build: ./backend
+    ports:
+      - "3001:80"
+    volumes:
+      - ./backend/storage/:/var/www/html/storage/:delegated
+    restart: always
+
+volumes:
+  ponto_db:

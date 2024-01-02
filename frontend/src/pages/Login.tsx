@@ -5,7 +5,11 @@ import { useMutation } from "@tanstack/react-query";
 import { useSignIn, useIsAuthenticated } from "react-auth-kit";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useAtom } from "jotai";
-import { notificationAtom } from "@/store";
+import {
+  notificationAtom,
+  notificationInitialState,
+  usingDefaultPasswordAtom,
+} from "@/store";
 import { LoaderIcon } from "lucide-react";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -23,6 +27,7 @@ type AuthData = {
     type: string;
   };
   user: User;
+  usingDefaultPassword: boolean;
 };
 
 const defaultMessageKeys = ["unauthorized"];
@@ -43,6 +48,7 @@ export default function LoginPage() {
   const isAuthenticated = useIsAuthenticated();
 
   const setNotification = useAtom(notificationAtom)[1];
+  const setUsingDefaultPassword = useAtom(usingDefaultPasswordAtom)[1];
 
   const loginMutation = useMutation({
     mutationFn: async ({ email, password }: LoginCredentials) => {
@@ -79,7 +85,18 @@ export default function LoginPage() {
         authState: { user: data.user },
       });
 
-      navigate("/home");
+      if (data.usingDefaultPassword) {
+        setNotification({
+          message: "Altere sua senha para obter acesso ao sistema.",
+          type: "warning",
+        });
+        setUsingDefaultPassword(true);
+        navigate("/changepassword");
+      } else {
+        setNotification(notificationInitialState);
+        setUsingDefaultPassword(false);
+        navigate("/home");
+      }
     },
   });
 
@@ -148,7 +165,7 @@ export default function LoginPage() {
           className="rounded-3xl border border-slate-600/20 bg-slate-400/20 px-4 py-1 text-center shadow shadow-black/30 outline-none hover:bg-slate-500/30 focus:border-indigo-600 disabled:cursor-not-allowed disabled:hover:bg-red-100/50"
         >
           {loginMutation.isPending ? (
-            <LoaderIcon className="duration-2000 animate-spin text-slate-700" />
+            <LoaderIcon className="animate-spin text-slate-700 duration-2000" />
           ) : (
             "Login"
           )}
