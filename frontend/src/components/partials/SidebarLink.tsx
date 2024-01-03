@@ -27,7 +27,9 @@ export default function SidebarLink({
       }
     >
       {logo}{" "}
-      <span className={`${sidebarIsOpen ? "ml-2" : "mt-1"}`}>{title}</span>
+      <span className={`${sidebarIsOpen ? "mt-1 md:ml-2 md:mt-0" : "mt-1"}`}>
+        {title}
+      </span>
     </NavLink>
   );
 }
