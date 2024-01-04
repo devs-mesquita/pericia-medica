@@ -38,14 +38,14 @@ export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
       listID: 1,
       linkList: [
         {
-          title: "Home",
+          title: "Principal",
           path: "/home",
           logo: <HomeIcon className="h-5 w-5" />,
           sidebarIsOpen,
         },
       ],
       listLogo: <HomeIcon />,
-      listTitle: "Home",
+      listTitle: "Principal",
     },
     {
       listID: 2,
