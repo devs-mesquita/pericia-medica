@@ -1,5 +1,16 @@
 import React from "react";
-import { HomeIcon, TvIcon, LogOutIcon } from "lucide-react";
+import {
+  HomeIcon,
+  FolderOpenIcon,
+  LogOutIcon,
+  ArchiveIcon,
+  BookUserIcon,
+  FileDownIcon,
+  FileBarChart2Icon,
+  SettingsIcon,
+  SendIcon,
+  FileInputIcon,
+} from "lucide-react";
 import { SidebarLinkProps } from "./SidebarLink";
 import SidebarLinkList from "./SidebarLinkList";
 import { nanoid } from "nanoid";
@@ -27,39 +38,70 @@ export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
       listID: 1,
       linkList: [
         {
-          title: "SubLink 1",
-          path: "/somewhere",
-          logo: <TvIcon className="h-5 w-5" />,
-          sidebarIsOpen,
-        },
-        {
-          title: "SubLink 2",
-          path: "/somewhere2",
-          logo: <TvIcon className="h-5 w-5" />,
-          sidebarIsOpen,
-        },
-        {
-          title: "SubLink 3",
-          path: "/somewhere3",
-          logo: <TvIcon className="h-5 w-5" />,
+          title: "Home",
+          path: "/home",
+          logo: <HomeIcon className="h-5 w-5" />,
           sidebarIsOpen,
         },
       ],
-      listLogo: <HomeIcon className="h-5 w-5" />,
+      listLogo: <HomeIcon />,
       listTitle: "Home",
     },
     {
       listID: 2,
       linkList: [
         {
-          title: "Link 1",
-          path: "/home",
-          logo: <TvIcon className="h-5 w-5" />,
+          title: "Em Análise",
+          path: "/requerimentos",
+          logo: <FileBarChart2Icon className="h-5 w-5" />,
+          sidebarIsOpen,
+        },
+        {
+          title: "Agenda Diária",
+          path: "/requerimentos/diario",
+          logo: <BookUserIcon className="h-5 w-5" />,
+          sidebarIsOpen,
+        },
+        {
+          title: "Arquivados",
+          path: "/requerimentos/arquivo",
+          logo: <ArchiveIcon className="h-5 w-5" />,
+          sidebarIsOpen,
+        },
+        {
+          title: "Relatório",
+          path: "/requerimentos/relatorio",
+          logo: <FileDownIcon className="h-5 w-5" />,
           sidebarIsOpen,
         },
       ],
-      listLogo: <HomeIcon />,
-      listTitle: "Home",
+      listLogo: <FolderOpenIcon className="h-5 w-5" />,
+      listTitle: "Requerimentos",
+    },
+    {
+      listID: 3,
+      linkList: [
+        {
+          title: "Direcionamentos",
+          path: "/direcionamentos",
+          logo: <SendIcon className="h-5 w-5" />,
+          sidebarIsOpen,
+        },
+        {
+          title: "Reagendamento",
+          path: "/requerimentos/reagendamento",
+          logo: <FileInputIcon className="h-5 w-5" />,
+          sidebarIsOpen,
+        },
+        {
+          title: "Funcionários",
+          path: "/users",
+          logo: <BookUserIcon className="h-5 w-5" />,
+          sidebarIsOpen,
+        },
+      ],
+      listLogo: <SettingsIcon className="h-5 w-5" />,
+      listTitle: "Administração",
     },
   ];
 
@@ -77,7 +119,7 @@ export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
           </h2>
         )}
       </div>
-      <div className="flex-1">
+      <div className="flex-1 font-semibold">
         {sidebarLinkList.map((link) => (
           <SidebarLinkList
             sidebarIsOpen={sidebarIsOpen}

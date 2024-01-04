@@ -553,7 +553,7 @@ export default function RequerimentoCreatePage() {
           <div className="flex justify-center rounded-b-md border border-t-0 border-black/20 bg-slate-200 p-2">
             <button
               disabled={requerimentoMutation.isPending}
-              className="rounded-lg bg-green-600 px-3 py-1 text-lg font-light text-white hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-green-400"
+              className="rounded-lg bg-green-600 px-3 py-1 text-lg font-medium text-white drop-shadow hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-green-400"
             >
               {requerimentoMutation.isPending
                 ? "Enviando..."
