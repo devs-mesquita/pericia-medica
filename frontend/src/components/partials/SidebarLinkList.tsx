@@ -22,24 +22,24 @@ export default function SidebarLinkList({
   sidebarIsOpen,
 }: SidebarLinkListProps) {
   return linkList.length > 1 ? (
-    <button
+    <div
       className={`${
         sidebarIsOpen
-          ? "w-[80px] flex-col py-2 md:w-[208px] md:py-0"
+          ? "flex-col py-2 md:w-[208px] md:py-0"
           : "w-[64px] text-xs md:py-2"
       } relative flex border-b border-black/20 hover:bg-black/10 md:w-full`}
-      onClick={() => {
-        setDropdownOpen((st) => {
-          return st === listID ? -1 : listID;
-        });
-      }}
     >
-      <div
-        className={`flex w-full items-center ${
+      <button
+        className={`flex w-full items-center text-xs ${
           sidebarIsOpen
-            ? " mx-auto flex-col md:mx-0 md:flex-row md:justify-center md:px-2 md:py-4"
-            : "mx-auto flex-col"
+            ? "mx-auto flex-col px-2 md:mx-0 md:flex-row md:justify-center md:py-4"
+            : "mx-auto flex-col px-2"
         }`}
+        onClick={() => {
+          setDropdownOpen((st) => {
+            return st === listID ? -1 : listID;
+          });
+        }}
       >
         {listLogo}{" "}
         <span className={`${sidebarIsOpen ? "mt-1 md:ml-2 md:mt-0" : "mt-1"}`}>
@@ -54,7 +54,7 @@ export default function SidebarLinkList({
             )}
           </>
         )}
-      </div>
+      </button>
       <div
         className={`
         ${dropdownIsOpen ? "block" : "hidden"}
@@ -75,8 +75,8 @@ export default function SidebarLinkList({
             }
             ${
               sidebarIsOpen
-                ? "w-[208px] px-2 md:py-4 md:pl-6"
-                : "justify-centertext-xs w-[104px] flex-col"
+                ? "w-[104px] px-2 md:w-[208px] md:py-4 md:pl-6"
+                : "w-[104px] flex-col"
             }`}
             sidebarIsOpen={sidebarIsOpen}
             key={nanoid()}
@@ -86,7 +86,7 @@ export default function SidebarLinkList({
           />
         ))}
       </div>
-    </button>
+    </div>
   ) : (
     <SidebarLink
       className="border-b border-black/20"

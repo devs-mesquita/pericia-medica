@@ -5,7 +5,7 @@ type ConfirmationPageState = {
   protocolo: string;
 };
 
-export default function ConfirmationPage() {
+export default function RequerimentoConfirmationPage() {
   const location = useLocation();
   const data = location.state as ConfirmationPageState;
 

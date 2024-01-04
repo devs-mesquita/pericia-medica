@@ -5,9 +5,20 @@ import DashboardLayout from "./components/layouts/DashboardLayout";
 import RegularLayout from "./components/layouts/RegularLayout";
 import LoginPage from "./pages/Login";
 import HomePage from "./pages/Home";
-import RequerimentoCreatePage from "./pages/RequerimentoCreate";
-import ConfirmationPage from "./pages/Confirmation";
+import RequerimentoCreatePage from "./pages/requerimentos/Create";
+import ConfirmationPage from "./pages/requerimentos/Confirmation";
 import ChangePasswordPage from "./pages/ChangePassword";
+import RequerimentoIndexPage from "./pages/requerimentos/Index";
+import RequerimentoDiarioPage from "./pages/requerimentos/Diario";
+import RequerimentoArquivoPage from "./pages/requerimentos/Arquivo";
+import RequerimentoRelatorioPage from "./pages/requerimentos/Relatorio";
+import RequerimentoReagendamentoPage from "./pages/requerimentos/Reagendamento";
+import DirecionamentoIndexPage from "./pages/direcionamentos/Index";
+import DirecionamentoEditPage from "./pages/direcionamentos/Edit";
+import DirecionamentoCreatePage from "./pages/direcionamentos/Create";
+import UserIndexPage from "./pages/users/Index";
+import UserEditPage from "./pages/users/Edit";
+import UserCreatePage from "./pages/users/Create";
 
 export default function App() {
   return (
@@ -29,6 +40,26 @@ export default function App() {
       >
         <Route path="home" element={<HomePage />} />
         <Route path="changepassword" element={<ChangePasswordPage />} />
+        <Route path="requerimentos">
+          <Route index element={<RequerimentoIndexPage />} />
+          <Route path="diario" element={<RequerimentoDiarioPage />} />
+          <Route path="arquivo" element={<RequerimentoArquivoPage />} />
+          <Route path="relatorio" element={<RequerimentoRelatorioPage />} />
+          <Route
+            path="reagendamento"
+            element={<RequerimentoReagendamentoPage />}
+          />
+        </Route>
+        <Route path="direcionamentos">
+          <Route index element={<DirecionamentoIndexPage />} />
+          <Route path="create" element={<DirecionamentoCreatePage />} />
+          <Route path="edit" element={<DirecionamentoEditPage />} />
+        </Route>
+        <Route path="users">
+          <Route index element={<UserIndexPage />} />
+          <Route path="edit" element={<UserEditPage />} />
+          <Route path="create" element={<UserCreatePage />} />
+        </Route>
       </Route>
       <Route path="*" element={<p>404 - Página não encontrada.</p>} />
     </Routes>

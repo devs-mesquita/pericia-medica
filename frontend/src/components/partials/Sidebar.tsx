@@ -113,11 +113,9 @@ export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
       } z-20 flex flex-col bg-roxo text-xs text-white shadow-[2px_38px_2px_0px_rgb(0,0,0,0.75)] shadow-black/30 md:text-sm`}
     >
       <div className="z-20 flex h-[48px] items-center justify-center border-b border-black/20 p-2 shadow-[1px_2px_2px_0px_rgb(0,0,0,0.75)] shadow-black/30">
-        {sidebarIsOpen && (
-          <h2 className="hidden text-sm font-bold tracking-wide md:block">
-            Perícia Médica
-          </h2>
-        )}
+        <h2 className="text-sm font-bold tracking-wide md:block">
+          Perícia Médica
+        </h2>
       </div>
       <div className="flex-1 font-semibold">
         {sidebarLinkList.map((link) => (
@@ -135,8 +133,8 @@ export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
         <button
           className={`flex hover:bg-black/10 ${className || ""} ${
             sidebarIsOpen
-              ? "w-[80px] flex-col p-2 text-xs md:w-[208px] md:flex-row md:px-2 md:py-4"
-              : "w-[80px] flex-col p-2 text-xs"
+              ? "w-full flex-col p-2 text-xs md:w-[208px] md:flex-row md:py-4"
+              : "flex-col p-2 text-xs"
           } items-center`}
           onClick={signOut}
         >
@@ -148,14 +146,25 @@ export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
           </span>
         </button>
       </div>
-      <div className="mt-auto h-[80px] p-2">
-        <img
+      <div className="mt-auto flex justify-center p-2">
+        {/* <img
           alt="Banner da Prefeitura de Mesquita"
           src="./banner192x64.png"
           className={`rounded-md shadow shadow-black/30 ${
             sidebarIsOpen ? "hidden md:block" : "hidden"
           }`}
-        />
+        /> */}
+        <picture>
+          <source media="(max-width: 767px)" srcSet="./logo192.png" />
+          <source
+            media="(min-width: 768px)"
+            srcSet={sidebarIsOpen ? "./banner192x64.png" : "./logo192.png"}
+          />
+          <img
+            alt="Logotipo da Prefeitura Municipal de Mesquita"
+            className={sidebarIsOpen ? "w-[80px] md:w-full" : "w-[80px]"}
+          />
+        </picture>
       </div>
     </nav>
   );
