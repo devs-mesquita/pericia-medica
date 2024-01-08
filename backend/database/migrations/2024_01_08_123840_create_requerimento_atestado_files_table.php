@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('requerimento_atestado_files', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->enum('nivel',['Guest','User','Admin','Super-Admin']);
-            $table->string('password');
+            $table->string('filename');
+            $table->string('extension');
             $table->timestamps();
-            $table->softDeletes();
+
+            $table->unsignedBigInteger('requerimento_id');
+            $table->foreign('requerimento_id')->references('id')->on('requerimentos')->onDelete('cascade');
         });
     }
 
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('requerimento_atestado_files');
     }
 };
