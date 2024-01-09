@@ -24,7 +24,7 @@ return new class extends Migration
             $table->boolean('acumula_matricula');
             $table->dateTime('last_movement_at')->useCurrent();
             $table->string('protocolo');
-            $table->enum('status', ['em-analise', 'recusado', 'realocado', 'reagendamento-solicitado', 'confirmado']);
+            $table->enum('status', ['em-analise', 'aguardando-confirmacao', 'recusado', 'realocado', 'reagendamento-solicitado', 'confirmado']);
             $table->dateTime('avaliado_at')->nullable();
             $table->dateTime('agenda_datetime')->nullable();
             $table->string('observacao_avaliador')->nullable();

@@ -118,10 +118,36 @@ class RequerimentoController extends Controller
       return response()->status(400)->json([ "message" => "error" ]);
     }
   }
+
+  public function avaliacao(Request $request, $id) {
+    DB::beginTransaction();
+    try {
+      // find requerimento, if has reagendamento: consider Reagendamento
+
+      // if Requerimento Main:
+        // Agendado: Atribuir direcionamento_id, agenda datetime, avaliador_id, status=aguardando-confirmacao
+          // Mail: RequerimentoAgendado
+
+        // Direcionamento sem_atendimento, status = confirmado
+          // Mail: RequerimentoSemAtendimento
+        
+        // if Reagendamento:
+          // Reagendamento: Atribuir direcionamento_id, agenda datetime, avaliador_id, status=aguardando-confirmacao
+            // Mail: ReagendamentoAgendado
+
+          // Direcionamento sem_atendimento, status = confirmado
+            // Mail: ReagendamentoSemAtendimento
+
+      // Recusado: justificativa_recusa, status=recusado, avaliador_id
+        // Mail: RequerimentoRecusado
+        // Mail: ReagendamentoRecusado
+
+    } catch (Exception $e) {
+
+    }
+  }
   
   public function show($id) {}
-
-  public function avaliacao(Request $request, $id) {}
   
   public function confirmacao(Request $request, $protocolo) {}
   
