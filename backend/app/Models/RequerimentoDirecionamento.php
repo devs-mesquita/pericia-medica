@@ -14,7 +14,8 @@ class RequerimentoDirecionamento extends Model
     protected $fillable = [
       'name',
       'config',
-      'sem_atendimento'
+      'sem_atendimento',
+      'deleted_at'
     ];
 
     public function requerimentos(): HasMany

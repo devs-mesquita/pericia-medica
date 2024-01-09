@@ -14,6 +14,7 @@ class RequerimentoReagendamento extends Model
       'requerimento_id',
       'justificativa_requerente',
       'envio_create',
+      'status',
       'observacao_avaliador',
       'justificativa_recusa',
       'avaliado_at',
@@ -24,9 +25,8 @@ class RequerimentoReagendamento extends Model
       'confirmado_at',
       'reagendamento_solicitado_at',
       'presenca',
-      'status',
       'realocador_id',
-      'justificativa_realocador',
+      'justificativa_realocacao',
       'realocado_at',
       'envio_realocacao',
     ];

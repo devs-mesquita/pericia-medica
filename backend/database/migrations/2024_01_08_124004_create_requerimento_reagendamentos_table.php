@@ -29,6 +29,9 @@ return new class extends Migration
             $table->boolean('presenca')->nullable();
             $table->dateTime('reagendamento_solicitado_at')->nullable();
 
+            $table->unsignedBigInteger('requerimento_id');
+            $table->foreign('requerimento_id')->references('id')->on('requerimentos')->onDelete('cascade');
+
             $table->unsignedBigInteger('direcionamento_id')->nullable();
             $table->foreign('direcionamento_id')->references('id')->on('requerimento_direcionamentos')->onDelete('cascade');
 

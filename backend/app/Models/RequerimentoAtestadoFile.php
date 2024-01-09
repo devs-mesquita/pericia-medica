@@ -11,7 +11,6 @@ class RequerimentoAtestadoFile extends Model
     use HasFactory;
 
     protected $fillable = [
-      'id',
       'filename',
       'extension',
       'requerimento_id'
