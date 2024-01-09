@@ -12,13 +12,13 @@ import { useNavigate } from "react-router-dom";
 const API_URL = import.meta.env.VITE_API_URL;
 
 type RequerimentoForm = {
-  name: string;
+  nome: string;
   matricula: string;
-  lotacao: string;
+  local_lotacao: string;
   email: string;
   inicio_expediente: string;
   fim_expediente: string;
-  data_atestado: string;
+  inicio_atestado_date: string;
   acumula_matricula: string;
 };
 
@@ -90,7 +90,7 @@ export default function RequerimentoCreatePage() {
     },
     onSuccess: (data) => {
       console.log(data);
-      navigate("/confirmation", {
+      navigate("/success", {
         state: {
           message: data.message,
           protocolo: data.protocolo,
@@ -100,12 +100,12 @@ export default function RequerimentoCreatePage() {
   });
 
   const [form, setForm] = React.useState<RequerimentoForm>({
-    name: "",
-    lotacao: "",
+    nome: "",
+    local_lotacao: "",
     inicio_expediente: "",
     fim_expediente: "",
     email: "",
-    data_atestado: "",
+    inicio_atestado_date: "",
     matricula: "",
     acumula_matricula: "",
   });
@@ -164,7 +164,8 @@ export default function RequerimentoCreatePage() {
         </div>
         <div className="flex w-1/2 justify-center md:w-1/3">
           <a
-            href="#"
+            href="/manual-de-utilizacao.pdf"
+            target="_blank"
             className="rounded-3xl bg-blue-500 px-4 py-2 text-sm font-bold text-white shadow-md shadow-black/20 hover:bg-blue-600 sm:text-base"
           >
             Manual de Utilização
@@ -194,11 +195,11 @@ export default function RequerimentoCreatePage() {
                 <label htmlFor="">Nome Completo:</label>
                 <input
                   disabled={requerimentoMutation.isPending}
-                  value={form.name}
+                  value={form.nome}
                   onChange={handleChange}
                   className="rounded border border-slate-300 p-2 outline-none focus:border-slate-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-600/80"
                   type="text"
-                  name="name"
+                  name="nome"
                   placeholder="Nome Completo do Servidor"
                   required
                 />
@@ -221,12 +222,12 @@ export default function RequerimentoCreatePage() {
             </div>
             <div className="flex flex-col gap-4 md:flex-row">
               <div className="flex flex-1 flex-col gap-1">
-                <label htmlFor="lotacao">Local de Lotação:</label>
+                <label htmlFor="local_lotacao">Local de Lotação:</label>
                 <select
                   disabled={requerimentoMutation.isPending}
-                  defaultValue={form.lotacao}
-                  name="lotacao"
-                  id="lotacao"
+                  defaultValue={form.local_lotacao}
+                  name="local_lotacao"
+                  id="local_lotacao"
                   className="w-full rounded border border-slate-300 p-2 text-sm outline-none focus:border-slate-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-600/80"
                   onChange={handleChange}
                   required
@@ -437,9 +438,9 @@ export default function RequerimentoCreatePage() {
                 <input
                   disabled={requerimentoMutation.isPending}
                   onChange={handleChange}
-                  value={form.data_atestado}
+                  value={form.inicio_atestado_date}
                   max={new Date().toISOString().split("T")[0]}
-                  name="data_atestado"
+                  name="inicio_atestado_date"
                   className="rounded border border-slate-300 p-2 outline-none focus:border-slate-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-600/80"
                   type="date"
                   placeholder="dd/mm/aaaa"

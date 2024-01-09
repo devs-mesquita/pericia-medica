@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
             $table->string('justificativa_requerente')->nullable();
-            $table->boolean('envio_create');
+            $table->boolean('envio_create')->nullable();
             $table->enum('status', ['em-analise', 'recusado', 'realocado', 'reagendamento-solicitado', 'confirmado']);
             $table->dateTime('avaliado_at')->nullable();
             $table->dateTime('agenda_datetime')->nullable();

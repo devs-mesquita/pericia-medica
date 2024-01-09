@@ -6,7 +6,8 @@ import RegularLayout from "./components/layouts/RegularLayout";
 import LoginPage from "./pages/Login";
 import HomePage from "./pages/Home";
 import RequerimentoCreatePage from "./pages/requerimentos/Create";
-import ConfirmationPage from "./pages/requerimentos/Confirmation";
+import SuccessPage from "./pages/requerimentos/Success";
+import ConfirmarPage from "./pages/requerimentos/Confirmar";
 import ChangePasswordPage from "./pages/ChangePassword";
 import RequerimentoIndexPage from "./pages/requerimentos/Index";
 import RequerimentoDiarioPage from "./pages/requerimentos/Diario";
@@ -26,7 +27,8 @@ export default function App() {
       <Route index element={<RequerimentoCreatePage />} />
       {/* Regular Layout */}
       <Route path="/" element={<RegularLayout />}>
-        <Route path="confirmation" element={<ConfirmationPage />} />
+        <Route path="success" element={<SuccessPage />} />
+        <Route path="confirmar" element={<ConfirmarPage />} />
         <Route path="login" element={<LoginPage />} />
       </Route>
       {/* Dashboard */}

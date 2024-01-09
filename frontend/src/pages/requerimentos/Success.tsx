@@ -1,13 +1,13 @@
 import { useLocation, Navigate } from "react-router-dom";
 
-type ConfirmationPageState = {
+type SuccessPageState = {
   message: "new-requirement" | "reschedule-request" | "confirmed-presence";
   protocolo: string;
 };
 
-export default function RequerimentoConfirmationPage() {
+export default function RequerimentoSuccessPage() {
   const location = useLocation();
-  const data = location.state as ConfirmationPageState;
+  const data = location.state as SuccessPageState;
 
   return data.message === "new-requirement" ? (
     <div className="mx-4 mt-10 flex max-w-[600px] flex-col border border-green-300 bg-green-100 px-4 py-3 text-center shadow sm:mx-auto">

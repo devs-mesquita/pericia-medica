@@ -1,0 +1,3 @@
+<p>Olá {{ substr($requerimento->nome, 0, strpos($requerimento->nome, ' ')) }}, o seu requerimento foi criado com sucesso e será analisado pelo nosso departamento.</p>
+<p>Aguarde a resposta com o seu agendamento (poderá se dar em até 48 horas úteis da sua solicitação), fique atento e por favor verifique a sua caixa de spam periodicamente.</p>
+<p><b>Protocolo do seu requerimento:</b> {{ $requerimento->protocolo }}</p>
