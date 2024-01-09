@@ -28,6 +28,10 @@ class RequerimentoController extends Controller
     try {
       $atestados = $request->file("atestado_files");
 
+      if(!$atestados) {
+        return response()->status(400)->json([ "message" => "missing-atestados" ]);
+      }
+
       // Protocolo:
       $hora_atual = Carbon::now('America/Sao_Paulo')->format('His');
       $caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -55,10 +59,6 @@ class RequerimentoController extends Controller
         'status' => "em-analise",
       ]);
 
-      if(!$atestados) {
-        return response()->status(400)->json([ "message" => "missing-atestados" ]);
-      }
-      
       $atestadoFiles = [];
       foreach($atestados as $file) {
         $filename = $file->store("public/atestados");
@@ -72,7 +72,7 @@ class RequerimentoController extends Controller
       
       if ($request->acumula_matricula === "sim") {
         $afastamentos = $request->file("afastamento_files");
-
+        
         if(!$afastamentos) {
           return response()->status(400)->json([ "message" => "missing-afastamentos" ]);
         }
