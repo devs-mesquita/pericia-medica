@@ -492,20 +492,20 @@ export default function RequerimentoCreatePage() {
                   Possui outro vínculo, ou acumula matrícula em outro local?
                 </label>
                 <div className="flex gap-8">
-                  <div className="flex gap-2">
+                  <label htmlFor="acumula_matricula_nao" className="flex gap-2">
                     <input
                       disabled={requerimentoMutation.isPending}
                       onChange={handleChange}
                       type="radio"
-                      id="acumua_matricula_nao"
+                      id="acumula_matricula_nao"
                       name="acumula_matricula"
                       checked={form.acumula_matricula === "nao"}
                       value="nao"
                       required
                     />
-                    <label htmlFor="acumua_matricula_nao">Não</label>
-                  </div>
-                  <div className="flex gap-2">
+                    <span>Não</span>
+                  </label>
+                  <label htmlFor="acumua_matricula_sim" className="flex gap-2">
                     <input
                       disabled={requerimentoMutation.isPending}
                       onChange={handleChange}
@@ -515,8 +515,8 @@ export default function RequerimentoCreatePage() {
                       name="acumula_matricula"
                       checked={form.acumula_matricula === "sim"}
                     />
-                    <label htmlFor="acumua_matricula_sim">Sim</label>
-                  </div>
+                    <span>Sim</span>
+                  </label>
                 </div>
               </div>
               {form.acumula_matricula === "sim" && (

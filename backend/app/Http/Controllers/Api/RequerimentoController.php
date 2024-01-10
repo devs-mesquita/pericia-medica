@@ -19,8 +19,23 @@ use App\Mail\RequerimentoCreate;
 class RequerimentoController extends Controller
 {
   public function index(Request $request) {
-    $requerimentos = Requerimento::paginate($request->per_page);
-    return $requerimentos;
+    $query = Requerimento::query();
+
+    foreach($request->filter as $key => $value) {
+      if ($value) {
+        $query = $query->where($key, 'like', '%'.$value.'%');
+      }
+    }
+
+    foreach($request->sort as $key => $order) {
+      if ($order) {
+        $query = $query->orderBy($key, $order);
+      }
+    }
+
+    $direcionamentos = $query->with('reagendamentos')->paginate($request->per_page);
+
+    return $direcionamentos;
   }
 
   public function store(Request $request) {

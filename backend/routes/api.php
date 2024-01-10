@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\RequerimentoController;
+use App\Http\Controllers\Api\RequerimentoDirecionamentoController;
 
 Route::controller(AuthController::class)->group(function () {
   Route::get('checkpassword', 'checkDefaultPassword');
@@ -27,6 +28,8 @@ Route::middleware(['api-auth'])->group(function () {
 
   // >= Admin
   Route::middleware(['admin'])->group(function () {
+    Route::post('direcionamentos/query', [RequerimentoDirecionamentoController::class, 'index']);
+    
     Route::get('users', [UserController::class, 'index']);
     Route::post('user/update', [UserController::class, 'updateUser']);
     Route::post('register', [UserController::class, 'register']);

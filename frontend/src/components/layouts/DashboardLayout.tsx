@@ -95,17 +95,17 @@ export default function DashboardLayout() {
   }, [location.pathname]);
 
   return (
-    <div id="dashboard-root" className="flex h-screen font-roboto">
+    <div id="dashboard-root" className="flex h-[100svh] font-roboto">
       <Sidebar
         sidebarIsOpen={sidebarIsOpen}
         className={`${sidebarIsOpen ? "flex" : "hidden md:flex"}`}
       />
-      <div id="dashboard-body" className="flex flex-1 flex-col">
+      <div id="dashboard-body" className="flex h-[100svh] flex-1 flex-col">
         <DashboardNavbar toggleSidebar={toggleSidebar} />
         <TopNotification />
         <main
           id="content"
-          className="flex flex-1 items-center justify-center bg-slate-200"
+          className="flex flex-1 flex-col overflow-auto bg-slate-200 p-4"
         >
           <Outlet />
         </main>

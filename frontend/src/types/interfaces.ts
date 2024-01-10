@@ -9,3 +9,13 @@ export type AppNotification = {
   message: string;
   type: "error" | "success" | "warning" | "";
 };
+
+export type Direcionamento = {
+  id: number;
+  name: string;
+  config: string;
+  sem_atendimento?: boolean;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string;
+}
