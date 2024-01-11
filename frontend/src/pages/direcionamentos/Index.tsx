@@ -51,15 +51,21 @@ export default function DirecionamentoIndexPage() {
   const authHeader = useAuthHeader();
   const queryClient = useQueryClient();
 
+  // Filtros
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
+
+  // Ordenações
   const [sorting, setSorting] = React.useState<SortingState>([]);
+
+  // Página atual, quantidade por página
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
   });
 
+  // Quantidade de Páginas
   const [pageCount, setPageCount] = React.useState(1);
 
   const { data } = useQuery<Paginated<Direcionamento[]>>({
@@ -72,7 +78,12 @@ export default function DirecionamentoIndexPage() {
           Accept: "application/json",
           Authorization: authHeader(),
         },
-        body: JSON.stringify({}),
+        body: JSON.stringify({
+          page: pagination.pageIndex + 1,
+          per_page: pagination.pageSize,
+          sorting,
+          columnFilters,
+        }),
       });
 
       if (!res.ok) {
@@ -83,18 +94,20 @@ export default function DirecionamentoIndexPage() {
     },
     initialData: {
       data: [],
-      page: 1,
-      per_page: 10,
       last_page: 1,
+      from: 1,
+      to: 1,
+      total: 1,
+      per_page: 10,
+      current_page: 1,
     },
   });
 
   React.useEffect(() => {
-    // apply states
+    setPageCount(data.last_page);
   }, [data]);
 
   React.useEffect(() => {
-    console.log(columnFilters, sorting, pagination);
     const interv = setTimeout(() => {
       queryClient.invalidateQueries({ queryKey: ["direcionamentos"] });
     }, 1000);

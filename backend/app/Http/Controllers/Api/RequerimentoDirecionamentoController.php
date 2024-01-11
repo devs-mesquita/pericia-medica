@@ -12,16 +12,12 @@ class RequerimentoDirecionamentoController extends Controller
   {
     $query = RequerimentoDirecionamento::query();
 
-    foreach($request->filter as $key => $value) {
-      if ($value) {
-        $query = $query->where($key, 'like', '%'.$value.'%');
-      }
+    foreach($request->columnFilters as $filter) {
+      $query = $query->where($filter->id, 'like', '%'.$filter->value.'%');
     }
 
-    foreach($request->sort as $key => $order) {
-      if ($order) {
-        $query = $query->orderBy($key, $order);
-      }
+    foreach($request->sorting as $order) {
+      $query = $query->orderBy($order->id, $order->value);
     }
 
     $direcionamentos = $query->paginate($request->per_page);
