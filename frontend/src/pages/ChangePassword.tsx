@@ -126,7 +126,7 @@ export default function ChangePasswordPage() {
   };
 
   return (
-    <div className="mb-auto mt-16 rounded-lg shadow">
+    <div className="mx-auto mb-auto mt-16 rounded-lg shadow">
       <div className="rounded-t-lg border border-black/10 bg-slate-100 p-2 text-center">
         <h1 className="font-semibold">Alterar Senha</h1>
       </div>

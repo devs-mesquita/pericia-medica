@@ -55,11 +55,11 @@ export default function App() {
         <Route path="direcionamentos">
           <Route index element={<DirecionamentoIndexPage />} />
           <Route path="create" element={<DirecionamentoCreatePage />} />
-          <Route path="edit" element={<DirecionamentoEditPage />} />
+          <Route path=":id/edit" element={<DirecionamentoEditPage />} />
         </Route>
         <Route path="users">
           <Route index element={<UserIndexPage />} />
-          <Route path="edit" element={<UserEditPage />} />
+          <Route path=":id/edit" element={<UserEditPage />} />
           <Route path="create" element={<UserCreatePage />} />
         </Route>
       </Route>

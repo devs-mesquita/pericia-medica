@@ -1,14 +1,15 @@
 import * as React from "react";
-import {
-  DataTable,
-  DataFetchConfig,
-  Paginated,
-} from "@/components/DataTable/data-table";
+import { DataTable, Paginated } from "@/components/DataTable/data-table";
 import type { Direcionamento } from "@/types/interfaces";
-import { ColumnDef } from "@tanstack/react-table";
-import { EditIcon } from "lucide-react";
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  PaginationState,
+  SortingState,
+} from "@tanstack/react-table";
+import { EditIcon, SendIcon } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuthHeader } from "react-auth-kit";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -17,8 +18,18 @@ const columns: ColumnDef<Direcionamento>[] = [
   {
     accessorKey: "name",
     header: "Nome",
+    enableColumnFilter: true,
+    enableSorting: true,
   },
   {
+    accessorKey: "sem_atendimento",
+    header: "Presencial",
+    enableColumnFilter: true,
+    enableSorting: true,
+  },
+  {
+    enableColumnFilter: false,
+    enableSorting: false,
     accessorKey: "id",
     header: () => <div className="text-right">Ações</div>,
     cell: ({ row }) => {
@@ -38,30 +49,18 @@ const columns: ColumnDef<Direcionamento>[] = [
 
 export default function DirecionamentoIndexPage() {
   const authHeader = useAuthHeader();
+  const queryClient = useQueryClient();
 
-  const [direcionamentoFetchConfig, setDirecionamentoFetchConfig] =
-    React.useState<DataFetchConfig<Direcionamento>>({
-      page: 1,
-      per_page: 10,
-      sort: {
-        id: "",
-        name: "",
-        config: "",
-        sem_atendimento: "asc",
-        created_at: "",
-        deleted_at: "",
-        updated_at: "",
-      },
-      filter: {
-        id: "",
-        name: "",
-        sem_atendimento: "",
-        config: "",
-        created_at: "",
-        deleted_at: "",
-        updated_at: "",
-      },
-    });
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    [],
+  );
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [pagination, setPagination] = React.useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
+  const [pageCount, setPageCount] = React.useState(1);
 
   const { data } = useQuery<Paginated<Direcionamento[]>>({
     queryKey: ["direcionamentos"],
@@ -73,7 +72,7 @@ export default function DirecionamentoIndexPage() {
           Accept: "application/json",
           Authorization: authHeader(),
         },
-        body: JSON.stringify(direcionamentoFetchConfig),
+        body: JSON.stringify({}),
       });
 
       if (!res.ok) {
@@ -90,12 +89,35 @@ export default function DirecionamentoIndexPage() {
     },
   });
 
+  React.useEffect(() => {
+    // apply states
+  }, [data]);
+
+  React.useEffect(() => {
+    console.log(columnFilters, sorting, pagination);
+    const interv = setTimeout(() => {
+      queryClient.invalidateQueries({ queryKey: ["direcionamentos"] });
+    }, 1000);
+
+    return () => {
+      clearTimeout(interv);
+    };
+  }, [columnFilters, sorting, pagination]);
+
   return (
     <div className="flex flex-1 flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20">
       <DataTable
+        columnFilters={columnFilters}
         columns={columns}
         data={data.data}
-        setDataFetchConfig={setDirecionamentoFetchConfig}
+        setColumnFilters={setColumnFilters}
+        setSorting={setSorting}
+        sorting={sorting}
+        pagination={pagination}
+        setPagination={setPagination}
+        pageCount={pageCount}
+        tableIcon={<SendIcon className="h-5 w-5" />}
+        tableTitle="Direcionamentos"
       />
     </div>
   );
