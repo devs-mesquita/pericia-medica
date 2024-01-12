@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/table";
 
 import { Button } from "../ui/button";
+import { MoveDownIcon, MoveUpIcon } from "lucide-react";
 
 export type DataFetchConfig<T> = {
   page: number;
@@ -39,7 +40,7 @@ export type Paginated<T> = {
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  data: Paginated<TData[]>;
   columnFilters: ColumnFiltersState;
   setColumnFilters: OnChangeFn<ColumnFiltersState>;
   setSorting: OnChangeFn<SortingState>;
@@ -47,8 +48,7 @@ interface DataTableProps<TData, TValue> {
   pagination: PaginationState;
   pageCount: number;
   setPagination: OnChangeFn<PaginationState>;
-  tableTitle: string;
-  tableIcon: JSX.Element;
+  tableHeadElement: JSX.Element;
 }
 
 export function DataTable<TData, TValue>({
@@ -61,11 +61,10 @@ export function DataTable<TData, TValue>({
   pagination,
   pageCount,
   setPagination,
-  tableTitle,
-  tableIcon,
+  tableHeadElement,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
-    data,
+    data: data.data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     onColumnFiltersChange: setColumnFilters,
@@ -77,14 +76,12 @@ export function DataTable<TData, TValue>({
     onSortingChange: setSorting,
     pageCount,
     onPaginationChange: setPagination,
+    autoResetPageIndex: false,
   });
 
   return (
     <>
-      <h1 className="mb-2 flex items-center gap-1 border-b-2 border-slate-300 pb-2 text-lg font-semibold">
-        {tableIcon}
-        <span className="ml-1">{tableTitle}</span>
-      </h1>
+      {tableHeadElement}
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -107,8 +104,8 @@ export function DataTable<TData, TValue>({
                         )}
                         {
                           {
-                            asc: " ↑",
-                            desc: " ↓",
+                            asc: <MoveUpIcon className="inline h-4 w-4" />,
+                            desc: <MoveDownIcon className="inline h-4 w-4" />,
                           }[(header.column.getIsSorted() as string) ?? null]
                         }
                       </div>
@@ -155,23 +152,34 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-      <div className="mt-auto flex items-center justify-end space-x-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Anterior
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Próximo
-        </Button>
+      <div className="mt-auto grid grid-cols-3 items-center justify-between space-x-2 border-t-2 border-slate-300 px-2 pt-2">
+        <div className="text-sm">
+          Mostrando de {data.from} até {data.to} de {data.total} registros
+        </div>
+        <div className="justify-self-center text-sm">
+          Página {data.current_page} de {data.last_page}
+        </div>
+        <div className="flex items-center space-x-2 justify-self-end">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Anterior
+          </Button>
+          <div className="rounded border border-slate-200 bg-white px-2 py-1">
+            {pagination.pageIndex + 1}
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            Próximo
+          </Button>
+        </div>
       </div>
     </>
   );

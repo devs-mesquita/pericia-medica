@@ -7,9 +7,9 @@ import {
   PaginationState,
   SortingState,
 } from "@tanstack/react-table";
-import { EditIcon, SendIcon } from "lucide-react";
+import { EditIcon, PlusSquareIcon, SendIcon } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useAuthHeader } from "react-auth-kit";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -23,8 +23,11 @@ const columns: ColumnDef<Direcionamento>[] = [
   },
   {
     accessorKey: "sem_atendimento",
-    header: "Presencial",
-    enableColumnFilter: true,
+    header: "Possui atendimento?",
+    cell: ({ row }) => {
+      return row.getValue("sem_atendimento") ? "Não" : "Sim";
+    },
+    enableColumnFilter: false,
     enableSorting: true,
   },
   {
@@ -36,7 +39,7 @@ const columns: ColumnDef<Direcionamento>[] = [
       return (
         <div className="flex w-full justify-end">
           <Link
-            className="rounded bg-yellow-500 p-2 hover:bg-yellow-600"
+            className="rounded bg-yellow-500 p-2 text-white hover:bg-yellow-600"
             to={`/direcionamentos/${row.getValue("id")}/edit`}
           >
             <EditIcon className="h-5 w-5" />
@@ -49,7 +52,6 @@ const columns: ColumnDef<Direcionamento>[] = [
 
 export default function DirecionamentoIndexPage() {
   const authHeader = useAuthHeader();
-  const queryClient = useQueryClient();
 
   // Filtros
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -61,16 +63,23 @@ export default function DirecionamentoIndexPage() {
 
   // Página atual, quantidade por página
   const [pagination, setPagination] = React.useState<PaginationState>({
-    pageIndex: 0,
+    pageIndex: 1,
     pageSize: 10,
   });
 
   // Quantidade de Páginas
   const [pageCount, setPageCount] = React.useState(1);
 
-  const { data } = useQuery<Paginated<Direcionamento[]>>({
+  const { data, refetch } = useQuery<Paginated<Direcionamento[]>>({
     queryKey: ["direcionamentos"],
     queryFn: async () => {
+      const requestBody = {
+        page: pagination.pageIndex + 1,
+        per_page: pagination.pageSize,
+        sorting,
+        columnFilters,
+      };
+
       const res = await fetch(`${API_URL}/api/direcionamentos/query`, {
         method: "POST",
         headers: {
@@ -78,12 +87,7 @@ export default function DirecionamentoIndexPage() {
           Accept: "application/json",
           Authorization: authHeader(),
         },
-        body: JSON.stringify({
-          page: pagination.pageIndex + 1,
-          per_page: pagination.pageSize,
-          sorting,
-          columnFilters,
-        }),
+        body: JSON.stringify(requestBody),
       });
 
       if (!res.ok) {
@@ -109,8 +113,8 @@ export default function DirecionamentoIndexPage() {
 
   React.useEffect(() => {
     const interv = setTimeout(() => {
-      queryClient.invalidateQueries({ queryKey: ["direcionamentos"] });
-    }, 1000);
+      refetch();
+    }, 250);
 
     return () => {
       clearTimeout(interv);
@@ -122,15 +126,27 @@ export default function DirecionamentoIndexPage() {
       <DataTable
         columnFilters={columnFilters}
         columns={columns}
-        data={data.data}
+        data={data}
         setColumnFilters={setColumnFilters}
         setSorting={setSorting}
         sorting={sorting}
         pagination={pagination}
         setPagination={setPagination}
         pageCount={pageCount}
-        tableIcon={<SendIcon className="h-5 w-5" />}
-        tableTitle="Direcionamentos"
+        tableHeadElement={
+          <div className="mb-2 flex items-center justify-between gap-1 border-b-2 border-slate-300 px-2 pb-2 text-lg font-semibold">
+            <h1 className="flex items-center">
+              <SendIcon className="h-5 w-5" />
+              <span className="ml-2">Direcionamentos</span>
+            </h1>
+            <Link
+              className="rounded bg-green-500 p-1 text-white hover:bg-green-600"
+              to="/direcionamentos/create"
+            >
+              <PlusSquareIcon className="h-5 w-5" />
+            </Link>
+          </div>
+        }
       />
     </div>
   );

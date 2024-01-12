@@ -13,11 +13,11 @@ class RequerimentoDirecionamentoController extends Controller
     $query = RequerimentoDirecionamento::query();
 
     foreach($request->columnFilters as $filter) {
-      $query = $query->where($filter->id, 'like', '%'.$filter->value.'%');
+      $query = $query->where($filter["id"], 'like', '%'.$filter["value"].'%');
     }
 
     foreach($request->sorting as $order) {
-      $query = $query->orderBy($order->id, $order->value);
+      $query = $query->orderBy($order["id"], $order["desc"] ? "desc" : "asc");
     }
 
     $direcionamentos = $query->paginate($request->per_page);

@@ -27,4 +27,4 @@ services:
     restart: always
 
 volumes:
-  ponto_db:
+  spm_db:
