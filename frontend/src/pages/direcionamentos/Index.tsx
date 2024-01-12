@@ -1,6 +1,7 @@
 import * as React from "react";
 import { DataTable, Paginated } from "@/components/DataTable/data-table";
 import type { Direcionamento } from "@/types/interfaces";
+import { format } from "date-fns";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -28,6 +29,15 @@ const columns: ColumnDef<Direcionamento>[] = [
       return row.getValue("sem_atendimento") ? "Não" : "Sim";
     },
     enableColumnFilter: false,
+    enableSorting: true,
+  },
+  {
+    accessorKey: "created_at",
+    header: "Data de Criação",
+    cell: ({ row }) => {
+      return format(row.getValue("created_at"), "dd/LL/yyyy");
+    },
+    enableColumnFilter: true,
     enableSorting: true,
   },
   {
