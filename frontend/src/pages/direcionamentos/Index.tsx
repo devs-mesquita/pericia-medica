@@ -119,6 +119,9 @@ export default function DirecionamentoIndexPage() {
 
   React.useEffect(() => {
     setPageCount(data.last_page);
+    if (data.data.length === 0 && data.current_page > 1) {
+      setPagination((st) => ({ ...st, pageIndex: 0 }));
+    }
   }, [data]);
 
   React.useEffect(() => {
