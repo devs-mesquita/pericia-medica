@@ -27,7 +27,7 @@ export default function SidebarLinkList({
         sidebarIsOpen
           ? "flex-col py-2 md:w-[208px] md:py-0"
           : "w-[64px] text-xs md:py-2"
-      } relative flex border-b border-black/20 hover:bg-black/10 md:w-full`}
+      } relative flex border-b border-black/20 hover:bg-black/10`}
     >
       <button
         className={`flex w-full items-center text-xs ${
