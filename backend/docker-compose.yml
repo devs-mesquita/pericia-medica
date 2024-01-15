@@ -5,7 +5,7 @@ services:
         environment:
             - MYSQL_ROOT_PASSWORD=secret
         volumes:
-            - pericia_medica_db:/var/lib/mysql
+            - spm_db:/var/lib/mysql
         ports:
             - "3306:3306"
         restart: always
@@ -21,4 +21,4 @@ services:
         restart: always
 
 volumes:
-    pericia_medica_db:
+    spm_db:
