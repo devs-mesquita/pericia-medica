@@ -73,7 +73,7 @@ export default function DirecionamentoIndexPage() {
 
   // Página atual, quantidade por página
   const [pagination, setPagination] = React.useState<PaginationState>({
-    pageIndex: 1,
+    pageIndex: 0,
     pageSize: 10,
   });
 

@@ -8,7 +8,13 @@ use App\Models\RequerimentoDirecionamento;
 
 class RequerimentoDirecionamentoController extends Controller
 {
-  public function index(Request $request)
+  public function index()
+  {
+    $direcionamentos = RequerimentoDirecionamento::get();
+    return $direcionamentos;
+  }
+
+  public function query(Request $request)
   {
     $query = RequerimentoDirecionamento::query();
 
