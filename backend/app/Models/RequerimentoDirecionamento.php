@@ -14,7 +14,7 @@ class RequerimentoDirecionamento extends Model
     protected $fillable = [
       'name',
       'config',
-      'sem_atendimento',
+      'atendimento_presencial',
       'deleted_at'
     ];
 

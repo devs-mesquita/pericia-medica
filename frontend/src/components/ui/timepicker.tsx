@@ -3,7 +3,7 @@ import * as React from "react";
 
 type TimePickerProps = {
   value: string;
-  onChange: React.Dispatch<React.SetStateAction<string>>;
+  onChange: (evt: React.ChangeEvent<HTMLInputElement>) => void;
   minTime?: string;
   maxTime?: string;
   required?: boolean;
@@ -13,6 +13,7 @@ type TimePickerProps = {
   step?: number;
   list?: string;
   className?: string;
+  dataWeekdayIndex?: string;
 };
 
 export default function TimePicker({
@@ -27,11 +28,8 @@ export default function TimePicker({
   list = "times",
   step = 1800,
   className = "",
+  dataWeekdayIndex,
 }: TimePickerProps) {
-  const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(evt.target.value);
-  };
-
   const generateTimeDataList = (
     minTime: string,
     maxTime: string,
@@ -77,8 +75,6 @@ export default function TimePicker({
         }
       }
     }
-
-    console.log(times);
     return times;
   };
 
@@ -89,7 +85,7 @@ export default function TimePicker({
         id={id}
         name={name}
         type="time"
-        onChange={handleChange}
+        onChange={onChange}
         value={value}
         min={minTime}
         max={maxTime}
@@ -97,6 +93,7 @@ export default function TimePicker({
         disabled={disabled}
         list={list}
         step={step}
+        data-weekday-index={dataWeekdayIndex}
       />
       <datalist id={list}>
         {generateTimeDataList(minTime, maxTime, step).map((time) => {

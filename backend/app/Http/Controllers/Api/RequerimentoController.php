@@ -143,14 +143,14 @@ class RequerimentoController extends Controller
         // Agendado: Atribuir direcionamento_id, agenda datetime, avaliador_id, status=aguardando-confirmacao
           // Mail: RequerimentoAgendado
 
-        // Direcionamento sem_atendimento, status = confirmado
+        // Direcionamento atendimento_presencial = false, status = confirmado
           // Mail: RequerimentoSemAtendimento
         
         // if Reagendamento:
           // Reagendamento: Atribuir direcionamento_id, agenda datetime, avaliador_id, status=aguardando-confirmacao
             // Mail: ReagendamentoAgendado
 
-          // Direcionamento sem_atendimento, status = confirmado
+          // Direcionamento atendimento_presencial = false, status = confirmado
             // Mail: ReagendamentoSemAtendimento
 
       // Recusado: justificativa_recusa, status=recusado, avaliador_id

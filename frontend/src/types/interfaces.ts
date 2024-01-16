@@ -14,7 +14,7 @@ export type Direcionamento = {
   id: number;
   name: string;
   config: string;
-  sem_atendimento: boolean;
+  atendimento_presencial: boolean;
   created_at: string;
   updated_at: string;
   deleted_at: string;

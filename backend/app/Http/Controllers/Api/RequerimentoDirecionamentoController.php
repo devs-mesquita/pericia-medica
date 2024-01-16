@@ -14,6 +14,25 @@ class RequerimentoDirecionamentoController extends Controller
     return $direcionamentos;
   }
 
+  public function store(Request $request)
+  {
+    $checkExistance = RequerimentoDirecionamento::where("name", mb_strtoupper($request->name))->first();
+
+    if ($checkExistance !== null) {
+      return response()->status(400)->json([
+        "message" => "name-conflict"
+      ]);
+    }
+
+    RequerimentoDirecionamento::create([
+      "name" => mb_strtoupper($request->name),
+      "atendimento_presencial" => $request->atendimento_presencial === "sim" ? true : false,
+      "config" => json_encode($request->config),
+    ]);
+
+    return ["message" => "success"];
+  }
+
   public function query(Request $request)
   {
     $query = RequerimentoDirecionamento::query();

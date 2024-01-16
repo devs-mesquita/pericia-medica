@@ -28,7 +28,8 @@ Route::middleware(['api-auth'])->group(function () {
 
   // >= Admin
   Route::middleware(['admin'])->group(function () {
-    Route::post('direcionamentos', [RequerimentoDirecionamentoController::class, 'index']);
+    Route::get('direcionamentos', [RequerimentoDirecionamentoController::class, 'index']);
+    Route::post('direcionamentos', [RequerimentoDirecionamentoController::class, 'store']);
     Route::post('direcionamentos/query', [RequerimentoDirecionamentoController::class, 'query']);
     
     Route::get('users', [UserController::class, 'index']);

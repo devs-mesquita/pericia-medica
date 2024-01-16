@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->json('config');
-            $table->boolean('sem_atendimento')->default(false);
+            $table->boolean('atendimento_presencial')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

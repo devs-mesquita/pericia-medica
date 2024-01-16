@@ -23,10 +23,10 @@ const columns: ColumnDef<Direcionamento>[] = [
     enableSorting: true,
   },
   {
-    accessorKey: "sem_atendimento",
-    header: "Possui atendimento?",
+    accessorKey: "atendimento_presencial",
+    header: "Atendimento presencial?",
     cell: ({ row }) => {
-      return row.getValue("sem_atendimento") ? "Não" : "Sim";
+      return row.getValue("atendimento_presencial") ? "Sim" : "Não";
     },
     enableColumnFilter: false,
     enableSorting: true,
@@ -37,7 +37,7 @@ const columns: ColumnDef<Direcionamento>[] = [
     cell: ({ row }) => {
       return format(row.getValue("created_at"), "dd/LL/yyyy");
     },
-    enableColumnFilter: true,
+    enableColumnFilter: false,
     enableSorting: true,
   },
   {

@@ -8,6 +8,7 @@ import { notificationAtom } from "@/store";
 import { useAtom } from "jotai";
 import TopNotification from "@/components/ui/TopNotification";
 import { useNavigate } from "react-router-dom";
+import { LoaderIcon } from "lucide-react";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -505,13 +506,13 @@ export default function RequerimentoCreatePage() {
                     />
                     <span>Não</span>
                   </label>
-                  <label htmlFor="acumua_matricula_sim" className="flex gap-2">
+                  <label htmlFor="acumula_matricula_sim" className="flex gap-2">
                     <input
                       disabled={requerimentoMutation.isPending}
                       onChange={handleChange}
                       value="sim"
                       type="radio"
-                      id="acumua_matricula_sim"
+                      id="acumula_matricula_sim"
                       name="acumula_matricula"
                       checked={form.acumula_matricula === "sim"}
                     />
@@ -556,9 +557,11 @@ export default function RequerimentoCreatePage() {
               disabled={requerimentoMutation.isPending}
               className="rounded-lg bg-green-600 px-3 py-1 text-lg font-medium text-white drop-shadow hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-green-400"
             >
-              {requerimentoMutation.isPending
-                ? "Enviando..."
-                : "Enviar Requerimento"}
+              {requerimentoMutation.isPending ? (
+                <LoaderIcon className="animate-spin text-green-100 duration-2000" />
+              ) : (
+                "Enviar Requerimento"
+              )}
             </button>
           </div>
         </form>

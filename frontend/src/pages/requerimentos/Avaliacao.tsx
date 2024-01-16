@@ -14,6 +14,10 @@ export default function RequerimentoAvaliacaoPage() {
 
   const authHeader = useAuthHeader();
 
+  const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    setTime(evt.target.value);
+  }
+
   const { data, isFetching } = useQuery({
     queryKey: ["direcionamentos"],
     queryFn: async () => {
@@ -77,7 +81,8 @@ export default function RequerimentoAvaliacaoPage() {
           minTime={direcionamento[date.getDay()].inicio}
           maxTime={direcionamento[date.getDay()].fim}
           value={time}
-          onChange={setTime}
+          onChange={handleChange}
+          step={1800}
         />
       ) : (
         <input
