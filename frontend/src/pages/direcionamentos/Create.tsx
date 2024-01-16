@@ -137,12 +137,17 @@ export default function DirecionamentoCreatePage() {
       navigate("/direcionamentos");
     },
     onError: (error) => {
-      console.log(error);
-      console.dir(error);
-      setNotification({
-        message: "Ocorreu um erro.",
-        type: "error",
-      });
+      if (error.message === "name-conflict") {
+        setNotification({
+          message: "Um direcionamento com o mesmo nome já existe.",
+          type: "error",
+        });
+      } else {
+        setNotification({
+          message: "Ocorreu um erro.",
+          type: "error",
+        });
+      }
     },
   });
 

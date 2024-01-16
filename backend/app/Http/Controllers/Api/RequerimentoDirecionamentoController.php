@@ -16,13 +16,19 @@ class RequerimentoDirecionamentoController extends Controller
 
   public function store(Request $request)
   {
-    $checkExistance = RequerimentoDirecionamento::where("name", mb_strtoupper($request->name))->first();
-
-    if ($checkExistance !== null) {
+    if (mb_strtoupper($request->name) === "RECUSADO") {
       return response()->status(400)->json([
         "message" => "name-conflict"
       ]);
     }
+
+    $checkNameConflict = RequerimentoDirecionamento::where("name", mb_strtoupper($request->name))->first();
+    if ($checkNameConflict !== null) {
+      return response()->status(400)->json([
+        "message" => "name-conflict"
+      ]);
+    }
+
 
     RequerimentoDirecionamento::create([
       "name" => mb_strtoupper($request->name),
