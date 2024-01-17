@@ -43,6 +43,8 @@ class RequerimentoDirecionamentoController extends Controller
   {
     $query = RequerimentoDirecionamento::query();
 
+    $query->withTrashed();
+
     foreach($request->columnFilters as $filter) {
       $query = $query->where($filter["id"], 'like', '%'.$filter["value"].'%');
     }
@@ -91,6 +93,25 @@ class RequerimentoDirecionamentoController extends Controller
     if (!$direcionamento) {
       return response()->json(["message" => "not-found"], 404);
     }
+
+    return ["direcionamento" => $direcionamento];
+  }
+
+  public function delete ($id)
+  {
+    $direcionamento = RequerimentoDirecionamento::find($id);
+
+    if (!$direcionamento) {
+      return response()->json(["message" => "not-found"], 404);
+    }
+
+    if ($direcionamento->deleted_at === null) {
+      $direcionamento->delete();
+    } else {
+      $direcionamento->restore();
+    }
+
+    $direcionamento->save();
 
     return ["direcionamento" => $direcionamento];
   }

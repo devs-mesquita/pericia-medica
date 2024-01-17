@@ -10,6 +10,13 @@ export type AppNotification = {
   type: "error" | "success" | "warning" | "";
 };
 
+export interface AppDialog {
+  isOpen: boolean;
+  message: string;
+  accept: () => void;
+  reject: () => void;
+}
+
 export type Direcionamento = {
   id: number;
   name: string;
