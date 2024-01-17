@@ -58,7 +58,7 @@ export default function DirecionamentoIndexPage() {
   };
 
   const deleteDirecionamentoMutation = useMutation({
-    mutationFn: async (id) => {
+    mutationFn: async (id: number) => {
       const res = await fetch(`${API_URL}/api/direcionamentos/${id}`, {
         method: "POST",
         body: JSON.stringify({ _method: "DELETE" }),
@@ -143,7 +143,7 @@ export default function DirecionamentoIndexPage() {
               onSubmit={(evt) => {
                 evt.preventDefault();
                 handleConfirmation(
-                  () => deleteDirecionamentoMutation.mutate(row.getValue("id")),
+                  () => deleteDirecionamentoMutation.mutate(row.original.id),
                   `Deseja confirmar a ${
                     row.original.deleted_at ? "reativação" : "desativação"
                   } do direcionamento?`,
