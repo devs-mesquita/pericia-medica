@@ -119,6 +119,15 @@ export default function DirecionamentoIndexPage() {
       enableSorting: true,
     },
     {
+      accessorKey: "deleted_at",
+      header: "Status",
+      cell: ({ row }) => {
+        return row.getValue("deleted_at") ? "Desativado" : "Ativo";
+      },
+      enableColumnFilter: false,
+      enableSorting: true,
+    },
+    {
       accessorKey: "created_at",
       header: "Data de Criação",
       cell: ({ row }) => {
