@@ -46,14 +46,14 @@ export default function ConfirmationDialog({
               <button
                 onClick={handleAccept}
                 disabled={isLoading}
-                className="flex-1 rounded bg-green-600 bg-gradient-to-r px-4 py-1 text-white shadow shadow-black/20 hover:bg-green-700 hover:text-white disabled:bg-slate-500/10"
+                className="flex-1 rounded bg-green-600 bg-gradient-to-r px-4 py-1 font-semibold text-white shadow shadow-black/20 hover:bg-green-700 hover:text-white disabled:bg-slate-500/10"
               >
-                {isLoading ? "Carregando..." : "CONFIRMAR"}
+                CONFIRMAR
               </button>
               <button
                 onClick={reject}
                 disabled={isLoading}
-                className="flex-1 rounded bg-slate-400 px-4 py-1 text-white hover:bg-slate-500 disabled:bg-slate-400/25"
+                className="flex-1 rounded bg-slate-400 px-4 py-1 font-semibold text-white hover:bg-slate-500 disabled:bg-slate-400/25"
               >
                 CANCELAR
               </button>

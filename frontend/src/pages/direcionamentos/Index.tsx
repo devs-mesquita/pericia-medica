@@ -59,6 +59,8 @@ export default function DirecionamentoIndexPage() {
 
   const deleteDirecionamentoMutation = useMutation({
     mutationFn: async (id: number) => {
+      console.log(id);
+
       const res = await fetch(`${API_URL}/api/direcionamentos/${id}`, {
         method: "POST",
         body: JSON.stringify({ _method: "DELETE" }),
@@ -82,6 +84,7 @@ export default function DirecionamentoIndexPage() {
         } com sucesso.`,
         type: "success",
       });
+      setDialog(dialogInitialState);
       queryClient.invalidateQueries({ queryKey: ["direcionamentos"] });
     },
     onError: (error) => {

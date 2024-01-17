@@ -99,7 +99,7 @@ class RequerimentoDirecionamentoController extends Controller
 
   public function delete ($id)
   {
-    $direcionamento = RequerimentoDirecionamento::find($id);
+    $direcionamento = RequerimentoDirecionamento::withTrashed()->find($id);
 
     if (!$direcionamento) {
       return response()->json(["message" => "not-found"], 404);
