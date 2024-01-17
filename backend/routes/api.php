@@ -29,8 +29,10 @@ Route::middleware(['api-auth'])->group(function () {
   // >= Admin
   Route::middleware(['admin'])->group(function () {
     Route::get('direcionamentos', [RequerimentoDirecionamentoController::class, 'index']);
-    Route::post('direcionamentos', [RequerimentoDirecionamentoController::class, 'store']);
+    Route::get('direcionamentos/{id}', [RequerimentoDirecionamentoController::class, 'show']);
     Route::post('direcionamentos/query', [RequerimentoDirecionamentoController::class, 'query']);
+    Route::post('direcionamentos', [RequerimentoDirecionamentoController::class, 'store']);
+    Route::patch('direcionamentos/{id}', [RequerimentoDirecionamentoController::class, 'update']);
     
     Route::get('users', [UserController::class, 'index']);
     Route::post('user/update', [UserController::class, 'updateUser']);

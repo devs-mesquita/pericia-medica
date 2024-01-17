@@ -44,7 +44,7 @@ class RequerimentoController extends Controller
       $atestados = $request->file("atestado_files");
 
       if(!$atestados) {
-        return response()->status(400)->json([ "message" => "missing-atestados" ]);
+        return response()->json([ "message" => "missing-atestados" ], 400);
       }
 
       // Protocolo:
@@ -89,7 +89,7 @@ class RequerimentoController extends Controller
         $afastamentos = $request->file("afastamento_files");
         
         if(!$afastamentos) {
-          return response()->status(400)->json([ "message" => "missing-afastamentos" ]);
+          return response()->json([ "message" => "missing-afastamentos"], 400);
         }
 
         $afastamentoFiles = [];
@@ -130,7 +130,7 @@ class RequerimentoController extends Controller
         }
       }
       DB::rollBack();
-      return response()->status(400)->json([ "message" => "error" ]);
+      return response()->json([ "message" => "error" ], 400);
     }
   }
 

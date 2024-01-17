@@ -224,7 +224,7 @@ export default function DirecionamentoCreatePage() {
           </div>
         </div>
         <h2 className="mb-2 border-t-2 border-slate-300 pt-2 text-center text-xl font-bold">
-          Atendimento
+          Atendimento Presencial
         </h2>
         <div className="grid grid-cols-4 items-center justify-items-center border-y-2 border-slate-300 py-2 font-semibold">
           <h3 className="ml-4 justify-self-start">Dia da Semana</h3>
@@ -236,7 +236,10 @@ export default function DirecionamentoCreatePage() {
           <div className="mb-2 grid grid-cols-4 items-center justify-items-center border-b border-slate-300 pb-2 pt-2">
             <h3 className="ml-4 justify-self-start">Domingo</h3>
             <input
-              disabled={createDirecionamentoMutation.isPending}
+              disabled={
+                createDirecionamentoMutation.isPending ||
+                form.atendimento_presencial === "nao"
+              }
               checked={form.config[0].isEnabled}
               onChange={handleToggleConfig}
               type="checkbox"
@@ -278,7 +281,10 @@ export default function DirecionamentoCreatePage() {
           <div className="mb-2 grid grid-cols-4 items-center justify-items-center border-b border-slate-300 pb-2">
             <h3 className="ml-4 justify-self-start">Segunda-Feira</h3>
             <input
-              disabled={createDirecionamentoMutation.isPending}
+              disabled={
+                createDirecionamentoMutation.isPending ||
+                form.atendimento_presencial === "nao"
+              }
               checked={form.config[1].isEnabled}
               onChange={handleToggleConfig}
               type="checkbox"
@@ -320,7 +326,10 @@ export default function DirecionamentoCreatePage() {
           <div className="mb-2 grid grid-cols-4 items-center justify-items-center border-b border-slate-300 pb-2">
             <h3 className="ml-4 justify-self-start">Terça-Feira</h3>
             <input
-              disabled={createDirecionamentoMutation.isPending}
+              disabled={
+                createDirecionamentoMutation.isPending ||
+                form.atendimento_presencial === "nao"
+              }
               checked={form.config[2].isEnabled}
               onChange={handleToggleConfig}
               type="checkbox"
@@ -362,7 +371,10 @@ export default function DirecionamentoCreatePage() {
           <div className="mb-2 grid grid-cols-4 items-center justify-items-center border-b border-slate-300 pb-2">
             <h3 className="ml-4 justify-self-start">Quarta-Feira</h3>
             <input
-              disabled={createDirecionamentoMutation.isPending}
+              disabled={
+                createDirecionamentoMutation.isPending ||
+                form.atendimento_presencial === "nao"
+              }
               checked={form.config[3].isEnabled}
               onChange={handleToggleConfig}
               type="checkbox"
@@ -404,7 +416,10 @@ export default function DirecionamentoCreatePage() {
           <div className="mb-2 grid grid-cols-4 items-center justify-items-center border-b border-slate-300 pb-2">
             <h3 className="ml-4 justify-self-start">Quinta-Feira</h3>
             <input
-              disabled={createDirecionamentoMutation.isPending}
+              disabled={
+                createDirecionamentoMutation.isPending ||
+                form.atendimento_presencial === "nao"
+              }
               checked={form.config[4].isEnabled}
               onChange={handleToggleConfig}
               type="checkbox"
@@ -446,7 +461,10 @@ export default function DirecionamentoCreatePage() {
           <div className="mb-2 grid grid-cols-4 items-center justify-items-center border-b border-slate-300 pb-2">
             <h3 className="ml-4 justify-self-start">Sexta-Feira</h3>
             <input
-              disabled={createDirecionamentoMutation.isPending}
+              disabled={
+                createDirecionamentoMutation.isPending ||
+                form.atendimento_presencial === "nao"
+              }
               checked={form.config[5].isEnabled}
               onChange={handleToggleConfig}
               type="checkbox"
@@ -488,7 +506,10 @@ export default function DirecionamentoCreatePage() {
           <div className="grid grid-cols-4 items-center justify-items-center border-b border-slate-300 pb-2">
             <h3 className="ml-4 justify-self-start">Sábado</h3>
             <input
-              disabled={createDirecionamentoMutation.isPending}
+              disabled={
+                createDirecionamentoMutation.isPending ||
+                form.atendimento_presencial === "nao"
+              }
               checked={form.config[6].isEnabled}
               onChange={handleToggleConfig}
               type="checkbox"
@@ -533,7 +554,10 @@ export default function DirecionamentoCreatePage() {
                 <LoaderIcon className="animate-spin text-slate-700 duration-2000" />
               ) : (
                 <>
-                  <button className="min-w-[120px] rounded bg-green-500 px-3 py-2 text-center font-semibold text-white hover:bg-green-600">
+                  <button
+                    type="submit"
+                    className="min-w-[120px] rounded bg-green-500 px-3 py-2 text-center font-semibold text-white hover:bg-green-600"
+                  >
                     CRIAR
                   </button>
                   <Link
