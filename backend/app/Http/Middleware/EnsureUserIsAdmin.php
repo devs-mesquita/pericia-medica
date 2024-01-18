@@ -15,7 +15,7 @@ class EnsureUserIsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (in_array(auth()?->user()?->nivel, ['Admin', 'Super-Admin'])) {
+        if (in_array(auth()?->user()?->role, ['Admin', 'Super-Admin'])) {
           return $next($request);
         }
 

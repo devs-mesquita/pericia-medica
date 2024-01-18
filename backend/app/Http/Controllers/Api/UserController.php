@@ -39,7 +39,7 @@ class UserController extends Controller
   {
       if (User::where('email', $request->email)->count() > 0) {
         return response()->json([
-          'message' => 'email-existente',
+          'message' => 'email-conflict',
         ], 400);
       }
 
@@ -47,18 +47,18 @@ class UserController extends Controller
           'name' => $request->name,
           'email' => $request->email,
           'password' => Hash::make(config('app.user_default_password', '')),
-          'nivel' => $request->nivel
+          'role' => $request->role
       ]);
 
       return response()->json([
-          'message' => 'created',
+          'message' => 'ok',
           'user' => $user
       ], 201);
   }
 
-  public function update(Request $request)
+  public function update(Request $request, $id)
   {
-    $user = User::find($request->user_id);
+    $user = User::find($id);
 
     if ($user === null) {
       return response()->json([
@@ -66,28 +66,28 @@ class UserController extends Controller
       ], 404);
     }
 
-    if (User::where('email', $request->email)->where('id', '!=', $request->user_id)->count() > 0) {
+    if (User::where('email', $request->email)->where('id', '!=', $id)->count() > 0) {
       return response()->json([
-        'message' => 'email-existente',
+        'message' => 'email-conflict',
       ], 400);
     }
 
     $user->name = $request->name;
     $user->email = $request->email;
-    $user->nivel = $request->nivel;
+    $user->role = $request->role;
     $user->save();
 
     return response()->json([
-        'message' => 'created',
+        'message' => 'ok',
         'user' => $user
     ]);
   }
 
-  public function resetPassword(Request $request)
+  public function resetPassword(Request $request, $id)
   {
-    $user = User::find($request?->user_id);
+    $user = User::find($id);
 
-    if ($user->nivel === "Super-Admin" && in_array(Auth::user()->nivel(), ["Admin", "User"])) {
+    if ($user->role === "Super-Admin" && in_array(Auth::user()->role, ["Admin", "User"])) {
       return response()->json([
         'message' => 'unauthorized',
       ], 403);
@@ -101,7 +101,7 @@ class UserController extends Controller
     
     $user->password = Hash::make(config('app.user_default_password', ''));
     
-    if(Auth::user()->setor_id !== $user->setor_id && Auth::user()->nivel !== 'Super-Admin') {
+    if(Auth::user()->setor_id !== $user->setor_id && Auth::user()->role !== 'Super-Admin') {
       return response()->json([
         'message' => 'unauthorized'
       ], 403);

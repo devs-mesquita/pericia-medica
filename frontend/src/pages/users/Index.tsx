@@ -13,6 +13,7 @@ import {
   PlusSquareIcon,
   PowerIcon,
   BookUserIcon,
+  RotateCcwIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -56,6 +57,40 @@ export default function UserIndexPage() {
     });
   };
 
+  const resetUserPasswordMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const res = await fetch(`${API_URL}/api/users/${id}/resetpassword`, {
+        method: "POST",
+        body: JSON.stringify({ _method: "PATCH" }),
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: authHeader(),
+        },
+      });
+
+      if (!res.ok) {
+        throw await res.json();
+      }
+
+      return (await res.json()) as DeleteUserResponse;
+    },
+    onSuccess: () => {
+      setNotification({
+        message: "Senha restaurada com sucesso.",
+        type: "success",
+      });
+      setDialog(dialogInitialState);
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+    onError: () => {
+      setNotification({
+        message: "Ocorreu um erro.",
+        type: "error",
+      });
+    },
+  });
+
   const deleteUserMutation = useMutation({
     mutationFn: async (id: number) => {
       console.log(id);
@@ -86,7 +121,7 @@ export default function UserIndexPage() {
       setDialog(dialogInitialState);
       queryClient.invalidateQueries({ queryKey: ["users"] });
     },
-    onError: (error) => {
+    onError: () => {
       setNotification({
         message: "Ocorreu um erro.",
         type: "error",
@@ -106,6 +141,30 @@ export default function UserIndexPage() {
       header: "Email",
       enableColumnFilter: true,
       enableSorting: true,
+    },
+    {
+      accessorKey: "role",
+      header: "Nível de Acesso",
+      enableColumnFilter: true,
+      enableSorting: true,
+      cell: ({ row }) => {
+        let role = "";
+        switch (row.getValue("role")) {
+          case "Guest":
+            role = "Visitante";
+            break;
+          case "User":
+            role = "Usuário";
+            break;
+          case "Admin":
+            role = "Administrador";
+            break;
+          case "Super-Admin":
+            role = "Super Administrador";
+            break;
+        }
+        return role;
+      },
     },
     {
       accessorKey: "deleted_at",
@@ -135,7 +194,26 @@ export default function UserIndexPage() {
               onSubmit={(evt) => {
                 evt.preventDefault();
                 handleConfirmation(
-                  () => deleteUserMutation.mutate(row.original.id),
+                  () => resetUserPasswordMutation.mutate(row.original.id),
+                  `Deseja confirmar a restauração de senha do usuário ${
+                    row.original.name.split(" ")[0]
+                  }?`,
+                );
+              }}
+            >
+              <button
+                type="submit"
+                className="rounded bg-blue-500 p-2 text-white hover:bg-blue-600"
+                title="Restaurar senha."
+              >
+                <RotateCcwIcon className="h-5 w-5" />
+              </button>
+            </form>
+            <form
+              onSubmit={(evt) => {
+                evt.preventDefault();
+                handleConfirmation(
+                  () => resetUserPasswordMutation.mutate(row.original.id),
                   `Deseja confirmar a ${
                     row.original.deleted_at ? "reativação" : "desativação"
                   } do usuário?`,

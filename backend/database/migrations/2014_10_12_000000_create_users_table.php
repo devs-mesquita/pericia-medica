@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->enum('nivel',['Guest','User','Admin','Super-Admin']);
+            $table->enum('role',['Guest','User','Admin','Super-Admin']);
             $table->string('password');
             $table->timestamps();
             $table->softDeletes();

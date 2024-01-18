@@ -40,7 +40,7 @@ export default function ConfirmationDialog({
         <h2 className="text-center text-slate-900">{message}</h2>
         <div className="flex w-full gap-4">
           {isLoading ? (
-            <LoaderIcon className="mx-auto animate-spin text-slate-700 duration-2000" />
+            <LoaderIcon className="mx-auto animate-spin cursor-wait text-slate-700 duration-2000" />
           ) : (
             <>
               <button

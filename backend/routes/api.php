@@ -41,7 +41,7 @@ Route::middleware(['api-auth'])->group(function () {
     Route::post('users', [UserController::class, 'store']);
     Route::patch('users/{id}', [UserController::class, 'update']);
     Route::delete('users/{id}', [UserController::class, 'delete']);
-    Route::post('resetpassword', [UserController::class, 'resetPassword']);
+    Route::patch('users/{id}/resetpassword', [UserController::class, 'resetPassword']);
   });
 
   // Super-Admin
