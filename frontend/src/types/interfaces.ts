@@ -13,6 +13,7 @@ export type AppNotification = {
 
 export interface AppDialog {
   isOpen: boolean;
+  isPending: boolean;
   message: string;
   accept: () => void;
   reject: () => void;

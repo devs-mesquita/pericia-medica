@@ -34,6 +34,7 @@ export default function DirecionamentoIndexPage() {
   const queryClient = useQueryClient();
 
   const dialogInitialState: AppDialog = {
+    isPending: false,
     isOpen: false,
     message: "",
     accept: () => {},
@@ -44,6 +45,7 @@ export default function DirecionamentoIndexPage() {
 
   const handleConfirmation = (
     accept: () => void,
+    isPending: boolean,
     message: string = "Deseja confimar a operação?",
     reject = () => {
       setDialog(() => dialogInitialState);
@@ -54,6 +56,7 @@ export default function DirecionamentoIndexPage() {
       accept,
       reject,
       message,
+      isPending,
     });
   };
 
@@ -87,7 +90,7 @@ export default function DirecionamentoIndexPage() {
       setDialog(dialogInitialState);
       queryClient.invalidateQueries({ queryKey: ["direcionamentos"] });
     },
-    onError: (error) => {
+    onError: () => {
       setNotification({
         message: "Ocorreu um erro.",
         type: "error",
@@ -149,6 +152,7 @@ export default function DirecionamentoIndexPage() {
                 evt.preventDefault();
                 handleConfirmation(
                   () => deleteDirecionamentoMutation.mutate(row.original.id),
+                  deleteDirecionamentoMutation.isPending,
                   `Deseja confirmar a ${
                     row.original.deleted_at ? "reativação" : "desativação"
                   } do direcionamento?`,
@@ -196,7 +200,7 @@ export default function DirecionamentoIndexPage() {
   // Quantidade de Páginas
   const [pageCount, setPageCount] = React.useState(1);
 
-  const { data, refetch } = useQuery<Paginated<Direcionamento[]>>({
+  const { data, refetch, isFetching } = useQuery<Paginated<Direcionamento[]>>({
     queryKey: ["direcionamentos"],
     queryFn: async () => {
       const requestBody = {
@@ -253,6 +257,7 @@ export default function DirecionamentoIndexPage() {
   return (
     <div className="flex flex-1 flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20">
       <DataTable
+        isFetching={isFetching}
         columnFilters={columnFilters}
         columns={columns}
         data={data}
@@ -282,6 +287,7 @@ export default function DirecionamentoIndexPage() {
           accept={dialog.accept}
           reject={dialog.reject}
           message={dialog.message}
+          isPending={dialog.isPending}
         />
       )}
     </div>

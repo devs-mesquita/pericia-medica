@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/table";
 
 import { Button } from "../ui/button";
-import { MoveDownIcon, MoveUpIcon } from "lucide-react";
+import { LoaderIcon, MoveDownIcon, MoveUpIcon } from "lucide-react";
 
 export type DataFetchConfig<T> = {
   page: number;
@@ -49,6 +49,7 @@ interface DataTableProps<TData, TValue> {
   pageCount: number;
   setPagination: OnChangeFn<PaginationState>;
   tableHeadElement: JSX.Element;
+  isFetching: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -62,6 +63,7 @@ export function DataTable<TData, TValue>({
   pageCount,
   setPagination,
   tableHeadElement,
+  isFetching,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data: data.data,
@@ -130,7 +132,7 @@ export function DataTable<TData, TValue>({
           ))}
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows?.length ? (
+          {table.getRowModel().rows?.length > 0 && !isFetching ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
@@ -146,7 +148,11 @@ export function DataTable<TData, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                Nenhum registro foi encontrado.
+                {isFetching ? (
+                  <LoaderIcon className="mx-auto animate-spin text-slate-700 duration-2000" />
+                ) : (
+                  "Nenhum registro foi encontrado."
+                )}
               </TableCell>
             </TableRow>
           )}
@@ -164,7 +170,7 @@ export function DataTable<TData, TValue>({
             variant="outline"
             size="sm"
             onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
+            disabled={!table.getCanPreviousPage() || isFetching}
           >
             Anterior
           </Button>
@@ -175,7 +181,7 @@ export function DataTable<TData, TValue>({
             variant="outline"
             size="sm"
             onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
+            disabled={!table.getCanNextPage() || isFetching}
           >
             Próximo
           </Button>

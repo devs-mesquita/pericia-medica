@@ -38,12 +38,14 @@ export default function UserIndexPage() {
     message: "",
     accept: () => {},
     reject: () => {},
+    isPending: false,
   };
 
   const [dialog, setDialog] = React.useState<AppDialog>(dialogInitialState);
 
   const handleConfirmation = (
     accept: () => void,
+    isPending: boolean,
     message: string = "Deseja confimar a operação?",
     reject = () => {
       setDialog(() => dialogInitialState);
@@ -54,6 +56,7 @@ export default function UserIndexPage() {
       accept,
       reject,
       message,
+      isPending,
     });
   };
 
@@ -195,6 +198,7 @@ export default function UserIndexPage() {
                 evt.preventDefault();
                 handleConfirmation(
                   () => resetUserPasswordMutation.mutate(row.original.id),
+                  resetUserPasswordMutation.isPending,
                   `Deseja confirmar a restauração de senha do usuário ${
                     row.original.name.split(" ")[0]
                   }?`,
@@ -213,7 +217,8 @@ export default function UserIndexPage() {
               onSubmit={(evt) => {
                 evt.preventDefault();
                 handleConfirmation(
-                  () => resetUserPasswordMutation.mutate(row.original.id),
+                  () => deleteUserMutation.mutate(row.original.id),
+                  deleteUserMutation.isPending,
                   `Deseja confirmar a ${
                     row.original.deleted_at ? "reativação" : "desativação"
                   } do usuário?`,
@@ -261,7 +266,7 @@ export default function UserIndexPage() {
   // Quantidade de Páginas
   const [pageCount, setPageCount] = React.useState(1);
 
-  const { data, refetch } = useQuery<Paginated<User[]>>({
+  const { data, refetch, isFetching } = useQuery<Paginated<User[]>>({
     queryKey: ["users"],
     queryFn: async () => {
       const requestBody = {
@@ -318,6 +323,7 @@ export default function UserIndexPage() {
   return (
     <div className="flex flex-1 flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20">
       <DataTable
+        isFetching={isFetching}
         columnFilters={columnFilters}
         columns={columns}
         data={data}
@@ -347,6 +353,7 @@ export default function UserIndexPage() {
           accept={dialog.accept}
           reject={dialog.reject}
           message={dialog.message}
+          isPending={dialog.isPending}
         />
       )}
     </div>

@@ -238,19 +238,19 @@ export default function ChangePasswordPage() {
             <>
               <button
                 type="submit"
-                className="col-start-2 flex justify-center rounded-full bg-roxo px-4 py-1 text-center text-sm font-semibold uppercase text-white hover:bg-roxo-lighter"
+                className="col-start-2 flex justify-center rounded bg-green-500 px-4 py-1 text-center text-sm font-semibold uppercase text-white hover:bg-green-600"
               >
-                Confirmar
+                CONFIRMAR
               </button>
               <Link
                 to="/home"
-                className="col-start-3 rounded-full bg-slate-500 px-4 py-1 text-center text-sm font-semibold uppercase text-white hover:bg-slate-400"
+                className="col-start-3 rounded bg-slate-500 px-4 py-1 text-center text-sm font-semibold uppercase text-white hover:bg-slate-600"
               >
-                Cancelar
+                CANCELAR
               </Link>
             </>
           ) : (
-            <button className="col-start-2 flex justify-center rounded-full bg-roxo px-4 py-1 text-center uppercase text-white">
+            <button className="col-start-2 flex justify-center rounded bg-roxo px-4 py-1 text-center uppercase text-white">
               <LoaderIcon className="animate-spin text-white duration-2000" />
             </button>
           )}
