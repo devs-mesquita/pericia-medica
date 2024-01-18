@@ -29,6 +29,7 @@ type DeleteDirecionamentoResponse = {
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function DirecionamentoIndexPage() {
+  document.title = "Direcionamentos";
   const authHeader = useAuthHeader();
   const setNotification = useAtom(notificationAtom)[1];
   const queryClient = useQueryClient();

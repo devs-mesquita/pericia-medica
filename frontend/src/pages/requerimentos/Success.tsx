@@ -6,6 +6,8 @@ type SuccessPageState = {
 };
 
 export default function RequerimentoSuccessPage() {
+  document.title = "Sucesso!";
+
   const location = useLocation();
   const data = location.state as SuccessPageState;
 

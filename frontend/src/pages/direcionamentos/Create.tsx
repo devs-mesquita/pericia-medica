@@ -14,6 +14,7 @@ type DirecionamentoResponse = {
 };
 
 export default function DirecionamentoCreatePage() {
+  document.title = "Novo Direcionamento";
   const authHeader = useAuthHeader();
   const navigate = useNavigate();
   const setNotification = useAtom(notificationAtom)[1];
@@ -160,7 +161,7 @@ export default function DirecionamentoCreatePage() {
     <div className="flex flex-1 flex-col rounded-md bg-slate-100 p-2 pt-1 shadow shadow-black/20">
       <h1 className="mb-2 flex items-center justify-center border-b-2 border-slate-300 py-3">
         <SendIcon className="h-5 w-5" />
-        <span className="ml-1 font-semibold">Criar Novo Direcionamento</span>
+        <span className="ml-1 font-semibold">Novo Direcionamento</span>
       </h1>
       <form
         onSubmit={handleSubmit}

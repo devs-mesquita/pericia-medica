@@ -29,6 +29,8 @@ type DeleteUserResponse = {
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function UserIndexPage() {
+  document.title = "Usuários";
+  
   const authHeader = useAuthHeader();
   const setNotification = useAtom(notificationAtom)[1];
   const queryClient = useQueryClient();

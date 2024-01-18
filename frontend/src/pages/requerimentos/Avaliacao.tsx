@@ -9,6 +9,7 @@ import { nanoid } from "nanoid";
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function RequerimentoAvaliacaoPage() {
+  document.title = "Avaliação de Requerimento";
   const [date, setDate] = React.useState<Date | undefined>(undefined);
   const [time, setTime] = React.useState<string>("");
 

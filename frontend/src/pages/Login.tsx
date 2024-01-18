@@ -43,6 +43,8 @@ const defaultMessages: Record<string, AppNotification> = {
 };
 
 export default function LoginPage() {
+  document.title = "Login";
+  
   const navigate = useNavigate();
   const signIn = useSignIn();
   const isAuthenticated = useIsAuthenticated();

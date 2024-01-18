@@ -30,6 +30,8 @@ const notificationMessages: Record<string, AppNotification> = {
 type APIMessage = "ok" | "email-conflict";
 
 export default function UserCreatePage() {
+  document.title = "Novo Usuário";
+
   const setNotification = useAtom(notificationAtom)[1];
   const authHeader = useAuthHeader();
   const navigate = useNavigate();

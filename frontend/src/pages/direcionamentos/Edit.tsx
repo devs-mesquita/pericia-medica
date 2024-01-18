@@ -19,6 +19,7 @@ type UpdateDirecionamentoResponse = {
 };
 
 export default function DirecionamentoEditPage() {
+  document.title = "Modificar Direcionamento";
   const authHeader = useAuthHeader();
   const navigate = useNavigate();
   const setNotification = useAtom(notificationAtom)[1];
