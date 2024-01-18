@@ -158,14 +158,14 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-      <div className="mt-auto grid grid-cols-3 items-center justify-between space-x-2 border-t-2 border-slate-300 px-2 pt-2">
+      <div className="mt-auto grid grid-cols-1 items-center justify-between space-y-1 border-t-2 border-slate-300 px-2 pt-2 md:grid-cols-3 md:space-x-2 md:space-y-0">
         <div className="text-sm">
           Mostrando de {data.from} até {data.to} de {data.total} registros
         </div>
-        <div className="justify-self-center text-sm">
+        <div className="text-sm md:justify-self-center">
           Página {data.current_page} de {data.last_page}
         </div>
-        <div className="flex items-center space-x-2 justify-self-end">
+        <div className="flex items-center space-x-2 md:justify-self-end">
           <Button
             variant="outline"
             size="sm"
