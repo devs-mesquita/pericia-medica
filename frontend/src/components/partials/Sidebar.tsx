@@ -94,7 +94,7 @@ export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
           sidebarIsOpen,
         },
         {
-          title: "Funcionários",
+          title: "Usuários",
           path: "/users",
           logo: <BookUserIcon className="h-5 w-5" />,
           sidebarIsOpen,

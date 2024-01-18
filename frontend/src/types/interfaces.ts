@@ -1,7 +1,8 @@
 export interface User {
+  id: number;
   name: string;
-  cpf: string;
   email: string;
+  deleted_at: string;
   role: "Guest" | "User" | "Admin" | "Super-Admin";
 }
 

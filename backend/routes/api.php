@@ -36,8 +36,11 @@ Route::middleware(['api-auth'])->group(function () {
     Route::delete('direcionamentos/{id}', [RequerimentoDirecionamentoController::class, 'delete']);
     
     Route::get('users', [UserController::class, 'index']);
-    Route::post('user/update', [UserController::class, 'updateUser']);
-    Route::post('register', [UserController::class, 'register']);
+    Route::get('users/{id}', [UserController::class, 'show']);
+    Route::post('users/query', [UserController::class, 'query']);
+    Route::post('users', [UserController::class, 'store']);
+    Route::patch('users/{id}', [UserController::class, 'update']);
+    Route::delete('users/{id}', [UserController::class, 'delete']);
     Route::post('resetpassword', [UserController::class, 'resetPassword']);
   });
 

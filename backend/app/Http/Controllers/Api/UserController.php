@@ -16,7 +16,26 @@ class UserController extends Controller
     return $users;
   }
 
-  public function register(Request $request)
+  public function query(Request $request)
+  {
+    $query = User::query();
+
+    $query->withTrashed();
+
+    foreach($request->columnFilters as $filter) {
+      $query = $query->where($filter["id"], 'like', '%'.$filter["value"].'%');
+    }
+
+    foreach($request->sorting as $order) {
+      $query = $query->orderBy($order["id"], $order["desc"] ? "desc" : "asc");
+    }
+
+    $users = $query->paginate($request->per_page);
+
+    return $users;
+  }
+
+  public function store(Request $request)
   {
       if (User::where('email', $request->email)->count() > 0) {
         return response()->json([
@@ -37,7 +56,7 @@ class UserController extends Controller
       ], 201);
   }
 
-  public function updateUser(Request $request)
+  public function update(Request $request)
   {
     $user = User::find($request->user_id);
 
@@ -123,5 +142,35 @@ class UserController extends Controller
     return response()->json([
       'message' => 'ok',
     ], 200);
+  }
+
+  public function show ($id)
+  {
+    $user = User::find($id);
+
+    if (!$user) {
+      return response()->json(["message" => "not-found"], 404);
+    }
+
+    return ["user" => $user];
+  }
+
+  public function delete ($id)
+  {
+    $user = User::withTrashed()->find($id);
+
+    if (!$user) {
+      return response()->json(["message" => "not-found"], 404);
+    }
+
+    if ($user->deleted_at === null) {
+      $user->delete();
+    } else {
+      $user->restore();
+    }
+
+    $user->save();
+
+    return ["user" => $user];
   }
 }

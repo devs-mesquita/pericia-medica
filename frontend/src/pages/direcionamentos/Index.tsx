@@ -88,17 +88,10 @@ export default function DirecionamentoIndexPage() {
       queryClient.invalidateQueries({ queryKey: ["direcionamentos"] });
     },
     onError: (error) => {
-      if (error.message === "name-conflict") {
-        setNotification({
-          message: "Um direcionamento com o mesmo nome já existe.",
-          type: "error",
-        });
-      } else {
-        setNotification({
-          message: "Ocorreu um erro.",
-          type: "error",
-        });
-      }
+      setNotification({
+        message: "Ocorreu um erro.",
+        type: "error",
+      });
     },
   });
 
