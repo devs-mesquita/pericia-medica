@@ -58,7 +58,7 @@ class UserController extends Controller
 
   public function update(Request $request, $id)
   {
-    $user = User::find($id);
+    $user = User::withTrashed()->find($id);
 
     if ($user === null) {
       return response()->json([
@@ -85,7 +85,7 @@ class UserController extends Controller
 
   public function resetPassword(Request $request, $id)
   {
-    $user = User::find($id);
+    $user = User::withTrashed()->find($id);
 
     if ($user->role === "Super-Admin" && in_array(Auth::user()->role, ["Admin", "User"])) {
       return response()->json([
@@ -122,7 +122,7 @@ class UserController extends Controller
       ], 400);
     }
     
-    $user = User::find(Auth::user()->id);
+    $user = User::withTrashed()->find(Auth::user()->id);
 
     if ($user === null) {
       return response()->json([
@@ -146,7 +146,7 @@ class UserController extends Controller
 
   public function show ($id)
   {
-    $user = User::find($id);
+    $user = User::withTrashed()->find($id);
 
     if (!$user) {
       return response()->json(["message" => "not-found"], 404);

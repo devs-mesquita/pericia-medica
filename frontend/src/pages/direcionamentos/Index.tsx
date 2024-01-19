@@ -108,7 +108,7 @@ export default function DirecionamentoIndexPage() {
     },
     {
       accessorKey: "atendimento_presencial",
-      header: "Atendimento presencial?",
+      header: "Atendimento Presencial?",
       cell: ({ row }) => {
         return row.getValue("atendimento_presencial") ? "Sim" : "Não";
       },

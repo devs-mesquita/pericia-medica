@@ -56,6 +56,7 @@ class Kernel extends HttpKernel
      */
     protected $middlewareAliases = [
         'api-auth' => \App\Http\Middleware\EnsureUserIsAuthenticated::class,
+        'user' => \App\Http\Middleware\EnsureUserIsUser::class,
         'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
         'cors' => \App\Http\Middleware\Cors::class,
         'super-admin' => \App\Http\Middleware\EnsureUserIsSuperAdmin::class,

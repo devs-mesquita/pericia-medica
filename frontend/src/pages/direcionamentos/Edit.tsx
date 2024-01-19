@@ -166,7 +166,7 @@ export default function DirecionamentoEditPage() {
     updateDirecionamentoMutation.mutate(form);
   };
 
-  const { data } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ["direcionamentos", id],
     queryFn: async () => {
       const res = await fetch(`${API_URL}/api/direcionamentos/${id}`, {
@@ -221,7 +221,7 @@ export default function DirecionamentoEditPage() {
             </label>
             <input
               id="name"
-              disabled={updateDirecionamentoMutation.isPending}
+              disabled={updateDirecionamentoMutation.isPending || isFetching}
               value={form.name}
               onChange={handleChange}
               className="rounded border border-slate-300 p-2 outline-none focus:border-slate-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-600/80"
@@ -241,7 +241,9 @@ export default function DirecionamentoEditPage() {
                 className="flex gap-2"
               >
                 <input
-                  disabled={updateDirecionamentoMutation.isPending}
+                  disabled={
+                    updateDirecionamentoMutation.isPending || isFetching
+                  }
                   onChange={handleChange}
                   value="sim"
                   type="radio"
@@ -257,7 +259,9 @@ export default function DirecionamentoEditPage() {
                 className="flex gap-2"
               >
                 <input
-                  disabled={updateDirecionamentoMutation.isPending}
+                  disabled={
+                    updateDirecionamentoMutation.isPending || isFetching
+                  }
                   onChange={handleChange}
                   type="radio"
                   id="atendimento_presencial_nao"

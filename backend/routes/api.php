@@ -17,15 +17,19 @@ Route::controller(AuthController::class)->group(function () {
 Route::post('requerimentos', [RequerimentoController::class, 'store']);
 Route::post('requerimentos/{protocolo}/confirmacao', [RequerimentoController::class, 'confirmacao']);
 
-// Authenticated, >= User:
+// Authenticated, >= Guest:
 Route::middleware(['api-auth'])->group(function () {
   Route::post('changepassword', [UserController::class, 'changePassword']);
 
   Route::get('requerimentos', [RequerimentoController::class, 'index']);
   Route::get('requerimentos/{id}', [RequerimentoController::class, 'show']);
-  Route::post('requerimentos/{id}/avaliacao', [RequerimentoController::class, 'avaliacao']);
-  Route::post('requerimentos/{id}/presenca', [RequerimentoController::class, 'presenca']);
-
+  
+  // >= User
+  Route::middleware(['user'])->group(function () {
+    Route::post('requerimentos/{id}/avaliacao', [RequerimentoController::class, 'avaliacao']);
+    Route::post('requerimentos/{id}/presenca', [RequerimentoController::class, 'presenca']);
+  });
+  
   // >= Admin
   Route::middleware(['admin'])->group(function () {
     Route::get('direcionamentos', [RequerimentoDirecionamentoController::class, 'index']);

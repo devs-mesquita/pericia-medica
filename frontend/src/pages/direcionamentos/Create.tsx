@@ -186,7 +186,7 @@ export default function DirecionamentoCreatePage() {
           </div>
           <div className="flex flex-col">
             <label htmlFor="" className="font-semibold">
-              O direcionamento possui atendimento presencial?
+              O direcionamento necessita de atendimento presencial?
             </label>
             <div className="flex gap-6 pl-3">
               <label

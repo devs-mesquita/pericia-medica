@@ -66,7 +66,7 @@ class RequerimentoDirecionamentoController extends Controller
       ], 400);
     }
 
-    $checkNameConflict = RequerimentoDirecionamento::where([
+    $checkNameConflict = RequerimentoDirecionamento::withTrashed()->where([
       ["name", mb_strtoupper($request->name)],
       ["id", "!=", $id]
     ])->first();
@@ -76,7 +76,7 @@ class RequerimentoDirecionamentoController extends Controller
       ], 400);
     }
 
-    RequerimentoDirecionamento::where("id", $id)
+    RequerimentoDirecionamento::withTrashed()->where("id", $id)
     ->update([
       "name" => mb_strtoupper($request->name),
       "atendimento_presencial" => $request->atendimento_presencial === "sim" ? true : false,
@@ -88,7 +88,7 @@ class RequerimentoDirecionamentoController extends Controller
 
   public function show ($id)
   {
-    $direcionamento = RequerimentoDirecionamento::find($id);
+    $direcionamento = RequerimentoDirecionamento::withTrashed()->find($id);
 
     if (!$direcionamento) {
       return response()->json(["message" => "not-found"], 404);

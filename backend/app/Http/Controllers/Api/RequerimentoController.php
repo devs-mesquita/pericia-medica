@@ -2,11 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Requerimento;
-use App\Models\RequerimentoDirecionamento;
-use App\Models\RequerimentoReagendamento;
-use App\Models\RequerimentoAtestadoFile;
-use App\Models\RequerimentoAfastamentoFile;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +9,21 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Carbon;
-use App\Mail\RequerimentoCreate;
+
+use App\Models\Requerimento;
+use App\Models\RequerimentoDirecionamento;
+use App\Models\RequerimentoReagendamento;
+use App\Models\RequerimentoAtestadoFile;
+use App\Models\RequerimentoAfastamentoFile;
+
+use App\Mail\RequerimentoCreateMail;
+use App\Mail\RequerimentoAgendadoMail;
+use App\Mail\RequerimentoNaoPresencialMail;
+use App\Mail\RequerimentoRecusadoMail;
+
+use App\Mail\ReagendamentoAgendadoMail;
+use App\Mail\ReagendamentoNaoPresencialMail;
+use App\Mail\ReagendamentoRecusadoMail;
 
 class RequerimentoController extends Controller
 {
@@ -104,7 +113,7 @@ class RequerimentoController extends Controller
         };
 
         try {
-          Mail::to($requerimento->email)->send(new RequerimentoCreate($requerimento));
+          Mail::to($requerimento->email)->send(new RequerimentoCreateMail($requerimento));
           $requerimento->envio_create = 1;
 
         } catch (Exception $e) {
@@ -133,32 +142,129 @@ class RequerimentoController extends Controller
       return response()->json([ "message" => "error" ], 400);
     }
   }
-
+  
   public function avaliacao(Request $request, $id) {
     DB::beginTransaction();
     try {
-      // find requerimento, if has reagendamento: consider Reagendamento
+      $requerimento = Requerimento::with("reagendamentos")->findOrFail($id);
+      
+      // Reagendamento
+      if ($requerimento->reagendamentos->count() > 0) {
+        $latestReagendamento = $requerimento->reagendamentos[$requerimento->reagendamentos->count()-1];
 
-      // if Requerimento Main:
-        // Agendado: Atribuir direcionamento_id, agenda datetime, avaliador_id, status=aguardando-confirmacao
-          // Mail: RequerimentoAgendado
+        if ($request->direcionamento_id === "recusado") {
+          $latestReagendamento->status = "recusado";
+          $latestReagendamento->justificativa_recusa = $request->justificativa_recusa;
+          $latestReagendamento->observacao_avaliador = $request->observacao_avaliador;
+          $latestReagendamento->avaliado_at = Carbon::now();
+          $latestReagendamento->avaliador_id = Auth::user()->id;
 
-        // Direcionamento atendimento_presencial = false, status = confirmado
-          // Mail: RequerimentoSemAtendimento
-        
-        // if Reagendamento:
-          // Reagendamento: Atribuir direcionamento_id, agenda datetime, avaliador_id, status=aguardando-confirmacao
-            // Mail: ReagendamentoAgendado
+          try {
+            Mail::to($requerimento->email)->send(new ReagendamentoRecusadoMail($requerimento, $latestReagendamento));
+            $latestReagendamento->envio_avaliacao = 1;
+  
+          } catch (Exception $e) {
+            $latestReagendamento->envio_avaliacao = 0;
+          }
 
-          // Direcionamento atendimento_presencial = false, status = confirmado
-            // Mail: ReagendamentoSemAtendimento
+        } else {
+          $direcionamento = RequerimentoDirecionamento::find($request->direcionamento_id);
 
-      // Recusado: justificativa_recusa, status=recusado, avaliador_id
-        // Mail: RequerimentoRecusado
-        // Mail: ReagendamentoRecusado
+          if ($direcionamento->atendimento_presencial) {
+            $latestReagendamento->direcionamento_id = $request->direcionamento_id;
+            $latestReagendamento->agenda_datetime = $request->data_agenda." ".$request->hora_agenda;
+            $latestReagendamento->observacao_avaliador = $request->observacao_avaliador;
+            $latestReagendamento->status = "aguardando-confirmacao";
+            $latestReagendamento->avaliado_at = Carbon::now();
+            $latestReagendamento->avaliador_id = Auth::user()->id;
+
+            try {
+              Mail::to($requerimento->email)->send(new ReagendamentoAgendadoMail($requerimento, $latestReagendamento));
+              $latestReagendamento->envio_avaliacao = 1;
+    
+            } catch (Exception $e) {
+              $latestReagendamento->envio_avaliacao = 0;
+            }
+
+          } else {
+            $latestReagendamento->direcionamento_id = $request->direcionamento_id;
+            $latestReagendamento->status = "confirmado";
+            $latestReagendamento->observacao_avaliador = $request->observacao_avaliador;
+            $latestReagendamento->avaliado_at = Carbon::now();
+            $latestReagendamento->avaliador_id = Auth::user()->id;
+
+            try {
+              Mail::to($requerimento->email)->send(new ReagendamentoNaoPresencialMail($requerimento, $latestReagendamento));
+              $latestReagendamento->envio_avaliacao = 1;
+
+            } catch (Exception $e) {
+              $latestReagendamento->envio_avaliacao = 0;
+            }
+          }
+        }
+        $latestReagendamento->save();
+
+      } else {
+        // Requerimento
+        if ($request->direcionamento_id === "recusado") {
+          $requerimento->status = "recusado";
+          $requerimento->justificativa_recusa = $request->justificativa_recusa;
+          $requerimento->observacao_avaliador = $request->observacao_avaliador;
+          $requerimento->avaliado_at = Carbon::now();
+          $requerimento->avaliador_id = Auth::user()->id;
+
+          try {
+            Mail::to($requerimento->email)->send(new RequerimentoRecusadoMail($requerimento));
+            $requerimento->envio_avaliacao = 1;
+          } catch (Exception $e) {
+            $requerimento->envio_avaliacao = 0;
+          }
+
+        } else {
+          $direcionamento = RequerimentoDirecionamento::find($request->direcionamento_id);
+
+          if ($direcionamento->atendimento_presencial) {
+            $requerimento->direcionamento_id = $request->direcionamento_id;
+            $requerimento->agenda_datetime = $request->data_agenda." ".$request->hora_agenda;
+            $requerimento->observacao_avaliador = $request->observacao_avaliador;
+            $requerimento->status = "aguardando-confirmacao";
+            $requerimento->avaliado_at = Carbon::now();
+            $requerimento->avaliador_id = Auth::user()->id;
+
+            try {
+              Mail::to($requerimento->email)->send(new RequerimentoAgendadoMail($requerimento));
+              $requerimento->envio_avaliacao = 1;
+    
+            } catch (Exception $e) {
+              $requerimento->envio_avaliacao = 0;
+            }
+
+          } else {
+            $requerimento->direcionamento_id = $request->direcionamento_id;
+            $requerimento->status = "confirmado";
+            $requerimento->observacao_avaliador = $request->observacao_avaliador;
+            $requerimento->avaliado_at = Carbon::now();
+            $requerimento->avaliador_id = Auth::user()->id;
+
+            try {
+              Mail::to($requerimento->email)->send(new RequerimentoNaoPresencialMail($requerimento));
+              $requerimento->envio_avaliacao = 1;
+
+            } catch (Exception $e) {
+              $requerimento->envio_avaliacao = 0;
+            }
+          }
+        }
+      }
+
+      $requerimento->last_movement_at = Carbon::now();
+      $requerimento->save();
+      DB::commit();
+      return ["message" => "ok"];
 
     } catch (Exception $e) {
-
+      DB::rollBack();
+      return response()->json([ "message" => "error" ], 400);
     }
   }
   

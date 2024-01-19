@@ -45,7 +45,7 @@ export default function UserCreatePage() {
   const queryClient = useQueryClient();
   const { id } = useParams();
 
-  const { data } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ["users", id],
     queryFn: async () => {
       const res = await fetch(`${API_URL}/api/users/${id}`, {
@@ -149,7 +149,7 @@ export default function UserCreatePage() {
               required
               value={form.name}
               onChange={handleChange}
-              disabled={editUserMutation.isPending}
+              disabled={editUserMutation.isPending || isFetching}
               name="name"
               className="rounded border border-slate-300 bg-white p-2 text-slate-700 outline-none focus:border-slate-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-600/80"
               placeholder="Arthur de Oliveira Vecchi"
@@ -164,7 +164,7 @@ export default function UserCreatePage() {
               onChange={handleChange}
               name="email"
               className="rounded border border-slate-300 bg-white p-2 text-slate-700 outline-none focus:border-slate-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-600/80"
-              disabled={editUserMutation.isPending}
+              disabled={editUserMutation.isPending || isFetching}
               placeholder="arthur.oliveira@mesquita.rj.gov.br"
               type="email"
             />
@@ -175,7 +175,7 @@ export default function UserCreatePage() {
               required
               value={form.role}
               onChange={handleChange}
-              disabled={editUserMutation.isPending}
+              disabled={editUserMutation.isPending || isFetching}
               name="role"
               className="rounded border border-slate-300 bg-white p-2 text-slate-700 outline-none focus:border-slate-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-600/80"
             >
