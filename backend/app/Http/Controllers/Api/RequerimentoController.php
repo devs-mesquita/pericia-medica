@@ -329,21 +329,49 @@ class RequerimentoController extends Controller
       }
     }
 
+    $reagendamento_keys = [
+      'id',
+      'requerimento_id',
+      'justificativa_requerente',
+      'envio_create',
+      'status',
+      'observacao_avaliador',
+      'justificativa_recusa',
+      'avaliado_at',
+      'avaliador_id',
+      'direcionamento_id',
+      'envio_avaliacao',
+      'agenda_datetime',
+      'confirmado_at',
+      'reagendamento_solicitado_at',
+      'presenca',
+      'realocador_id',
+      'justificativa_realocacao',
+      'realocado_at',
+      'envio_realocacao'
+    ];
+
     if ($request->columnFilters) {
       foreach($request->columnFilters as $filter) {
-        $query = $query->where($filter["id"], 'like', '%'.$filter["value"].'%')
-        ->orWhereHas("reagendamentos", function($q) use ($filter) {
-          $q->where($filter["id"], 'like', '%'.$filter["value"].'%');
-        });
+        $query = $query->where($filter["id"], 'like', '%'.$filter["value"].'%');
+
+        if(in_array($filter, $reagendamento_keys)) {
+          $query = $query->orWhereHas("reagendamentos", function($q) use ($filter) {
+            $q->where($filter["id"], 'like', '%'.$filter["value"].'%');
+          });
+        }
       }
     }
 
     if ($request->sorting) {
       foreach($request->sorting as $order) {
-        $query = $query->orderBy($order["id"], $order["desc"] ? "desc" : "asc")
-        ->orWhereHas("reagendamentos", function($q) use ($order) {
-          $q->orderBy($order["id"], $order["desc"] ? "desc" : "asc");
-        });
+        $query = $query->orderBy($order["id"], $order["desc"] ? "desc" : "asc");
+
+        if(in_array($order, $reagendamento_keys)) {
+          $query = $query->orWhereHas("reagendamentos", function($q) use ($order) {
+            $q->orderBy($order["id"], $order["desc"] ? "desc" : "asc");
+          });
+        }
       }
     }
 
