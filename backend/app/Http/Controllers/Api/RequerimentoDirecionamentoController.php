@@ -45,12 +45,16 @@ class RequerimentoDirecionamentoController extends Controller
 
     $query->withTrashed();
 
-    foreach($request->columnFilters as $filter) {
-      $query = $query->where($filter["id"], 'like', '%'.$filter["value"].'%');
+    if ($request->columnFilters) {
+      foreach($request->columnFilters as $filter) {
+        $query = $query->where($filter["id"], 'like', '%'.$filter["value"].'%');
+      }
     }
 
-    foreach($request->sorting as $order) {
-      $query = $query->orderBy($order["id"], $order["desc"] ? "desc" : "asc");
+    if ($request->sorting) {
+      foreach($request->sorting as $order) {
+        $query = $query->orderBy($order["id"], $order["desc"] ? "desc" : "asc");
+      }
     }
 
     $direcionamentos = $query->paginate($request->per_page);

@@ -23,7 +23,7 @@ return new class extends Migration
             $table->date('inicio_atestado_date');
             $table->boolean('acumula_matricula');
             $table->dateTime('last_movement_at')->useCurrent();
-            $table->string('protocolo');
+            $table->string('protocolo')->unique()->nullable();
             $table->enum('status', ['em-analise', 'aguardando-confirmacao', 'recusado', 'realocado', 'reagendamento-solicitado', 'confirmado']);
             $table->dateTime('avaliado_at')->nullable();
             $table->dateTime('agenda_datetime')->nullable();

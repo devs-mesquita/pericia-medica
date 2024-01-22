@@ -28,3 +28,54 @@ export type Direcionamento = {
   updated_at: string;
   deleted_at: string;
 };
+
+type RequerimentoFile = {
+  id: number;
+  filename: string;
+  extension: string;
+  created_at: string;
+  updated_at: string;
+  requerimento_id: number;
+};
+
+export type Requerimento = {
+  id: number;
+  nome: string;
+  matricula: string;
+  local_lotacao: string;
+  inicio_expediente: string;
+  fim_expediente: string;
+  email: string;
+  inicio_atestado_date: string;
+  acumula_matricula: boolean;
+  last_movement_at: string;
+  protocolo: string;
+  status:
+    | "em-analise"
+    | "aguardando-confirmacao"
+    | "recusado"
+    | "realocado"
+    | "reagendamento-solicitado";
+  atestado_files: RequerimentoFile[];
+  afatastamento_files: RequerimentoFile[];
+  avaliado_at?: string;
+  agenda_datetime?: string;
+  observacao_avaliador?: string;
+  justificativa_recusa?: string;
+  justificativa_realocacao?: string;
+  realocado_at?: string;
+  envio_create?: boolean;
+  envio_avaliacao?: boolean;
+  envio_realocacao?: boolean;
+  confirmado_at?: string;
+  presenca?: boolean;
+  reagendamento_solicitado_at?: string;
+  direcionamento_id?: number;
+  direcionamento?: Direcionamento;
+  avaliador?: User;
+  realocador?: User;
+  avaliador_id?: number;
+  realocador_id?: number;
+  created_at: string;
+  updated_at: string;
+};

@@ -23,6 +23,7 @@ Route::middleware(['api-auth'])->group(function () {
 
   Route::get('requerimentos', [RequerimentoController::class, 'index']);
   Route::get('requerimentos/{id}', [RequerimentoController::class, 'show']);
+  Route::post('requerimentos/query', [RequerimentoController::class, 'query']);
   
   // >= User
   Route::middleware(['user'])->group(function () {

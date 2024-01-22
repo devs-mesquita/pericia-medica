@@ -45,6 +45,16 @@ class Requerimento extends Model
       return $this->hasMany(RequerimentoReagendamento::class, 'requerimento_id');
     }
 
+    public function atestado_files(): HasMany
+    {
+      return $this->hasMany(RequerimentoAtestadoFile::class, 'requerimento_id');
+    }
+
+    public function afastamento_files(): HasMany
+    {
+      return $this->hasMany(RequerimentoAfastamentoFile::class, 'requerimento_id');
+    }
+
     public function direcionamento(): BelongsTo
     {
       return $this->belongsTo(RequerimentoDirecionamento::class, 'direcionamento_id');
