@@ -29,13 +29,46 @@ export type Direcionamento = {
   deleted_at: string;
 };
 
-type RequerimentoFile = {
+export type RequerimentoFile = {
   id: number;
   filename: string;
   extension: string;
   created_at: string;
   updated_at: string;
   requerimento_id: number;
+};
+
+export type Reagendamento = {
+  id: number;
+  requerimento_id: number;
+  status:
+    | "em-analise"
+    | "aguardando-confirmacao"
+    | "recusado"
+    | "realocado"
+    | "reagendamento-solicitado";
+  justificativa_requerente?: string;
+  direcionamento_id?: number;
+  avaliador_id: number;
+  realocador_id: number;
+  envio_create?: boolean;
+  avaliado_at?: string;
+  agenda_datetime?: string;
+  observacao_avaliador?: string;
+  justificativa_recusa?: string;
+  justificativa_realocacao?: string;
+  realocado_at?: string;
+  envio_avaliacao?: boolean;
+  envio_realocacao?: boolean;
+  confirmato_at?: string;
+  presenca?: boolean;
+  reagendamento_solicitado_at?: string;
+  created_at: string;
+  updated_at: string;
+  requerimento: Requerimento;
+  direcionamento?: Direcionamento;
+  avaliador?: User;
+  realocador?: User;
 };
 
 export type Requerimento = {
@@ -72,6 +105,7 @@ export type Requerimento = {
   reagendamento_solicitado_at?: string;
   direcionamento_id?: number;
   direcionamento?: Direcionamento;
+  reagendamentos: Reagendamento[];
   avaliador?: User;
   realocador?: User;
   avaliador_id?: number;

@@ -97,25 +97,31 @@ export default function RequerimentosIndexPage() {
       enableColumnFilter: true,
       enableSorting: true,
       cell: ({ row }) => {
-        let role = "";
-        switch (row.original.status) {
+        let lastStatus = "";
+        switch (
+          row.original.reagendamentos.length > 0
+            ? row.original.reagendamentos[
+                row.original.reagendamentos.length - 1
+              ].status
+            : row.original.status
+        ) {
           case "em-analise":
-            role = "Em Análise";
+            lastStatus = "Em Análise";
             break;
           case "aguardando-confirmacao":
-            role = "Aguardando Confirmação";
+            lastStatus = "Aguardando Confirmação";
             break;
           case "reagendamento-solicitado":
-            role = "Reagendamento Solicitado";
+            lastStatus = "Reagendamento Solicitado";
             break;
           case "realocado":
-            role = "Realocado";
+            lastStatus = "Realocado";
             break;
           case "recusado":
-            role = "Recusado";
+            lastStatus = "Recusado";
             break;
         }
-        return role;
+        return lastStatus;
       },
     },
     {
@@ -133,7 +139,14 @@ export default function RequerimentosIndexPage() {
       enableColumnFilter: false,
       enableSorting: true,
       cell: ({ row }) => {
-        return format(row.getValue("last_movement_at"), "dd/LL/yyyy H:mm");
+        let lastDate =
+          row.original.reagendamentos.length > 0
+            ? row.original.reagendamentos[
+                row.original.reagendamentos.length - 1
+              ]?.agenda_datetime || ""
+            : row.original?.agenda_datetime || "";
+
+        return lastDate ? format(lastDate || "", "dd/LL/yyyy H:mm") : "";
       },
     },
     {
@@ -212,7 +225,14 @@ export default function RequerimentosIndexPage() {
       enableColumnFilter: false,
       enableSorting: true,
       cell: ({ row }) => {
-        return row.original.avaliador?.name || "";
+        let lastAvaliador =
+          row.original.reagendamentos.length > 0
+            ? row.original.reagendamentos[
+                row.original.reagendamentos.length - 1
+              ]?.avaliador?.name || ""
+            : row.original?.avaliador?.name || "";
+
+        return lastAvaliador;
       },
     },
   ];
@@ -254,7 +274,7 @@ export default function RequerimentosIndexPage() {
           Accept: "application/json",
           Authorization: authHeader(),
         },
-        body: JSON.stringify({...requestBody, section: "ativos"}),
+        body: JSON.stringify({ ...requestBody, section: "ativos" }),
       });
 
       if (!res.ok) {
