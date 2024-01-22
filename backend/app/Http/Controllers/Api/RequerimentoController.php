@@ -290,44 +290,18 @@ class RequerimentoController extends Controller
   public function query(Request $request) {
     $query = Requerimento::query();
     
-    $query = $query->with(
+    $query = $query->with([
       "reagendamentos",
       "direcionamento",
       "atestado_files",
       "afastamento_files",
       "avaliador",
       "realocador"
-    );
+    ]);
 
-    if ($request->section) {
-      switch($request->section) {
-        case "ativos":
-          $query = $query
-            ->whereIn("status", ["em-analise", "aguardando-confirmacao", "reagendamento-solicitado", "realocado"])
-            ->orWhereHas("reagendamentos", function($q) {
-              $q->whereIn("status", ["em-analise", "aguardando-confirmacao", "reagendamento-solicitado", "realocado"]);
-            });
-          break;
-
-        case "diario":
-          $query = $query
-            ->whereBetween("agenda_datetime", [Carbon::now()->startOfDay(), Carbon::now()->endOfDay()])
-            ->whereIn("status", ["confirmado", "aguardando-confirmacao", "reagendamento-solicitado"])
-            ->orWhereHas("reagendamentos", function($q) {
-              $q->whereBetween("agenda_datetime", [Carbon::now()->startOfDay(), Carbon::now()->endOfDay()])
-              ->whereIn("status", ["confirmado"]);
-            });
-          break;
-
-        case "arquivo":
-          $query = $query
-            ->whereIn("status", ["recusado", "confirmado"])
-            ->orWhereHas("reagendamentos", function($q) {
-              $q->whereIn("status", ["recusado", "confirmado"]);
-            });
-          break;
-      }
-    }
+    $sorting = $request?->sorting;
+    $columnFilters = $request?->columnFilters;
+    $section = $request?->section;
 
     $reagendamento_keys = [
       'id',
@@ -351,32 +325,63 @@ class RequerimentoController extends Controller
       'envio_realocacao'
     ];
 
-    if ($request->columnFilters) {
-      foreach($request->columnFilters as $filter) {
-        $query = $query->where($filter["id"], 'like', '%'.$filter["value"].'%');
+    if ($section) {
+      switch($section) {
+        case "ativos":
+          $query = $query->where(function ($qry) {
+              $qry->whereIn("status", ["em-analise", "aguardando-confirmacao", "reagendamento-solicitado", "realocado"])
+              ->orWhereRelation("reagendamentos", function($q) {
+                $q->whereIn("status", ["em-analise", "aguardando-confirmacao", "reagendamento-solicitado", "realocado"]);
+              });
+            })->whereDoesntHave("reagendamentos", function($q) {
+              $q->whereIn("status", ["recusado", "confirmado"]);
+            });
+          break;
 
-        if(in_array($filter, $reagendamento_keys)) {
-          $query = $query->orWhereHas("reagendamentos", function($q) use ($filter) {
-            $q->where($filter["id"], 'like', '%'.$filter["value"].'%');
+        case "diario":
+          $query = $query->where(function ($qry) {
+            $qry->whereBetween("agenda_datetime", [Carbon::now()->startOfDay(), Carbon::now()->endOfDay()])
+              ->whereIn("status", ["confirmado"])
+              ->orWhereRelation("reagendamentos", function($q) {
+                $q->whereBetween("agenda_datetime", [Carbon::now()->startOfDay(), Carbon::now()->endOfDay()])
+                ->whereIn("status", ["confirmado"]);
+              });
           });
+          break;
+
+        case "arquivo":
+          $query = $query->where(function ($qry) {
+            $qry->whereIn("status", ["recusado", "confirmado"])
+              ->orWhereRelation("reagendamentos", function($q) {
+                $q->whereIn("status", ["recusado", "confirmado"]);
+              });
+          });
+          break;
+      }
+    }
+
+    if ($columnFilters) {
+      foreach($columnFilters as $filter) {
+        if (in_array($filter["id"], $reagendamento_keys)) {
+          $query = $query->where(function ($qry) use ($filter) {
+            $qry->where($filter["id"], 'like', '%'.$filter["value"].'%')
+              ->orWhereRelation("reagendamentos", function($q) use ($filter) {
+                $q->where($filter["id"], 'like', '%'.$filter["value"].'%');
+              });
+            });
+        } else {
+          $query = $query->where($filter["id"], 'like', '%'.$filter["value"].'%');
         }
       }
     }
 
-    if ($request->sorting) {
-      foreach($request->sorting as $order) {
+    if ($sorting) {
+      foreach($sorting as $order) {
         $query = $query->orderBy($order["id"], $order["desc"] ? "desc" : "asc");
-
-        if(in_array($order, $reagendamento_keys)) {
-          $query = $query->orWhereHas("reagendamentos", function($q) use ($order) {
-            $q->orderBy($order["id"], $order["desc"] ? "desc" : "asc");
-          });
-        }
       }
     }
 
     $requerimentos = $query->paginate($request->per_page);
-
     return $requerimentos;
   }
 }
