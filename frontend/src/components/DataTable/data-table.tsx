@@ -95,7 +95,7 @@ export function DataTable<TData, TValue>({
                       <div
                         {...{
                           className: header.column.getCanSort()
-                            ? "cursor-pointer select-none"
+                            ? "cursor-pointer select-none flex items-center"
                             : "",
                           onClick: header.column.getToggleSortingHandler(),
                         }}
@@ -106,8 +106,8 @@ export function DataTable<TData, TValue>({
                         )}
                         {
                           {
-                            asc: <MoveUpIcon className="inline h-4 w-4" />,
-                            desc: <MoveDownIcon className="inline h-4 w-4" />,
+                            asc: <MoveUpIcon className="inline h-5 w-5" />,
+                            desc: <MoveDownIcon className="inline h-5 w-5" />,
                           }[(header.column.getIsSorted() as string) ?? null]
                         }
                       </div>
@@ -120,7 +120,7 @@ export function DataTable<TData, TValue>({
                           value={
                             (header.column.getFilterValue() ?? "") as string
                           }
-                          className="text-light-50 my-1 rounded border px-2 py-1 font-normal"
+                          className="text-light-50 my-1 w-full rounded border px-2 py-1 font-normal"
                           placeholder={`Filtrar ${header.column.columnDef.header}`}
                         />
                       ) : null}

@@ -11,14 +11,6 @@ export type AppNotification = {
   type: "error" | "success" | "warning" | "";
 };
 
-export interface AppDialog {
-  isOpen: boolean;
-  isPending: boolean;
-  message: string;
-  accept: () => void;
-  reject: () => void;
-}
-
 export type Direcionamento = {
   id: number;
   name: string;
@@ -45,6 +37,7 @@ export type Reagendamento = {
     | "em-analise"
     | "aguardando-confirmacao"
     | "recusado"
+    | "confirmado"
     | "realocado"
     | "reagendamento-solicitado";
   justificativa_requerente?: string;
@@ -87,6 +80,7 @@ export type Requerimento = {
     | "em-analise"
     | "aguardando-confirmacao"
     | "recusado"
+    | "confirmado"
     | "realocado"
     | "reagendamento-solicitado";
   atestado_files: RequerimentoFile[];

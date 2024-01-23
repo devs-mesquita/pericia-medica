@@ -1,6 +1,6 @@
 import * as React from "react";
 import { DataTable, Paginated } from "@/components/DataTable/data-table";
-import type { AppDialog, Requerimento } from "@/types/interfaces";
+import type { Requerimento } from "@/types/interfaces";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -15,14 +15,23 @@ import {
   XCircleIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuthHeader } from "react-auth-kit";
 import { useAtom } from "jotai";
 import { notificationAtom } from "@/store";
-import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
+import ConfirmationDialog, {
+  AppDialog,
+  dialogInitialState,
+  handleConfirmation,
+} from "@/components/ui/ConfirmationDialog";
 import { format } from "date-fns";
 
 const API_URL = import.meta.env.VITE_API_URL;
+
+type PresencaAPIResponse = {
+  message: "ok" | "not-found";
+  presenca: boolean;
+};
 
 export default function RequerimentosIndexPage() {
   document.title = "Requerimentos Em Análise";
@@ -31,32 +40,43 @@ export default function RequerimentosIndexPage() {
   const setNotification = useAtom(notificationAtom)[1];
   const queryClient = useQueryClient();
 
-  const dialogInitialState: AppDialog = {
-    isOpen: false,
-    message: "",
-    accept: () => {},
-    reject: () => {},
-    isPending: false,
-  };
-
   const [dialog, setDialog] = React.useState<AppDialog>(dialogInitialState);
 
-  const handleConfirmation = (
-    accept: () => void,
-    isPending: boolean,
-    message: string = "Deseja confimar a operação?",
-    reject = () => {
-      setDialog(() => dialogInitialState);
+  const requerimentoPresencaMutation = useMutation({
+    mutationFn: async ({ id, presenca }: { id: number; presenca: boolean }) => {
+      const res = await fetch(`${API_URL}/api/requerimentos/${id}/presenca`, {
+        method: "POST",
+        body: JSON.stringify({ _method: "PATCH", presenca }),
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: authHeader(),
+        },
+      });
+
+      if (!res.ok) {
+        throw await res.json();
+      }
+
+      return (await res.json()) as PresencaAPIResponse;
     },
-  ) => {
-    setDialog({
-      isOpen: true,
-      accept,
-      reject,
-      message,
-      isPending,
-    });
-  };
+    onSuccess: (data) => {
+      setNotification({
+        message: `${
+          data.presenca ? "Presença" : "Falta"
+        } atribuída com sucesso.`,
+        type: "success",
+      });
+      setDialog(dialogInitialState);
+      queryClient.invalidateQueries({ queryKey: ["requerimentos"] });
+    },
+    onError: () => {
+      setNotification({
+        message: "Ocorreu um erro.",
+        type: "error",
+      });
+    },
+  });
 
   const columns: ColumnDef<Requerimento>[] = [
     {
@@ -120,6 +140,9 @@ export default function RequerimentosIndexPage() {
           case "recusado":
             lastStatus = "Recusado";
             break;
+          case "confirmado":
+            lastStatus = "Confirmado";
+            break;
         }
         return lastStatus;
       },
@@ -174,16 +197,19 @@ export default function RequerimentosIndexPage() {
             {row.original.status === "aguardando-confirmacao" && (
               <>
                 <form
-                /* onSubmit={(evt) => {
-                evt.preventDefault();
-                handleConfirmation(
-                  () => resetUserPasswordMutation.mutate(row.original.id),
-                  resetUserPasswordMutation.isPending,
-                  `Deseja confirmar a restauração de senha do usuário ${
-                    row.original.name.split(" ")[0]
-                  }?`,
-                );
-              }} */
+                  onSubmit={(evt) => {
+                    evt.preventDefault();
+                    handleConfirmation({
+                      accept: () =>
+                        requerimentoPresencaMutation.mutate({
+                          id: row.original.id,
+                          presenca: true,
+                        }),
+                      isPending: requerimentoPresencaMutation.isPending,
+                      message: `Deseja confirmar a atribuição de presença?`,
+                      setDialog,
+                    });
+                  }}
                 >
                   <button
                     type="submit"
@@ -194,16 +220,19 @@ export default function RequerimentosIndexPage() {
                   </button>
                 </form>
                 <form
-                /* onSubmit={(evt) => {
-                evt.preventDefault();
-                handleConfirmation(
-                  () => resetUserPasswordMutation.mutate(row.original.id),
-                  resetUserPasswordMutation.isPending,
-                  `Deseja confirmar a restauração de senha do usuário ${
-                    row.original.name.split(" ")[0]
-                  }?`,
-                );
-              }} */
+                  onSubmit={(evt) => {
+                    evt.preventDefault();
+                    handleConfirmation({
+                      accept: () =>
+                        requerimentoPresencaMutation.mutate({
+                          id: row.original.id,
+                          presenca: false,
+                        }),
+                      isPending: requerimentoPresencaMutation.isPending,
+                      message: "Deseja confirmar a atribuição de falta?",
+                      setDialog,
+                    });
+                  }}
                 >
                   <button
                     type="submit"

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { DataTable, Paginated } from "@/components/DataTable/data-table";
-import type { AppDialog, User } from "@/types/interfaces";
+import type { User } from "@/types/interfaces";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -20,7 +20,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuthHeader } from "react-auth-kit";
 import { useAtom } from "jotai";
 import { notificationAtom } from "@/store";
-import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
+import ConfirmationDialog, {
+  AppDialog,
+  dialogInitialState,
+  handleConfirmation,
+} from "@/components/ui/ConfirmationDialog";
 
 type DeleteUserResponse = {
   user: User;
@@ -30,37 +34,12 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 export default function UserIndexPage() {
   document.title = "Usuários";
-  
+
   const authHeader = useAuthHeader();
   const setNotification = useAtom(notificationAtom)[1];
   const queryClient = useQueryClient();
 
-  const dialogInitialState: AppDialog = {
-    isOpen: false,
-    message: "",
-    accept: () => {},
-    reject: () => {},
-    isPending: false,
-  };
-
   const [dialog, setDialog] = React.useState<AppDialog>(dialogInitialState);
-
-  const handleConfirmation = (
-    accept: () => void,
-    isPending: boolean,
-    message: string = "Deseja confimar a operação?",
-    reject = () => {
-      setDialog(() => dialogInitialState);
-    },
-  ) => {
-    setDialog({
-      isOpen: true,
-      accept,
-      reject,
-      message,
-      isPending,
-    });
-  };
 
   const resetUserPasswordMutation = useMutation({
     mutationFn: async (id: number) => {
@@ -198,13 +177,15 @@ export default function UserIndexPage() {
             <form
               onSubmit={(evt) => {
                 evt.preventDefault();
-                handleConfirmation(
-                  () => resetUserPasswordMutation.mutate(row.original.id),
-                  resetUserPasswordMutation.isPending,
-                  `Deseja confirmar a restauração de senha do usuário ${
+                handleConfirmation({
+                  setDialog,
+                  accept: () =>
+                    resetUserPasswordMutation.mutate(row.original.id),
+                  isPending: resetUserPasswordMutation.isPending,
+                  message: `Deseja confirmar a restauração de senha do usuário ${
                     row.original.name.split(" ")[0]
                   }?`,
-                );
+                });
               }}
             >
               <button
@@ -218,13 +199,14 @@ export default function UserIndexPage() {
             <form
               onSubmit={(evt) => {
                 evt.preventDefault();
-                handleConfirmation(
-                  () => deleteUserMutation.mutate(row.original.id),
-                  deleteUserMutation.isPending,
-                  `Deseja confirmar a ${
+                handleConfirmation({
+                  setDialog,
+                  accept: () => deleteUserMutation.mutate(row.original.id),
+                  isPending: deleteUserMutation.isPending,
+                  message: `Deseja confirmar a ${
                     row.original.deleted_at ? "reativação" : "desativação"
                   } do usuário?`,
-                );
+                });
               }}
             >
               {row.original.deleted_at ? (

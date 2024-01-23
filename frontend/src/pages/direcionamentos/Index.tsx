@@ -1,6 +1,6 @@
 import * as React from "react";
 import { DataTable, Paginated } from "@/components/DataTable/data-table";
-import type { AppDialog, Direcionamento } from "@/types/interfaces";
+import type { Direcionamento } from "@/types/interfaces";
 import { format } from "date-fns";
 import {
   ColumnDef,
@@ -20,7 +20,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuthHeader } from "react-auth-kit";
 import { useAtom } from "jotai";
 import { notificationAtom } from "@/store";
-import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
+import ConfirmationDialog, {
+  AppDialog,
+  dialogInitialState,
+  handleConfirmation,
+} from "@/components/ui/ConfirmationDialog";
 
 type DeleteDirecionamentoResponse = {
   direcionamento: Direcionamento;
@@ -34,32 +38,7 @@ export default function DirecionamentoIndexPage() {
   const setNotification = useAtom(notificationAtom)[1];
   const queryClient = useQueryClient();
 
-  const dialogInitialState: AppDialog = {
-    isPending: false,
-    isOpen: false,
-    message: "",
-    accept: () => {},
-    reject: () => {},
-  };
-
   const [dialog, setDialog] = React.useState<AppDialog>(dialogInitialState);
-
-  const handleConfirmation = (
-    accept: () => void,
-    isPending: boolean,
-    message: string = "Deseja confimar a operação?",
-    reject = () => {
-      setDialog(() => dialogInitialState);
-    },
-  ) => {
-    setDialog({
-      isOpen: true,
-      accept,
-      reject,
-      message,
-      isPending,
-    });
-  };
 
   const deleteDirecionamentoMutation = useMutation({
     mutationFn: async (id: number) => {
@@ -151,13 +130,14 @@ export default function DirecionamentoIndexPage() {
             <form
               onSubmit={(evt) => {
                 evt.preventDefault();
-                handleConfirmation(
-                  () => deleteDirecionamentoMutation.mutate(row.original.id),
-                  deleteDirecionamentoMutation.isPending,
-                  `Deseja confirmar a ${
+                handleConfirmation({
+                  setDialog,
+                  accept: () => deleteDirecionamentoMutation.mutate(row.original.id),
+                  isPending: deleteDirecionamentoMutation.isPending,
+                  message: `Deseja confirmar a ${
                     row.original.deleted_at ? "reativação" : "desativação"
                   } do direcionamento?`,
-                );
+                });
               }}
             >
               {row.original.deleted_at ? (

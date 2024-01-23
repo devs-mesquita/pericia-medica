@@ -1,7 +1,24 @@
+import * as React from "react";
 import ReactDOM from "react-dom";
 import { useAtom } from "jotai";
 import { notificationAtom } from "@/store";
 import { LoaderIcon } from "lucide-react";
+
+export interface AppDialog {
+  isOpen: boolean;
+  isPending: boolean;
+  message: string;
+  accept: () => void;
+  reject: () => void;
+}
+
+export type HandleConfirmationParams = {
+  isPending: boolean;
+  message: string;
+  setDialog: React.Dispatch<React.SetStateAction<Omit<AppDialog, "setDialog">>>;
+  accept: () => void;
+  reject?: () => void;
+};
 
 interface ConfirmationDialogProps {
   message: string;
@@ -9,6 +26,32 @@ interface ConfirmationDialogProps {
   reject: () => void;
   isPending: boolean;
 }
+
+export const dialogInitialState: AppDialog = {
+  isOpen: false,
+  message: "",
+  accept: () => {},
+  reject: () => {},
+  isPending: false,
+};
+
+export const handleConfirmation = ({
+  accept = () => {},
+  message = "Deseja confimar a operação?",
+  setDialog,
+  reject = () => {
+    setDialog(() => dialogInitialState);
+  },
+  isPending = false,
+}: HandleConfirmationParams) => {
+  setDialog({
+    isOpen: true,
+    accept,
+    reject,
+    message,
+    isPending,
+  });
+};
 
 export default function ConfirmationDialog({
   message,
