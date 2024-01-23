@@ -132,7 +132,8 @@ export default function DirecionamentoIndexPage() {
                 evt.preventDefault();
                 handleConfirmation({
                   setDialog,
-                  accept: () => deleteDirecionamentoMutation.mutate(row.original.id),
+                  accept: () =>
+                    deleteDirecionamentoMutation.mutate(row.original.id),
                   isPending: deleteDirecionamentoMutation.isPending,
                   message: `Deseja confirmar a ${
                     row.original.deleted_at ? "reativação" : "desativação"

@@ -21,6 +21,21 @@ export type Direcionamento = {
   deleted_at: string;
 };
 
+export type DirecionamentoConfig = {
+  end: string | null;
+  start: string | null;
+  weekday:
+    | "Doming"
+    | "Segunda"
+    | "Terça"
+    | "Quarta"
+    | "Quinta"
+    | "Sexta"
+    | "Sábado";
+  isEnabled: boolean;
+  weekdayIndex: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+};
+
 export type RequerimentoFile = {
   id: number;
   filename: string;

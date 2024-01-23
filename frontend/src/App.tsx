@@ -6,6 +6,7 @@ import RegularLayout from "./components/layouts/RegularLayout";
 import LoginPage from "./pages/Login";
 import HomePage from "./pages/Home";
 import RequerimentoCreatePage from "./pages/requerimentos/Create";
+import RequerimentoAvaliacaoPage from "./pages/requerimentos/Avaliacao";
 import SuccessPage from "./pages/requerimentos/Success";
 import ConfirmarPage from "./pages/requerimentos/Confirmar";
 import ChangePasswordPage from "./pages/ChangePassword";
@@ -51,6 +52,7 @@ export default function App() {
             path="reagendamento"
             element={<RequerimentoReagendamentoPage />}
           />
+          <Route path=":id/avaliacao" element={<RequerimentoAvaliacaoPage />} />
         </Route>
         <Route path="direcionamentos">
           <Route index element={<DirecionamentoIndexPage />} />

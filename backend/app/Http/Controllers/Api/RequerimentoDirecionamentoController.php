@@ -10,7 +10,7 @@ class RequerimentoDirecionamentoController extends Controller
 {
   public function index()
   {
-    $direcionamentos = RequerimentoDirecionamento::get();
+    $direcionamentos = RequerimentoDirecionamento::orderBy("atendimento_presencial", "desc")->orderBy("name", "asc")->get();
     return $direcionamentos;
   }
 

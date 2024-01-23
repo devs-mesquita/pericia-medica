@@ -194,6 +194,7 @@ export default function DirecionamentoEditPage() {
         data.direcionamento.config,
       ) as typeof form.config;
 
+      console.log(data, parsedConfig);
       setForm({
         name: direcionamento.name,
         atendimento_presencial: direcionamento.atendimento_presencial
@@ -308,7 +309,7 @@ export default function DirecionamentoEditPage() {
               className="rounded px-2 py-1 text-lg disabled:text-slate-400"
               minTime="00:00"
               maxTime="23:00"
-              value={form.config[0].start}
+              value={form.config[0].start || ""}
               onChange={handleChangeConfig}
               step={1800}
               dataWeekdayIndex="0"
@@ -323,7 +324,7 @@ export default function DirecionamentoEditPage() {
               className="rounded px-2 py-1 text-lg disabled:text-slate-400"
               minTime={form.config[0].start || "00:00"}
               maxTime="23:00"
-              value={form.config[0].end}
+              value={form.config[0].end || ""}
               onChange={handleChangeConfig}
               step={1800}
               dataWeekdayIndex="0"
@@ -353,7 +354,7 @@ export default function DirecionamentoEditPage() {
               className="rounded px-2 py-1 text-lg disabled:text-slate-400"
               minTime="00:00"
               maxTime="23:00"
-              value={form.config[1].start}
+              value={form.config[1].start || ""}
               onChange={handleChangeConfig}
               step={1800}
               dataWeekdayIndex="1"
@@ -368,7 +369,7 @@ export default function DirecionamentoEditPage() {
               className="rounded px-2 py-1 text-lg disabled:text-slate-400"
               minTime={form.config[1].start || "00:00"}
               maxTime="23:00"
-              value={form.config[1].end}
+              value={form.config[1].end || ""}
               onChange={handleChangeConfig}
               step={1800}
               dataWeekdayIndex="1"
@@ -398,7 +399,7 @@ export default function DirecionamentoEditPage() {
               className="rounded px-2 py-1 text-lg disabled:text-slate-400"
               minTime="00:00"
               maxTime="23:00"
-              value={form.config[2].start}
+              value={form.config[2].start || ""}
               onChange={handleChangeConfig}
               step={1800}
               dataWeekdayIndex="2"
@@ -413,7 +414,7 @@ export default function DirecionamentoEditPage() {
               className="rounded px-2 py-1 text-lg disabled:text-slate-400"
               minTime={form.config[2].start || "00:00"}
               maxTime="23:00"
-              value={form.config[2].end}
+              value={form.config[2].end || ""}
               onChange={handleChangeConfig}
               step={1800}
               dataWeekdayIndex="2"
@@ -443,7 +444,7 @@ export default function DirecionamentoEditPage() {
               className="rounded px-2 py-1 text-lg disabled:text-slate-400"
               minTime="00:00"
               maxTime="23:00"
-              value={form.config[3].start}
+              value={form.config[3].start || ""}
               onChange={handleChangeConfig}
               step={1800}
               dataWeekdayIndex="3"
@@ -458,7 +459,7 @@ export default function DirecionamentoEditPage() {
               className="rounded px-2 py-1 text-lg disabled:text-slate-400"
               minTime={form.config[3].start || "00:00"}
               maxTime="23:00"
-              value={form.config[3].end}
+              value={form.config[3].end || ""}
               onChange={handleChangeConfig}
               step={1800}
               dataWeekdayIndex="3"
@@ -488,7 +489,7 @@ export default function DirecionamentoEditPage() {
               className="rounded px-2 py-1 text-lg disabled:text-slate-400"
               minTime="00:00"
               maxTime="23:00"
-              value={form.config[4].start}
+              value={form.config[4].start || ""}
               onChange={handleChangeConfig}
               step={1800}
               dataWeekdayIndex="4"
@@ -503,7 +504,7 @@ export default function DirecionamentoEditPage() {
               className="rounded px-2 py-1 text-lg disabled:text-slate-400"
               minTime={form.config[4].start || "00:00"}
               maxTime="23:00"
-              value={form.config[4].end}
+              value={form.config[4].end || ""}
               onChange={handleChangeConfig}
               step={1800}
               dataWeekdayIndex="4"
@@ -533,7 +534,7 @@ export default function DirecionamentoEditPage() {
               className="rounded px-2 py-1 text-lg disabled:text-slate-400"
               minTime="00:00"
               maxTime="23:00"
-              value={form.config[5].start}
+              value={form.config[5].start || ""}
               onChange={handleChangeConfig}
               step={1800}
               dataWeekdayIndex="5"
@@ -548,7 +549,7 @@ export default function DirecionamentoEditPage() {
               className="rounded px-2 py-1 text-lg disabled:text-slate-400"
               minTime={form.config[5].start || "00:00"}
               maxTime="23:00"
-              value={form.config[5].end}
+              value={form.config[5].end || ""}
               onChange={handleChangeConfig}
               step={1800}
               dataWeekdayIndex="5"
@@ -578,7 +579,7 @@ export default function DirecionamentoEditPage() {
               className="rounded px-2 py-1 text-lg disabled:text-slate-400"
               minTime="00:00"
               maxTime="23:00"
-              value={form.config[6].start}
+              value={form.config[6].start || ""}
               onChange={handleChangeConfig}
               step={1800}
               dataWeekdayIndex="6"
@@ -593,7 +594,7 @@ export default function DirecionamentoEditPage() {
               className="rounded px-2 py-1 text-lg disabled:text-slate-400"
               minTime={form.config[6].start || "00:00"}
               maxTime="23:00"
-              value={form.config[6].end}
+              value={form.config[6].end || ""}
               onChange={handleChangeConfig}
               step={1800}
               dataWeekdayIndex="6"
