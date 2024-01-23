@@ -27,8 +27,8 @@ Route::middleware(['api-auth'])->group(function () {
   
   // >= User
   Route::middleware(['user'])->group(function () {
-    Route::post('requerimentos/{id}/avaliacao', [RequerimentoController::class, 'avaliacao']);
-    Route::post('requerimentos/{id}/presenca', [RequerimentoController::class, 'presenca']);
+    Route::patch('requerimentos/{id}/avaliacao', [RequerimentoController::class, 'avaliacao']);
+    Route::patch('requerimentos/{id}/presenca', [RequerimentoController::class, 'presenca']);
   });
   
   // >= Admin

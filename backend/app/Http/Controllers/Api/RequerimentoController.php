@@ -283,7 +283,27 @@ class RequerimentoController extends Controller
   
   public function confirmacao(Request $request, $protocolo) {}
   
-  public function presenca(Request $request, $id) {}
+  public function presenca(Request $request, $id) {
+    $requerimento = Requerimento::with("reagendamentos")->findOrFail($id);
+
+    if ($requerimento->reagendamentos->count() > 0) {
+      $latestReagendamento = $requerimento->reagendamentos[$requerimento->reagendamentos->count()-1];
+      
+      $latestReagendamento->presenca = $request->presenca;
+      $latestReagendamento->confirmado_at = Carbon::now();
+      $latestReagendamento->status = "confirmado";
+      $latestReagendamento->save();
+    } else {
+      $requerimento->confirmado_at = Carbon::now();
+      $requerimento->presenca = $request->presenca;
+      $requerimento->status = "confirmado";
+    }
+
+    $requerimento->last_movement_at = Carbon::now();
+    $requerimento->save();
+
+    return ["message" => "ok"];
+  }
 
   public function realocacao(Request $request) {}
 
