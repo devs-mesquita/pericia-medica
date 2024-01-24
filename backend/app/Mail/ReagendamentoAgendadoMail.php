@@ -8,6 +8,8 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use App\Models\Requerimento;
+use App\Models\RequerimentoReagendamento;
 
 class ReagendamentoAgendadoMail extends Mailable
 {
@@ -16,7 +18,7 @@ class ReagendamentoAgendadoMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(public Requerimento $requerimento, public Requerimento $reagendamento) {}
+    public function __construct(public Requerimento $requerimento, public RequerimentoReagendamento $reagendamento) {}
 
     /**
      * Get the message envelope.

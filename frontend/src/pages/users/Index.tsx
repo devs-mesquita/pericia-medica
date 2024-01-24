@@ -337,7 +337,9 @@ export default function UserIndexPage() {
           accept={dialog.accept}
           reject={dialog.reject}
           message={dialog.message}
-          isPending={dialog.isPending}
+          isPending={
+            deleteUserMutation.isPending || resetUserPasswordMutation.isPending
+          }
         />
       )}
     </div>

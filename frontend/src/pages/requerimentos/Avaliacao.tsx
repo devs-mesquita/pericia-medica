@@ -1,21 +1,49 @@
 import * as React from "react";
 import DatePicker from "@/components/ui/datepicker";
 import TimePicker from "@/components/ui/timepicker";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuthHeader } from "react-auth-kit";
-import { Direcionamento, DirecionamentoConfig } from "@/types/interfaces";
+import {
+  Direcionamento,
+  DirecionamentoConfig,
+  Requerimento,
+} from "@/types/interfaces";
 import { nanoid } from "nanoid";
-import { FileBarChart2Icon } from "lucide-react";
+import {
+  FileBarChart2Icon,
+  FilePlus2Icon,
+  PaperclipIcon,
+  ViewIcon,
+} from "lucide-react";
 import ConfirmationDialog, {
   AppDialog,
-  dialogInitialState,
   handleConfirmation,
+  dialogInitialState,
 } from "@/components/ui/ConfirmationDialog";
+import { useAtom } from "jotai";
+import { notificationAtom } from "@/store";
+import { useNavigate, useParams } from "react-router-dom";
+import { format } from "date-fns";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
+const IMG_EXTENSIONS = ["jpg", "jpeg", "png", "jfif", "webp", "gif", "bmp"];
+
+type AvaliacaoMutationParams = {
+  direcionamento_id: number | "recusado";
+  data_agenda: Date | undefined;
+  hora_agenda: string;
+  justificativa_recusa: string;
+  observacao_avaliador: string;
+};
+
+type AvaliacaoAPIResponse = {
+  message: "ok";
+};
+
 export default function RequerimentoAvaliacaoPage() {
   document.title = "Avaliação de Requerimento";
+  const setNotification = useAtom(notificationAtom)[1];
   const [dialog, setDialog] = React.useState<AppDialog>(dialogInitialState);
   const [date, setDate] = React.useState<Date | undefined>(undefined);
   const [time, setTime] = React.useState<string>("");
@@ -26,7 +54,7 @@ export default function RequerimentoAvaliacaoPage() {
   const [justificativaRecusaOutro, setJustificativaRecusaOutro] =
     React.useState<string>("");
   const [direcionamentoID, setDirecionamentoID] = React.useState<
-    number | "RECUSADO"
+    number | "recusado"
   >();
   const [direcionamento, setDirecionamento] = React.useState<{
     atendimento_presencial: boolean;
@@ -34,6 +62,9 @@ export default function RequerimentoAvaliacaoPage() {
   }>();
 
   const authHeader = useAuthHeader();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const { id } = useParams();
 
   const handleChangeTime = (evt: React.ChangeEvent<HTMLInputElement>) => {
     setTime(evt.target.value);
@@ -64,15 +95,35 @@ export default function RequerimentoAvaliacaoPage() {
     setTime("");
     setJustificativaRecusa("");
     setJustificativaRecusaOutro("");
-    if (evt.target.value === "RECUSADO") {
+    if (evt.target.value === "recusado") {
       setDirecionamentoID(evt.target.value);
     } else {
       setDirecionamentoID(+evt.target.value);
     }
   };
 
+  const { data: requerimento, isFetching: requerimentoIsFetching } = useQuery({
+    queryKey: ["requerimentos", id],
+    queryFn: async () => {
+      const res = await fetch(`${API_URL}/api/requerimentos/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: authHeader(),
+        },
+      });
+
+      if (!res.ok) {
+        throw await res.json();
+      }
+
+      return (await res.json()) as Requerimento;
+    },
+  });
+
   const { data, isFetching } = useQuery({
-    queryKey: ["direcionamento-options"],
+    queryKey: ["direcionamentos", "options"],
     queryFn: async () => {
       const res = await fetch(`${API_URL}/api/direcionamentos`, {
         method: "GET",
@@ -93,7 +144,7 @@ export default function RequerimentoAvaliacaoPage() {
 
   React.useEffect(() => {
     if (data && direcionamentoID) {
-      if (direcionamentoID === "RECUSADO") {
+      if (direcionamentoID === "recusado") {
         setDirecionamento(undefined);
         return;
       }
@@ -121,43 +172,98 @@ export default function RequerimentoAvaliacaoPage() {
   }, [data, direcionamentoID]);
 
   const avaliacaoMutation = useMutation({
-    mutationFn: async (data) => {
+    mutationFn: async (data: AvaliacaoMutationParams) => {
       // send avaliação data to /requerimentos/${id}/avaliação (PATCH)
+      const res = await fetch(`${API_URL}/api/requerimentos/${id}/avaliacao`, {
+        method: "POST",
+        body: JSON.stringify({
+          ...data,
+          data_agenda: data.data_agenda
+            ? format(data.data_agenda, "yyyy-LL-dd")
+            : null,
+          _method: "PATCH",
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: authHeader(),
+        },
+      });
+
+      if (!res.ok) {
+        throw await res.json();
+      }
+
+      return (await res.json()) as AvaliacaoAPIResponse;
     },
-    onError: () => {
+    onError: (error) => {
       // show error
+      if (error.message === "not-found") {
+        setNotification({
+          message: "O requerimento não foi encontrado.",
+          type: "error",
+        });
+      } else {
+        setNotification({
+          message: "Ocorreu um erro.",
+          type: "error",
+        });
+      }
     },
     onSuccess: () => {
-      // invalidate "requerimentos"
-      // navigate /requerimentos
+      setNotification({
+        message: "Requerimento avaliado com sucesso.",
+        type: "success",
+      });
+      queryClient.invalidateQueries({ queryKey: ["requerimentos"] });
+      navigate("/requerimentos");
     },
   });
 
   const handleSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
-    if (!direcionamento) {
-      // Selecione um direcionamento.
+    if (!direcionamentoID) {
+      setNotification({
+        message: "Selecione um direcionamento.",
+        type: "warning",
+      });
       return;
     }
 
-    if (direcionamento.atendimento_presencial && (!time || !date)) {
-      // Selecione a data e hora do atendimento.
+    if (direcionamento?.atendimento_presencial && (!time || !date)) {
+      setNotification({
+        message: "Selecione a data e hora do atendimento.",
+        type: "warning",
+      });
       return;
     }
 
     if (
-      direcionamentoID === "RECUSADO" &&
+      direcionamentoID === "recusado" &&
       (!justificativaRecusa ||
         (justificativaRecusa === "Outro" && !justificativaRecusaOutro))
     ) {
-      // Descreva a justificativa de recusa.
+      setNotification({
+        message: "Descreva a justificativa de recusa.",
+        type: "warning",
+      });
       return;
     }
 
     // Can send
     handleConfirmation({
-      accept: () => avaliacaoMutation.mutate(),
+      accept: () =>
+        avaliacaoMutation.mutate({
+          data_agenda: date,
+          direcionamento_id: direcionamentoID,
+          hora_agenda: time,
+          justificativa_recusa:
+            justificativaRecusa === "Outro"
+              ? justificativaRecusaOutro
+              : justificativaRecusa,
+          observacao_avaliador: observacaoAvaliador,
+        }),
       isPending: avaliacaoMutation.isPending,
       message: "Deseja confirmar a avaliação do requerimento?",
       setDialog,
@@ -165,15 +271,170 @@ export default function RequerimentoAvaliacaoPage() {
   };
 
   return (
-    <>
+    <div className="flex flex-1 flex-col gap-4">
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20">
+          <div className="mb-2 flex items-center justify-between gap-1 border-b-2 border-slate-300 px-2 pb-2 text-lg font-semibold">
+            <h1 className="flex items-center">
+              <FileBarChart2Icon className="h-5 w-5" />
+              <span className="ml-2">Requerimento</span>
+            </h1>
+          </div>
+          <div className="font-semibold">
+            <p>
+              Status:{" "}
+              <span className="">
+                {requerimento?.status === "em-analise"
+                  ? "Em Análise"
+                  : requerimento?.status === "reagendamento-solicitado"
+                    ? "Reagendamento Solicitado"
+                    : requerimento?.status === "aguardando-confirmacao"
+                      ? "Aguardando Confirmação"
+                      : requerimento?.status === "confirmado"
+                        ? "Confirmado"
+                        : requerimento?.status === "realocado"
+                          ? "Realocado"
+                          : requerimento?.status === "recusado"
+                            ? "Recusado"
+                            : null}
+              </span>
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20">
+          <div className="mb-2 flex items-center justify-between gap-1 border-b-2 border-slate-300 px-2 pb-2 text-lg font-semibold">
+            <h1 className="flex items-center">
+              <PaperclipIcon className="h-5 w-5" />
+              <span className="ml-2">Imagens e Documentos</span>
+            </h1>
+          </div>
+          <div className="grid grid-cols-2">
+            <div className="flex flex-col">
+              <p className="mb-2 pb-1 font-semibold">Atestado</p>
+              <div className="grid grid-cols-3 gap-2">
+                {requerimento?.atestado_files.map((attachment) => {
+                  return IMG_EXTENSIONS.includes(attachment.extension) ? (
+                    <a
+                      href={`${API_URL}/storage/atestados/${attachment.filename}`}
+                      target="_blank"
+                      key={nanoid()}
+                      className="relative h-[100px] w-[100px] rounded border border-slate-400 bg-slate-300 p-1"
+                    >
+                      <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded text-slate-50/60 opacity-0 hover:bg-black/25 hover:opacity-100">
+                        <ViewIcon className="h-[32px] w-[32px]" />
+                      </div>
+                      <img
+                        className="h-full w-full rounded object-contain"
+                        src={`${API_URL}/storage/atestados/${attachment.filename}`}
+                        alt="Atestado"
+                      />
+                    </a>
+                  ) : (
+                    <a
+                      href={`${API_URL}/storage/atestados/${attachment.filename}`}
+                      target="_blank"
+                      key={nanoid()}
+                      className="relative flex h-[100px] w-[100px] items-center justify-center rounded border border-slate-400 bg-slate-100 p-1 text-blue-500"
+                    >
+                      <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded text-slate-50/60 opacity-0 hover:bg-black/25 hover:opacity-100">
+                        <ViewIcon className="h-[32px] w-[32px]" />
+                      </div>
+                      <FileBarChart2Icon className="h-[64px] w-[64px]" />
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+            {requerimento?.afastamento_files?.length ? (
+              <div className="flex flex-col">
+                <p className="mb-2 pb-1 font-semibold">
+                  Comprovante de Afastamento
+                </p>
+                <div className="grid grid-cols-3 gap-2">
+                  {requerimento?.afastamento_files.map((attachment) => {
+                    return IMG_EXTENSIONS.includes(attachment.extension) ? (
+                      <a
+                        href={`${API_URL}/storage/afastamentos/${attachment.filename}`}
+                        target="_blank"
+                        key={nanoid()}
+                        className="relative h-[100px] w-[100px] rounded border border-slate-400 bg-slate-300 p-1"
+                      >
+                        <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded text-slate-50/60 opacity-0 hover:bg-black/25 hover:opacity-100">
+                          <ViewIcon className="h-[32px] w-[32px]" />
+                        </div>
+                        <img
+                          className="h-full w-full rounded object-contain"
+                          src={`${API_URL}/storage/afastamentos/${attachment.filename}`}
+                          alt="Comprovante de Afastamento"
+                        />
+                      </a>
+                    ) : (
+                      <a
+                        href={`${API_URL}/storage/afastamentos/${attachment.filename}`}
+                        target="_blank"
+                        key={nanoid()}
+                        className="relative flex h-[100px] w-[100px] items-center justify-center rounded border border-slate-400 bg-slate-100 p-1 text-blue-500"
+                      >
+                        <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded text-slate-50/60 opacity-0 hover:bg-black/25 hover:opacity-100">
+                          <ViewIcon className="h-[32px] w-[32px]" />
+                        </div>
+                        <FileBarChart2Icon className="h-[64px] w-[64px]" />
+                      </a>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </div>
+        {requerimento?.reagendamentos.length
+          ? requerimento.reagendamentos.map((reagendamento, i) => {
+              return (
+                <div
+                  key={nanoid()}
+                  className="col-span-2 flex flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20"
+                >
+                  <div className="mb-2 flex items-center justify-between gap-1 border-b-2 border-slate-300 px-2 pb-2 text-lg font-semibold">
+                    <h1 className="flex items-center">
+                      <FilePlus2Icon className="h-5 w-5" />
+                      <span className="ml-2">
+                        Pedido de Reagendamento {i + 1}
+                      </span>
+                    </h1>
+                  </div>
+                  <div className="font-semibold">
+                    <p>
+                      Status:{" "}
+                      <span className="">
+                        {reagendamento.status === "em-analise"
+                          ? "Em Análise"
+                          : reagendamento.status === "reagendamento-solicitado"
+                            ? "Reagendamento Solicitado"
+                            : reagendamento.status === "aguardando-confirmacao"
+                              ? "Aguardando Confirmação"
+                              : reagendamento.status === "confirmado"
+                                ? "Confirmado"
+                                : reagendamento.status === "realocado"
+                                  ? "Realocado"
+                                  : reagendamento.status === "recusado"
+                                    ? "Recusado"
+                                    : null}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              );
+            })
+          : null}
+      </div>
       <form
-        className="flex flex-1 flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20"
+        className="flex flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20"
         onSubmit={handleSubmit}
       >
         <div className="mb-2 flex items-center justify-between gap-1 border-b-2 border-slate-300 px-2 pb-2 text-lg font-semibold">
           <h1 className="flex items-center">
             <FileBarChart2Icon className="h-5 w-5" />
-            <span className="ml-2">Avaliação de Requerimento</span>
+            <span className="ml-2">Avaliar Requerimento</span>
           </h1>
         </div>
         <div className="flex flex-col gap-4">
@@ -183,7 +444,11 @@ export default function RequerimentoAvaliacaoPage() {
                 Direcionamento:
               </label>
               <select
-                disabled={isFetching}
+                disabled={
+                  isFetching ||
+                  requerimentoIsFetching ||
+                  avaliacaoMutation.isPending
+                }
                 name="direcionamento"
                 id="direcionamento"
                 className="rounded bg-white p-2 text-base"
@@ -201,7 +466,7 @@ export default function RequerimentoAvaliacaoPage() {
                         </option>
                       );
                     })}
-                    <option value="RECUSADO">RECUSADO</option>
+                    <option value="recusado">RECUSADO</option>
                   </>
                 ) : (
                   <option value="">Carregando...</option>
@@ -242,6 +507,11 @@ export default function RequerimentoAvaliacaoPage() {
                           required
                           id="hora_agenda"
                           className="rounded px-2 py-1 text-lg disabled:cursor-not-allowed disabled:bg-white disabled:text-slate-400"
+                          disabled={
+                            isFetching ||
+                            requerimentoIsFetching ||
+                            avaliacaoMutation.isPending
+                          }
                           minTime={
                             direcionamento.config[date.getDay()].start || ""
                           }
@@ -271,7 +541,7 @@ export default function RequerimentoAvaliacaoPage() {
                   </>
                 ) : null}
               </>
-            ) : direcionamentoID === "RECUSADO" ? (
+            ) : direcionamentoID === "recusado" ? (
               <>
                 <div className="flex flex-col gap-2">
                   <label
@@ -287,6 +557,11 @@ export default function RequerimentoAvaliacaoPage() {
                     name="justificativaRecusa"
                     id="justificativaRecusa"
                     className="resize-none rounded border border-slate-300 p-2 text-sm"
+                    disabled={
+                      isFetching ||
+                      requerimentoIsFetching ||
+                      avaliacaoMutation.isPending
+                    }
                   >
                     <option value="">-- Justificativa --</option>
                     <option value="Documento Ilegível">
@@ -305,6 +580,11 @@ export default function RequerimentoAvaliacaoPage() {
                       Descreva a Justificativa:
                     </label>
                     <textarea
+                      disabled={
+                        isFetching ||
+                        requerimentoIsFetching ||
+                        avaliacaoMutation.isPending
+                      }
                       required
                       value={justificativaRecusaOutro}
                       onChange={handleChangeJustificativaRecusaOutro}
@@ -328,6 +608,11 @@ export default function RequerimentoAvaliacaoPage() {
               Observação (opcional):
             </label>
             <textarea
+              disabled={
+                isFetching ||
+                requerimentoIsFetching ||
+                avaliacaoMutation.isPending
+              }
               value={observacaoAvaliador}
               onChange={handleChangeObservacao}
               name="observacaoAvaliador"
@@ -350,9 +635,9 @@ export default function RequerimentoAvaliacaoPage() {
           accept={dialog.accept}
           reject={dialog.reject}
           message={dialog.message}
-          isPending={dialog.isPending}
+          isPending={avaliacaoMutation.isPending}
         />
       )}
-    </>
+    </div>
   );
 }

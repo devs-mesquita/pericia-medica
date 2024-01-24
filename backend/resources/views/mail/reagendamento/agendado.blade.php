@@ -7,8 +7,8 @@
 <h3 style="margin-bottom: 5px;">Requerimento Reagendado</h3>
 <ul style="margin-top: 0;">
     <li><b>Protocolo do seu requerimento:</b> {{ $requerimento->protocolo }}</li>
-    @if($reagendamento->observacao_reagenda)
-    <li><b>Observação do avaliador: </b> {{ $reagendamento->observacao_reagenda }}
+    @if($reagendamento->observacao_avaliador)
+    <li><b>Observação do avaliador: </b> {{ $reagendamento->observacao_avaliador }}
     @endif
     <li><b>Direcionamento:</b> {{ $reagendamento->direcionamento->name }}</li>
     <li><b>Data/Hora Reagendada:</b> {{ date('d/m/Y', strtotime($reagendamento->agenda_datetime)) }} às {{ date('H:i', strtotime($reagendamento->agenda_datetime)) }} horas.</li>

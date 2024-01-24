@@ -18,7 +18,7 @@ class ReagendamentoRecusadoMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(public Requerimento $requerimento, public Requerimento $reagendamento) {}
+    public function __construct(public Requerimento $requerimento, public RequerimentoReagendamento $reagendamento) {}
 
     /**
      * Get the message envelope.

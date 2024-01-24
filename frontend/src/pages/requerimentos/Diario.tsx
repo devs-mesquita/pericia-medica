@@ -177,10 +177,30 @@ export default function RequerimentosDiarioPage() {
       accessorKey: "presenca",
       header: "Presença",
       cell: ({ row }) => {
-        if (row.original.status === "recusado") return null;
+        if (
+          row.original.status === "recusado" ||
+          (row.original.reagendamentos.length &&
+            row.original.reagendamentos[row.original.reagendamentos.length - 1]
+              .status === "recusado")
+        ) {
+          return null;
+        }
 
-        if (row.original.presenca !== null) {
-          return row.original.presenca ? "Presente" : "Ausente";
+        if (
+          row.original.presenca !== null ||
+          (row.original.reagendamentos.length &&
+            row.original.reagendamentos[row.original.reagendamentos.length - 1]
+              ?.presenca !== null)
+        ) {
+          return row.original.reagendamentos.length
+            ? row.original.reagendamentos[
+                row.original.reagendamentos.length - 1
+              ]?.presenca
+              ? "Presente"
+              : "Ausente"
+            : row.original.presenca
+              ? "Presente"
+              : "Ausente";
         }
 
         return (
@@ -373,7 +393,7 @@ export default function RequerimentosDiarioPage() {
           accept={dialog.accept}
           reject={dialog.reject}
           message={dialog.message}
-          isPending={dialog.isPending}
+          isPending={requerimentoPresencaMutation.isPending}
         />
       )}
     </div>

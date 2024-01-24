@@ -81,6 +81,7 @@ class RequerimentoController extends Controller
         'inicio_atestado_date' => $request->inicio_atestado_date,
         'acumula_matricula' => $request->acumula_matricula === "sim" ? true : false,
         'status' => "em-analise",
+        'last_movement_at' => Carbon::now()
       ]);
 
       $atestadoFiles = [];
@@ -146,7 +147,11 @@ class RequerimentoController extends Controller
   public function avaliacao(Request $request, $id) {
     DB::beginTransaction();
     try {
-      $requerimento = Requerimento::with("reagendamentos")->findOrFail($id);
+      $requerimento = Requerimento::with("reagendamentos")->find($id);
+
+      if(!$requerimento) {
+        return response()->json(["message" => "not-found"], 404);
+      }
       
       // Reagendamento
       if ($requerimento->reagendamentos->count() > 0) {
@@ -276,7 +281,11 @@ class RequerimentoController extends Controller
       "afastamento_files",
       "avaliador",
       "realocador"
-    )->findOrFail($id);
+    )->find($id);
+
+    if (!$requerimento) {
+      return response()->json(["message" => "not-found"], 404);
+    }
 
     return $requerimento;
   }
@@ -302,7 +311,7 @@ class RequerimentoController extends Controller
     $requerimento->last_movement_at = Carbon::now();
     $requerimento->save();
 
-    return ["message" => "ok"];
+    return ["message" => "ok", "presenca" => $request->presenca];
   }
 
   public function realocacao(Request $request) {}
@@ -312,6 +321,9 @@ class RequerimentoController extends Controller
     
     $query = $query->with([
       "reagendamentos",
+      "reagendamentos.avaliador",
+      "reagendamentos.realocador",
+      "reagendamentos.direcionamento",
       "direcionamento",
       "atestado_files",
       "afastamento_files",

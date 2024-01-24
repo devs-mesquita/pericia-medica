@@ -126,7 +126,10 @@ export default function RequerimentosIndexPage() {
             : row.original.status
         ) {
           case "em-analise":
-            lastStatus = "Em Análise";
+            lastStatus =
+              row.original.status === "reagendamento-solicitado"
+                ? "Reagendamento Solicitado"
+                : "Em Análise";
             break;
           case "aguardando-confirmacao":
             lastStatus = "Aguardando Confirmação";
@@ -180,13 +183,19 @@ export default function RequerimentosIndexPage() {
       cell: ({ row }) => {
         return (
           <div className="flex w-full justify-end gap-4">
-            <Link
-              className="rounded bg-blue-500 p-2 text-white hover:bg-blue-600"
-              to={`/requerimentos/${row.getValue("id")}/avaliacao`}
-              title="Avaliar requerimento."
-            >
-              <EditIcon className="h-5 w-5" />
-            </Link>
+            {row.original.status === "em-analise" ||
+            (row.original.reagendamentos.length &&
+              row.original.reagendamentos[
+                row.original.reagendamentos.length - 1
+              ].status === "em-analise") ? (
+              <Link
+                className="rounded bg-blue-500 p-2 text-white hover:bg-blue-600"
+                to={`/requerimentos/${row.getValue("id")}/avaliacao`}
+                title="Avaliar requerimento."
+              >
+                <EditIcon className="h-5 w-5" />
+              </Link>
+            ) : null}
             <Link
               className="rounded bg-cyan-500 p-2 text-white hover:bg-cyan-600"
               to={`/requerimentos/${row.getValue("id")}`}
@@ -194,7 +203,11 @@ export default function RequerimentosIndexPage() {
             >
               <EyeIcon className="h-5 w-5" />
             </Link>
-            {row.original.status === "aguardando-confirmacao" && (
+            {row.original.status === "aguardando-confirmacao" ||
+            (row.original.reagendamentos.length &&
+              row.original.reagendamentos[
+                row.original.reagendamentos.length - 1
+              ].status === "aguardando-confirmacao") ? (
               <>
                 <form
                   onSubmit={(evt) => {
@@ -243,7 +256,7 @@ export default function RequerimentosIndexPage() {
                   </button>
                 </form>
               </>
-            )}
+            ) : null}
           </div>
         );
       },
@@ -367,7 +380,7 @@ export default function RequerimentosIndexPage() {
           accept={dialog.accept}
           reject={dialog.reject}
           message={dialog.message}
-          isPending={dialog.isPending}
+          isPending={requerimentoPresencaMutation.isPending}
         />
       )}
     </div>

@@ -72,7 +72,7 @@ export default function ConfirmationDialog({
   return ReactDOM.createPortal(
     <>
       <div
-        className="fixed z-40 h-screen w-screen bg-black/30 backdrop-blur-sm"
+        className="fixed z-40 h-screen w-screen bg-black/30 backdrop-blur-[1px]"
         onClick={reject}
       ></div>
       <div className="fixed left-1/2 top-1/2 z-50 flex max-h-[90vh] w-72 max-w-[90vw] translate-x-[-50%] translate-y-[-50%] flex-col gap-3 overflow-auto rounded bg-slate-100 p-4 sm:w-[30rem] md:w-[36rem] lg:w-[42rem]">

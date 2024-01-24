@@ -269,7 +269,7 @@ export default function DirecionamentoIndexPage() {
           accept={dialog.accept}
           reject={dialog.reject}
           message={dialog.message}
-          isPending={dialog.isPending}
+          isPending={deleteDirecionamentoMutation.isPending}
         />
       )}
     </div>

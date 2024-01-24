@@ -2,17 +2,16 @@
 
 <p>Por favor, confirme o recebimento deste e-mail inserindo o seu protocolo em nossa <a target="_blank" rel="noopener noreferrer" href="https://periciamedica.mesquita.rj.gov.br/confirmar">página de confirmação</a>, e siga as demais instruções deste e-mail.</p>
 
-
 <b>Página de Confirmação:</b> https://periciamedica.mesquita.rj.gov.br/confirmar
 
 <h3 style="margin-bottom: 5px;">Requerimento</h3>
 <ul style="margin-top: 0;">
     <li><b>Protocolo do seu requerimento:</b> {{ $requerimento->protocolo }}</li>
-    @if($requerimento->observacao)
-    <li><b>Observação do avaliador:</b> {{ $requerimento->observacao }}
+    @if($requerimento->observacao_avaliador)
+    <li><b>Observação do avaliador:</b> {{ $requerimento->observacao_avaliador }}
     @endif
-    <li><b>Direcionamento:</b> {{ $requerimento->direcionamento }}</li>
-    <li><b>Data/Hora agendada:</b> {{ date('d/m/Y', strtotime($requerimento->data_agenda)) }} às {{ $requerimento->hora_agenda }} horas.</li>
+    <li><b>Direcionamento:</b> {{ $requerimento->direcionamento->name }}</li>
+    <li><b>Data/Hora agendada:</b> {{ date('d/m/Y', strtotime($requerimento->agenda_datetime)) }} às {{ date('H:i', strtotime($requerimento->agenda_datetime)) }} horas.</li>
     <li><b>Endereço:</b> Subsecretaria de Administração (segundo andar) — Prefeitura Municipal de Mesquita.
         <ul>
             <li>

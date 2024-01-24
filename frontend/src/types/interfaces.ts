@@ -99,7 +99,7 @@ export type Requerimento = {
     | "realocado"
     | "reagendamento-solicitado";
   atestado_files: RequerimentoFile[];
-  afatastamento_files: RequerimentoFile[];
+  afastamento_files: RequerimentoFile[];
   avaliado_at?: string;
   agenda_datetime?: string;
   observacao_avaliador?: string;

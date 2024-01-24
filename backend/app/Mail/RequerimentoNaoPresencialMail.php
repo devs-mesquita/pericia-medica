@@ -8,6 +8,8 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use App\Models\Requerimento;
+use App\Models\RequerimentoReagendamento;
 
 class RequerimentoNaoPresencialMail extends Mailable
 {
@@ -16,10 +18,7 @@ class RequerimentoNaoPresencialMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
-    {
-        //
-    }
+    public function __construct(public Requerimento $requerimento) {}
 
     /**
      * Get the message envelope.
@@ -37,7 +36,7 @@ class RequerimentoNaoPresencialMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'mail.requerimento.naoPresencial',
         );
     }
 
