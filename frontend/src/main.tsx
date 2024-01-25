@@ -5,7 +5,7 @@ import { AuthProvider } from "react-auth-kit";
 import { BrowserRouter } from "react-router-dom";
 import refreshApi from "./lib/refreshApi.ts";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const queryClient = new QueryClient();
 
