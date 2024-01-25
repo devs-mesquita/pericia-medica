@@ -131,10 +131,10 @@ export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
           />
         ))}
         <button
-          className={`flex hover:bg-black/10 ${className || ""} ${
+          className={`flex hover:bg-indigo-600/50 ${className || ""} ${
             sidebarIsOpen
               ? "w-full flex-col p-2 text-xs md:w-[208px] md:flex-row md:py-4"
-              : "flex-col p-2 text-xs"
+              : "flex-col p-2 text-xs md:w-full"
           } items-center`}
           onClick={signOut}
         >

@@ -79,17 +79,19 @@ export default function RequerimentosArquivoPage() {
 
   const columns: ColumnDef<Requerimento>[] = [
     {
+      size: 80,
       accessorKey: "nome",
       header: "Nome",
       enableColumnFilter: true,
       enableSorting: true,
       cell: ({ row }) => {
-        return row.original.nome.length <= 11
+        return row.original.nome.length <= 10
           ? row.original.nome
-          : `${row.original.nome.slice(0, 11)}...`;
+          : `${row.original.nome.slice(0, 10)}...`;
       },
     },
     {
+      size: 60,
       accessorKey: "matricula",
       header: "Matrícula",
       enableColumnFilter: true,
@@ -116,7 +118,6 @@ export default function RequerimentosArquivoPage() {
       enableColumnFilter: true,
       enableSorting: true,
       cell: ({ row }) => {
-        let lastStatus = "";
         switch (
           row.original.reagendamentos.length > 0
             ? row.original.reagendamentos[
@@ -125,25 +126,47 @@ export default function RequerimentosArquivoPage() {
             : row.original.status
         ) {
           case "em-analise":
-            lastStatus = "Em Análise";
-            break;
+            return row.original.status === "reagendamento-solicitado" ? (
+              <span className="rounded-full bg-amber-500 px-4 py-1 text-sm text-slate-50">
+                Reagendamento Solicitado
+              </span>
+            ) : (
+              <span className="rounded-full bg-slate-500 px-4 py-1 text-sm text-slate-50">
+                Em Análise
+              </span>
+            );
           case "aguardando-confirmacao":
-            lastStatus = "Aguardando Confirmação";
-            break;
+            return (
+              <span className="rounded-full bg-blue-500 px-4 py-1 text-sm text-slate-50">
+                Aguardando Confirmação
+              </span>
+            );
           case "reagendamento-solicitado":
-            lastStatus = "Reagendamento Solicitado";
-            break;
+            return (
+              <span className="rounded-full bg-amber-500 px-4 py-1 text-sm text-slate-50">
+                Reagendamento Solicitado
+              </span>
+            );
           case "realocado":
-            lastStatus = "Realocado";
-            break;
+            return (
+              <span className="rounded-full bg-amber-500 px-4 py-1 text-sm text-slate-50">
+                Realocado
+              </span>
+            );
           case "recusado":
-            lastStatus = "Recusado";
-            break;
+            return (
+              <span className="rounded-full bg-red-500 px-4 py-1 text-sm text-slate-50">
+                Recusado
+              </span>
+            );
+
           case "confirmado":
-            lastStatus = "Confirmado";
-            break;
+            return (
+              <span className="rounded-full bg-green-500 px-4 py-1 text-sm text-slate-50">
+                Confirmado
+              </span>
+            );
         }
-        return lastStatus;
       },
     },
     {
@@ -156,6 +179,7 @@ export default function RequerimentosArquivoPage() {
       },
     },
     {
+      size: 60,
       accessorKey: "agenda_datetime",
       header: "Data/Hora Agendada",
       enableColumnFilter: false,
@@ -204,7 +228,7 @@ export default function RequerimentosArquivoPage() {
         }
 
         return (
-          <div className="flex w-full items-center justify-end gap-4">
+          <div className="flex w-full items-center justify-end gap-3">
             <form
               onSubmit={(evt) => {
                 evt.preventDefault();
@@ -262,7 +286,7 @@ export default function RequerimentosArquivoPage() {
       header: () => <div className="text-right">Ações</div>,
       cell: ({ row }) => {
         return (
-          <div className="flex w-full justify-end gap-4">
+          <div className="flex w-full justify-start gap-4">
             <Link
               className="rounded bg-cyan-500 p-2 text-white hover:bg-cyan-600"
               to={`/requerimentos/${row.getValue("id")}`}
@@ -275,6 +299,7 @@ export default function RequerimentosArquivoPage() {
       },
     },
     {
+      size: 50,
       accessorKey: "avaliador_id",
       header: "Avaliador",
       enableColumnFilter: false,
@@ -284,8 +309,8 @@ export default function RequerimentosArquivoPage() {
           row.original.reagendamentos.length > 0
             ? row.original.reagendamentos[
                 row.original.reagendamentos.length - 1
-              ]?.avaliador?.name || ""
-            : row.original?.avaliador?.name || "";
+              ]?.avaliador?.name.split(" ")[0] || ""
+            : row.original?.avaliador?.name.split(" ")[0] || "";
 
         return lastAvaliador;
       },

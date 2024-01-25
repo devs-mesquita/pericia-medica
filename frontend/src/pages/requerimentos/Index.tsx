@@ -80,17 +80,19 @@ export default function RequerimentosIndexPage() {
 
   const columns: ColumnDef<Requerimento>[] = [
     {
+      size: 80,
       accessorKey: "nome",
       header: "Nome",
       enableColumnFilter: true,
       enableSorting: true,
       cell: ({ row }) => {
-        return row.original.nome.length <= 11
+        return row.original.nome.length <= 10
           ? row.original.nome
-          : `${row.original.nome.slice(0, 11)}...`;
+          : `${row.original.nome.slice(0, 10)}...`;
       },
     },
     {
+      size: 60,
       accessorKey: "matricula",
       header: "Matrícula",
       enableColumnFilter: true,
@@ -112,12 +114,12 @@ export default function RequerimentosIndexPage() {
       },
     },
     {
+      size: 192,
       accessorKey: "status",
       header: "Status",
       enableColumnFilter: true,
       enableSorting: true,
       cell: ({ row }) => {
-        let lastStatus = "";
         switch (
           row.original.reagendamentos.length > 0
             ? row.original.reagendamentos[
@@ -126,28 +128,47 @@ export default function RequerimentosIndexPage() {
             : row.original.status
         ) {
           case "em-analise":
-            lastStatus =
-              row.original.status === "reagendamento-solicitado"
-                ? "Reagendamento Solicitado"
-                : "Em Análise";
-            break;
+            return row.original.status === "reagendamento-solicitado" ? (
+              <span className="rounded-full bg-amber-500 px-4 py-1 text-sm text-slate-50">
+                Reagendamento Solicitado
+              </span>
+            ) : (
+              <span className="w-[195px] rounded-full bg-slate-500 px-4 py-1 text-sm text-slate-50">
+                Em Análise
+              </span>
+            );
           case "aguardando-confirmacao":
-            lastStatus = "Aguardando Confirmação";
-            break;
+            return (
+              <span className="rounded-full bg-blue-500 px-4 py-1 text-sm text-slate-50">
+                Aguardando Confirmação
+              </span>
+            );
           case "reagendamento-solicitado":
-            lastStatus = "Reagendamento Solicitado";
-            break;
+            return (
+              <span className="rounded-full bg-amber-500 px-4 py-1 text-sm text-slate-50">
+                Reagendamento Solicitado
+              </span>
+            );
           case "realocado":
-            lastStatus = "Realocado";
-            break;
+            return (
+              <span className="rounded-full bg-amber-500 px-4 py-1 text-sm text-slate-50">
+                Realocado
+              </span>
+            );
           case "recusado":
-            lastStatus = "Recusado";
-            break;
+            return (
+              <span className="rounded-full bg-red-500 px-4 py-1 text-sm text-slate-50">
+                Recusado
+              </span>
+            );
+
           case "confirmado":
-            lastStatus = "Confirmado";
-            break;
+            return (
+              <span className="rounded-full bg-green-500 px-4 py-1 text-sm text-slate-50">
+                Confirmado
+              </span>
+            );
         }
-        return lastStatus;
       },
     },
     {
@@ -160,6 +181,7 @@ export default function RequerimentosIndexPage() {
       },
     },
     {
+      size: 60,
       accessorKey: "agenda_datetime",
       header: "Data/Hora Agendada",
       enableColumnFilter: false,
@@ -179,10 +201,10 @@ export default function RequerimentosIndexPage() {
       enableColumnFilter: false,
       enableSorting: false,
       accessorKey: "id",
-      header: () => <div className="text-right">Ações</div>,
+      header: () => <div>Ações</div>,
       cell: ({ row }) => {
         return (
-          <div className="flex w-full justify-end gap-4">
+          <div className="flex w-full justify-start gap-3">
             {row.original.status === "em-analise" ||
             (row.original.reagendamentos.length &&
               row.original.reagendamentos[
@@ -262,6 +284,7 @@ export default function RequerimentosIndexPage() {
       },
     },
     {
+      size: 50,
       accessorKey: "avaliador_id",
       header: "Avaliador",
       enableColumnFilter: false,
@@ -271,8 +294,8 @@ export default function RequerimentosIndexPage() {
           row.original.reagendamentos.length > 0
             ? row.original.reagendamentos[
                 row.original.reagendamentos.length - 1
-              ]?.avaliador?.name || ""
-            : row.original?.avaliador?.name || "";
+              ]?.avaliador?.name.split(" ")[0] || ""
+            : row.original?.avaliador?.name.split(" ")[0] || "";
 
         return lastAvaliador;
       },

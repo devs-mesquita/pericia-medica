@@ -26,11 +26,13 @@ export default function SidebarLinkList({
       className={`${
         sidebarIsOpen
           ? "flex-col py-2 md:w-[208px] md:py-0"
-          : "w-[64px] text-xs md:w-full md:py-2"
-      } relative flex border-b border-black/20 hover:bg-black/10`}
+          : "w-[64px] text-xs md:w-full"
+      } ${
+        dropdownIsOpen ? "bg-indigo-700/50" : ""
+      } relative flex border-b border-slate-900 hover:bg-indigo-600/50`}
     >
       <button
-        className={`flex w-full items-center text-xs ${
+        className={`flex w-full items-center text-xs md:py-2 ${
           sidebarIsOpen
             ? "mx-auto flex-col px-2 md:mx-0 md:flex-row md:justify-center md:py-4"
             : "mx-auto flex-col px-2"
@@ -60,8 +62,8 @@ export default function SidebarLinkList({
         ${dropdownIsOpen ? "block" : "hidden"}
         ${
           sidebarIsOpen
-            ? "absolute left-full top-0 bg-roxo md:static"
-            : "absolute left-full top-0 md:bg-roxo"
+            ? "absolute left-full top-0 border border-slate-800 bg-slate-500 md:static md:border-0 md:bg-slate-500/50"
+            : "absolute left-full top-0 border border-slate-800 bg-slate-500"
         }`}
       >
         {linkList.map((link, i) => (

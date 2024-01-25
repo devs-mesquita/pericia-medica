@@ -66,6 +66,9 @@ export function DataTable<TData, TValue>({
   isFetching,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
+    defaultColumn: {
+      size: 100,
+    },
     data: data.data,
     columns,
     getCoreRowModel: getCoreRowModel(),
@@ -91,7 +94,10 @@ export function DataTable<TData, TValue>({
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead key={header.id}>
-                    <div className="flex flex-col items-start font-bold text-slate-700">
+                    <div
+                      style={{ width: `${header.getSize()}px` }}
+                      className="flex flex-col items-start font-bold text-slate-700"
+                    >
                       <div
                         {...{
                           className: header.column.getCanSort()

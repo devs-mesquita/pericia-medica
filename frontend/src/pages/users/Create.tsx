@@ -154,7 +154,7 @@ export default function UserCreatePage() {
             <>
               <button
                 type="submit"
-                className="col-start-2 flex min-w-[115px] justify-center rounded bg-green-600 px-4 py-1 text-center text-sm font-semibold uppercase text-white hover:bg-green-700"
+                className="col-start-2 flex min-w-[115px] justify-center rounded bg-green-500 px-4 py-1 text-center text-sm font-semibold uppercase text-white hover:bg-green-600"
               >
                 CRIAR
               </button>

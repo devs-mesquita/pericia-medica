@@ -20,11 +20,13 @@ export default function SidebarLink({
       to={path}
       end
       className={({ isActive }) =>
-        `flex hover:bg-black/10 ${className || ""} ${
+        `flex hover:bg-indigo-600/50 ${className || ""} ${
           sidebarIsOpen
             ? "flex-col p-2 text-xs md:w-[208px] md:flex-row md:px-2 md:py-4"
             : "flex-col p-2 text-xs"
-        } items-center ${isActive ? "bg-white/10 hover:bg-white/20" : ""}`
+        } items-center ${
+          isActive ? "bg-indigo-700/50 hover:bg-indigo-600/50" : ""
+        }`
       }
     >
       {logo}{" "}

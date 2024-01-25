@@ -66,7 +66,9 @@ export default function RequerimentoAvaliacaoPage() {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const handleChangeTime = (evt: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeTime = (
+    evt: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     setTime(evt.target.value);
   };
 
@@ -272,33 +274,41 @@ export default function RequerimentoAvaliacaoPage() {
 
   return (
     <div className="flex flex-1 flex-col gap-4">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="flex flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20">
-          <div className="mb-2 flex items-center justify-between gap-1 border-b-2 border-slate-300 px-2 pb-2 text-lg font-semibold">
-            <h1 className="flex items-center">
+          <div className="mb-2 flex w-full items-center justify-between gap-1 border-b-2 border-slate-300 px-2 pb-2 text-lg font-semibold">
+            <h1 className="flex flex-1 items-center">
               <FileBarChart2Icon className="h-5 w-5" />
               <span className="ml-2">Requerimento</span>
+              {requerimento?.status === "em-analise" ? (
+                <span className="ml-auto rounded-full bg-slate-500 px-4 py-1 text-sm text-slate-50">
+                  Em Análise
+                </span>
+              ) : requerimento?.status === "reagendamento-solicitado" ? (
+                <span className="ml-auto rounded-full bg-amber-500 px-4 py-1 text-sm text-slate-50">
+                  Reagendamento Solicitado
+                </span>
+              ) : requerimento?.status === "aguardando-confirmacao" ? (
+                <span className="ml-auto rounded-full bg-blue-500 px-4 py-1 text-sm text-slate-50">
+                  Aguardando Confirmação
+                </span>
+              ) : requerimento?.status === "confirmado" ? (
+                <span className="ml-auto rounded-full bg-green-500 px-4 py-1 text-sm text-slate-50">
+                  Confirmado
+                </span>
+              ) : requerimento?.status === "realocado" ? (
+                <span className="ml-auto rounded-full bg-amber-500 px-4 py-1 text-sm text-slate-50">
+                  Realocado
+                </span>
+              ) : requerimento?.status === "recusado" ? (
+                <span className="ml-auto rounded-full bg-red-500 px-4 py-1 text-sm text-slate-50">
+                  Recusado
+                </span>
+              ) : null}
             </h1>
           </div>
           <div className="font-semibold">
-            <p>
-              Status:{" "}
-              <span className="">
-                {requerimento?.status === "em-analise"
-                  ? "Em Análise"
-                  : requerimento?.status === "reagendamento-solicitado"
-                    ? "Reagendamento Solicitado"
-                    : requerimento?.status === "aguardando-confirmacao"
-                      ? "Aguardando Confirmação"
-                      : requerimento?.status === "confirmado"
-                        ? "Confirmado"
-                        : requerimento?.status === "realocado"
-                          ? "Realocado"
-                          : requerimento?.status === "recusado"
-                            ? "Recusado"
-                            : null}
-              </span>
-            </p>
+            <p>Protocolo: {requerimento?.protocolo}</p>
           </div>
         </div>
         <div className="flex flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20">
@@ -310,7 +320,9 @@ export default function RequerimentoAvaliacaoPage() {
           </div>
           <div className="grid grid-cols-2">
             <div className="flex flex-col">
-              <p className="mb-2 pb-1 font-semibold">Atestado</p>
+              <p className="mb-2 pb-1 text-xs font-semibold md:text-base">
+                Atestado
+              </p>
               <div className="grid grid-cols-3 gap-2">
                 {requerimento?.atestado_files.map((attachment) => {
                   return IMG_EXTENSIONS.includes(attachment.extension) ? (
@@ -347,10 +359,10 @@ export default function RequerimentoAvaliacaoPage() {
             </div>
             {requerimento?.afastamento_files?.length ? (
               <div className="flex flex-col">
-                <p className="mb-2 pb-1 font-semibold">
+                <p className="mb-2 pb-1 text-xs font-semibold md:text-base">
                   Comprovante de Afastamento
                 </p>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 gap-2">
                   {requerimento?.afastamento_files.map((attachment) => {
                     return IMG_EXTENSIONS.includes(attachment.extension) ? (
                       <a
@@ -406,19 +418,33 @@ export default function RequerimentoAvaliacaoPage() {
                     <p>
                       Status:{" "}
                       <span className="">
-                        {reagendamento.status === "em-analise"
-                          ? "Em Análise"
-                          : reagendamento.status === "reagendamento-solicitado"
-                            ? "Reagendamento Solicitado"
-                            : reagendamento.status === "aguardando-confirmacao"
-                              ? "Aguardando Confirmação"
-                              : reagendamento.status === "confirmado"
-                                ? "Confirmado"
-                                : reagendamento.status === "realocado"
-                                  ? "Realocado"
-                                  : reagendamento.status === "recusado"
-                                    ? "Recusado"
-                                    : null}
+                        {reagendamento.status === "em-analise" ? (
+                          <span className="ml-auto rounded-full bg-slate-500 px-4 py-1 text-sm text-slate-50">
+                            Em Análise
+                          </span>
+                        ) : reagendamento.status ===
+                          "reagendamento-solicitado" ? (
+                          <span className="ml-auto rounded-full bg-amber-500 px-4 py-1 text-sm text-slate-50">
+                            Reagendamento Solicitado
+                          </span>
+                        ) : reagendamento.status ===
+                          "aguardando-confirmacao" ? (
+                          <span className="ml-auto rounded-full bg-blue-500 px-4 py-1 text-sm text-slate-50">
+                            Aguardando Confirmação
+                          </span>
+                        ) : reagendamento.status === "confirmado" ? (
+                          <span className="ml-auto rounded-full bg-green-500 px-4 py-1 text-sm text-slate-50">
+                            Confirmado
+                          </span>
+                        ) : reagendamento.status === "realocado" ? (
+                          <span className="ml-auto rounded-full bg-amber-500 px-4 py-1 text-sm text-slate-50">
+                            Realocado
+                          </span>
+                        ) : reagendamento.status === "recusado" ? (
+                          <span className="ml-auto rounded-full bg-red-500 px-4 py-1 text-sm text-slate-50">
+                            Recusado
+                          </span>
+                        ) : null}
                       </span>
                     </p>
                   </div>
@@ -438,7 +464,7 @@ export default function RequerimentoAvaliacaoPage() {
           </h1>
         </div>
         <div className="flex flex-col gap-4">
-          <div className="flex gap-12">
+          <div className="flex flex-col items-start gap-4 md:flex-row md:gap-8">
             <div className="flex flex-col gap-2">
               <label className="text-sm font-semibold" htmlFor="direcionamento">
                 Direcionamento:
@@ -506,7 +532,7 @@ export default function RequerimentoAvaliacaoPage() {
                         <TimePicker
                           required
                           id="hora_agenda"
-                          className="rounded px-2 py-1 text-lg disabled:cursor-not-allowed disabled:bg-white disabled:text-slate-400"
+                          className="rounded p-2 disabled:cursor-not-allowed disabled:bg-white disabled:text-slate-400"
                           disabled={
                             isFetching ||
                             requerimentoIsFetching ||

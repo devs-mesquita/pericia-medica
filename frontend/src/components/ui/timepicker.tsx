@@ -3,7 +3,9 @@ import * as React from "react";
 
 type TimePickerProps = {
   value: string;
-  onChange: (evt: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (
+    evt: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => void;
   minTime?: string;
   maxTime?: string;
   required?: boolean;
@@ -11,7 +13,7 @@ type TimePickerProps = {
   disabled?: boolean;
   name?: string;
   step?: number;
-  list?: string;
+  /* list?: string; */
   className?: string;
   dataWeekdayIndex?: string;
 };
@@ -25,7 +27,7 @@ export default function TimePicker({
   disabled = false,
   id = "",
   name = "",
-  list = "times",
+  /* list = "times", */
   step = 1800,
   className = "",
   dataWeekdayIndex,
@@ -80,7 +82,25 @@ export default function TimePicker({
 
   return (
     <>
-      <input
+      <select
+        className={className}
+        id={id}
+        name={name}
+        onChange={onChange}
+        value={value}
+        required={required}
+        disabled={disabled}
+        data-weekday-index={dataWeekdayIndex}
+      >
+        {generateTimeDataList(minTime, maxTime, step).map((time) => {
+          return (
+            <option key={nanoid()} value={time}>
+              {time}
+            </option>
+          );
+        })}
+      </select>
+      {/* <input
         className={className}
         id={id}
         name={name}
@@ -99,7 +119,7 @@ export default function TimePicker({
         {generateTimeDataList(minTime, maxTime, step).map((time) => {
           return <option key={nanoid()}>{time}</option>;
         })}
-      </datalist>
+      </datalist> */}
     </>
   );
 }

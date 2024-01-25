@@ -82,7 +82,9 @@ export default function DirecionamentoCreatePage() {
     }));
   };
 
-  const handleChangeConfig = (evt: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeConfig = (
+    evt: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     setForm((st) => ({
       ...st,
       config: st.config.map((c) => {
@@ -227,13 +229,13 @@ export default function DirecionamentoCreatePage() {
         <h2 className="mb-2 border-t-2 border-slate-300 pt-2 text-center text-xl font-bold">
           Atendimento Presencial
         </h2>
-        <div className="grid grid-cols-4 items-center justify-items-center border-y-2 border-slate-300 py-2 font-semibold">
+        <div className="grid grid-cols-4 items-center justify-items-center border-y-2 border-slate-300 py-2 text-sm font-semibold md:text-base">
           <h3 className="ml-4 justify-self-start">Dia da Semana</h3>
           <h3>Habilitar dia?</h3>
           <h3>Horário Mínimo</h3>
           <h3>Horário Máximo</h3>
         </div>
-        <div className="flex flex-col">
+        <div className="md:tx-base flex flex-col text-sm">
           <div className="mb-2 grid grid-cols-4 items-center justify-items-center border-b border-slate-300 pb-2 pt-2">
             <h3 className="ml-4 justify-self-start">Domingo</h3>
             <input
@@ -254,7 +256,7 @@ export default function DirecionamentoCreatePage() {
                 createDirecionamentoMutation.isPending ||
                 !form.config[0].isEnabled
               }
-              className="rounded px-2 py-1 text-lg disabled:text-slate-400"
+              className="rounded px-2 py-1 text-base disabled:text-slate-400 md:text-lg"
               minTime="00:00"
               maxTime="23:00"
               value={form.config[0].start}
@@ -269,7 +271,7 @@ export default function DirecionamentoCreatePage() {
                 createDirecionamentoMutation.isPending ||
                 !form.config[0].isEnabled
               }
-              className="rounded px-2 py-1 text-lg disabled:text-slate-400"
+              className="rounded px-2 py-1 text-base disabled:text-slate-400 md:text-lg"
               minTime={form.config[0].start || "00:00"}
               maxTime="23:00"
               value={form.config[0].end}
@@ -299,7 +301,7 @@ export default function DirecionamentoCreatePage() {
                 createDirecionamentoMutation.isPending ||
                 !form.config[1].isEnabled
               }
-              className="rounded px-2 py-1 text-lg disabled:text-slate-400"
+              className="rounded px-2 py-1 text-base disabled:text-slate-400 md:text-lg"
               minTime="00:00"
               maxTime="23:00"
               value={form.config[1].start}
@@ -314,7 +316,7 @@ export default function DirecionamentoCreatePage() {
                 createDirecionamentoMutation.isPending ||
                 !form.config[1].isEnabled
               }
-              className="rounded px-2 py-1 text-lg disabled:text-slate-400"
+              className="rounded px-2 py-1 text-base disabled:text-slate-400 md:text-lg"
               minTime={form.config[1].start || "00:00"}
               maxTime="23:00"
               value={form.config[1].end}
@@ -344,7 +346,7 @@ export default function DirecionamentoCreatePage() {
                 createDirecionamentoMutation.isPending ||
                 !form.config[2].isEnabled
               }
-              className="rounded px-2 py-1 text-lg disabled:text-slate-400"
+              className="rounded px-2 py-1 text-base disabled:text-slate-400 md:text-lg"
               minTime="00:00"
               maxTime="23:00"
               value={form.config[2].start}
@@ -359,7 +361,7 @@ export default function DirecionamentoCreatePage() {
                 createDirecionamentoMutation.isPending ||
                 !form.config[2].isEnabled
               }
-              className="rounded px-2 py-1 text-lg disabled:text-slate-400"
+              className="rounded px-2 py-1 text-base disabled:text-slate-400 md:text-lg"
               minTime={form.config[2].start || "00:00"}
               maxTime="23:00"
               value={form.config[2].end}
@@ -389,7 +391,7 @@ export default function DirecionamentoCreatePage() {
                 createDirecionamentoMutation.isPending ||
                 !form.config[3].isEnabled
               }
-              className="rounded px-2 py-1 text-lg disabled:text-slate-400"
+              className="rounded px-2 py-1 text-base disabled:text-slate-400 md:text-lg"
               minTime="00:00"
               maxTime="23:00"
               value={form.config[3].start}
@@ -404,7 +406,7 @@ export default function DirecionamentoCreatePage() {
                 createDirecionamentoMutation.isPending ||
                 !form.config[3].isEnabled
               }
-              className="rounded px-2 py-1 text-lg disabled:text-slate-400"
+              className="rounded px-2 py-1 text-base disabled:text-slate-400 md:text-lg"
               minTime={form.config[3].start || "00:00"}
               maxTime="23:00"
               value={form.config[3].end}
@@ -434,7 +436,7 @@ export default function DirecionamentoCreatePage() {
                 createDirecionamentoMutation.isPending ||
                 !form.config[4].isEnabled
               }
-              className="rounded px-2 py-1 text-lg disabled:text-slate-400"
+              className="rounded px-2 py-1 text-base disabled:text-slate-400 md:text-lg"
               minTime="00:00"
               maxTime="23:00"
               value={form.config[4].start}
@@ -449,7 +451,7 @@ export default function DirecionamentoCreatePage() {
                 createDirecionamentoMutation.isPending ||
                 !form.config[4].isEnabled
               }
-              className="rounded px-2 py-1 text-lg disabled:text-slate-400"
+              className="rounded px-2 py-1 text-base disabled:text-slate-400 md:text-lg"
               minTime={form.config[4].start || "00:00"}
               maxTime="23:00"
               value={form.config[4].end}
@@ -479,7 +481,7 @@ export default function DirecionamentoCreatePage() {
                 createDirecionamentoMutation.isPending ||
                 !form.config[5].isEnabled
               }
-              className="rounded px-2 py-1 text-lg disabled:text-slate-400"
+              className="rounded px-2 py-1 text-base disabled:text-slate-400 md:text-lg"
               minTime="00:00"
               maxTime="23:00"
               value={form.config[5].start}
@@ -494,7 +496,7 @@ export default function DirecionamentoCreatePage() {
                 createDirecionamentoMutation.isPending ||
                 !form.config[5].isEnabled
               }
-              className="rounded px-2 py-1 text-lg disabled:text-slate-400"
+              className="rounded px-2 py-1 text-base disabled:text-slate-400 md:text-lg"
               minTime={form.config[5].start || "00:00"}
               maxTime="23:00"
               value={form.config[5].end}
@@ -524,7 +526,7 @@ export default function DirecionamentoCreatePage() {
                 createDirecionamentoMutation.isPending ||
                 !form.config[6].isEnabled
               }
-              className="rounded px-2 py-1 text-lg disabled:text-slate-400"
+              className="rounded px-2 py-1 text-base disabled:text-slate-400 md:text-lg"
               minTime="00:00"
               maxTime="23:00"
               value={form.config[6].start}
@@ -539,7 +541,7 @@ export default function DirecionamentoCreatePage() {
                 createDirecionamentoMutation.isPending ||
                 !form.config[6].isEnabled
               }
-              className="rounded px-2 py-1 text-lg disabled:text-slate-400"
+              className="rounded px-2 py-1 text-base disabled:text-slate-400 md:text-lg"
               minTime={form.config[6].start || "00:00"}
               maxTime="23:00"
               value={form.config[6].end}
