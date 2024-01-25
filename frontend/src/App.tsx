@@ -21,6 +21,7 @@ import DirecionamentoCreatePage from "./pages/direcionamentos/Create";
 import UserIndexPage from "./pages/users/Index";
 import UserEditPage from "./pages/users/Edit";
 import UserCreatePage from "./pages/users/Create";
+import RequerimentoShowPage from "./pages/requerimentos/Show";
 
 export default function App() {
   return (
@@ -52,6 +53,7 @@ export default function App() {
             path="reagendamento"
             element={<RequerimentoReagendamentoPage />}
           />
+          <Route path=":id" element={<RequerimentoShowPage />} />
           <Route path=":id/avaliacao" element={<RequerimentoAvaliacaoPage />} />
         </Route>
         <Route path="direcionamentos">

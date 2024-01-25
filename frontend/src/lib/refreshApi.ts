@@ -16,7 +16,7 @@ type RefreshAPIResponse = {
 };
 
 const refreshApi = createRefresh({
-  interval: 10, // Refreshs the token in every 10 minutes
+  interval: 10, // Refreshes the token in every 10 minutes
   refreshApiCallback: async ({ authToken, refreshToken }) => {
     try {
       const res = await fetch(`${API_URL}/api/refresh`, {

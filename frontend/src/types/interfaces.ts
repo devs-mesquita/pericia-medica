@@ -68,7 +68,7 @@ export type Reagendamento = {
   realocado_at?: string;
   envio_avaliacao?: boolean;
   envio_realocacao?: boolean;
-  confirmato_at?: string;
+  confirmado_at?: string;
   presenca?: boolean;
   reagendamento_solicitado_at?: string;
   created_at: string;

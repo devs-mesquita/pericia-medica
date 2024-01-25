@@ -127,42 +127,42 @@ export default function RequerimentosArquivoPage() {
         ) {
           case "em-analise":
             return row.original.status === "reagendamento-solicitado" ? (
-              <span className="rounded-full bg-amber-500 px-4 py-1 text-sm text-slate-50">
+              <span className="rounded-full bg-amber-500 px-4 py-1 text-sm font-bold text-slate-50">
                 Reagendamento Solicitado
               </span>
             ) : (
-              <span className="rounded-full bg-slate-500 px-4 py-1 text-sm text-slate-50">
+              <span className="rounded-full bg-slate-500 px-4 py-1 text-sm font-bold text-slate-50">
                 Em Análise
               </span>
             );
           case "aguardando-confirmacao":
             return (
-              <span className="rounded-full bg-blue-500 px-4 py-1 text-sm text-slate-50">
+              <span className="rounded-full bg-blue-500 px-4 py-1 text-sm font-bold text-slate-50">
                 Aguardando Confirmação
               </span>
             );
           case "reagendamento-solicitado":
             return (
-              <span className="rounded-full bg-amber-500 px-4 py-1 text-sm text-slate-50">
+              <span className="rounded-full bg-amber-500 px-4 py-1 text-sm font-bold text-slate-50">
                 Reagendamento Solicitado
               </span>
             );
           case "realocado":
             return (
-              <span className="rounded-full bg-amber-500 px-4 py-1 text-sm text-slate-50">
+              <span className="rounded-full bg-roxo-lighter px-4 py-1 text-sm font-bold text-slate-50">
                 Realocado
               </span>
             );
           case "recusado":
             return (
-              <span className="rounded-full bg-red-500 px-4 py-1 text-sm text-slate-50">
+              <span className="rounded-full bg-red-500 px-4 py-1 text-sm font-bold text-slate-50">
                 Recusado
               </span>
             );
 
           case "confirmado":
             return (
-              <span className="rounded-full bg-green-500 px-4 py-1 text-sm text-slate-50">
+              <span className="rounded-full bg-green-600 px-4 py-1 text-sm font-bold text-slate-50">
                 Confirmado
               </span>
             );
