@@ -114,7 +114,7 @@ export default function RequerimentosIndexPage() {
       },
     },
     {
-      size: 205,
+      size: 213,
       accessorKey: "status",
       header: "Status",
       enableColumnFilter: true,
@@ -177,7 +177,14 @@ export default function RequerimentosIndexPage() {
       enableColumnFilter: true,
       enableSorting: true,
       cell: ({ row }) => {
-        return row.original.direcionamento?.name || "";
+        let lastDirecionamento =
+          row.original.reagendamentos.length > 0
+            ? row.original.reagendamentos[
+                row.original.reagendamentos.length - 1
+              ]?.direcionamento?.name || ""
+            : row.original?.direcionamento?.name || "";
+
+        return lastDirecionamento ? lastDirecionamento : "";
       },
     },
     {

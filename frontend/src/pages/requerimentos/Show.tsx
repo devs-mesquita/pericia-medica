@@ -326,7 +326,7 @@ export default function RequerimentoShowPage() {
                       arr[i - 1]?.reagendamento_solicitado_at ? (
                         <>
                           <FilePlus2Icon className="h-5 w-5" />
-                          <span className="ml-2">
+                          <span className="mx-2">
                             Pedido de Reagendamento {reagendamentoIndex}
                           </span>
                         </>
@@ -334,7 +334,7 @@ export default function RequerimentoShowPage() {
                         arr[i - 1]?.realocado_at ? (
                         <>
                           <FileInputIcon className="h-5 w-5" />
-                          <span className="ml-2">
+                          <span className="mx-2">
                             Realocação {realocacaoIndex}
                           </span>
                         </>

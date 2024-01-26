@@ -206,6 +206,11 @@ export default function RequerimentoAvaliacaoPage() {
           message: "O requerimento não foi encontrado.",
           type: "error",
         });
+      } else if (error.message === "bad-request") {
+        setNotification({
+          message: "O requerimento não está em análise.",
+          type: "error",
+        });
       } else {
         setNotification({
           message: "Ocorreu um erro.",
@@ -557,7 +562,7 @@ export default function RequerimentoAvaliacaoPage() {
                       arr[i - 1]?.reagendamento_solicitado_at ? (
                         <>
                           <FilePlus2Icon className="h-5 w-5" />
-                          <span className="ml-2">
+                          <span className="mx-2">
                             Pedido de Reagendamento {reagendamentoIndex}
                           </span>
                         </>
@@ -565,7 +570,7 @@ export default function RequerimentoAvaliacaoPage() {
                         arr[i - 1]?.realocado_at ? (
                         <>
                           <FileInputIcon className="h-5 w-5" />
-                          <span className="ml-2">
+                          <span className="mx-2">
                             Realocação {realocacaoIndex}
                           </span>
                         </>

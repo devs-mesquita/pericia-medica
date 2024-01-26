@@ -157,6 +157,9 @@ class RequerimentoController extends Controller
       // Reagendamento
       if ($requerimento->reagendamentos->count() > 0) {
         $latestReagendamento = $requerimento->reagendamentos[$requerimento->reagendamentos->count()-1];
+        if ($latestReagendamento->status !== "em-analise") {
+          return response()->json(["message" => "bad-request"], 400);
+        }
 
         if ($request->direcionamento_id === "recusado") {
           $latestReagendamento->status = "recusado";
@@ -211,6 +214,10 @@ class RequerimentoController extends Controller
         $latestReagendamento->save();
 
       } else {
+        if ($requerimento->status !== "em-analise") {
+          return response()->json(["message" => "bad-request"], 400);
+        }
+
         // Requerimento
         if ($request->direcionamento_id === "recusado") {
           $requerimento->status = "recusado";
@@ -277,6 +284,9 @@ class RequerimentoController extends Controller
   public function show($id) {
     $requerimento = Requerimento::with(
       "reagendamentos",
+      "reagendamentos.direcionamento",
+      "reagendamentos.avaliador",
+      "reagendamentos.realocador",
       "direcionamento",
       "atestado_files",
       "afastamento_files",
