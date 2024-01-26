@@ -21,6 +21,7 @@ use App\Mail\RequerimentoAgendadoMail;
 use App\Mail\RequerimentoNaoPresencialMail;
 use App\Mail\RequerimentoRecusadoMail;
 
+use App\Mail\ReagendamentoCreateMail;
 use App\Mail\ReagendamentoAgendadoMail;
 use App\Mail\ReagendamentoNaoPresencialMail;
 use App\Mail\ReagendamentoRecusadoMail;
@@ -290,7 +291,116 @@ class RequerimentoController extends Controller
     return $requerimento;
   }
   
-  public function confirmacao(Request $request, $protocolo) {}
+  public function confirmacao(Request $request, $protocolo) {
+    if (!$request->opcao) {
+      return response()->json(["message" => "bad-request"], 400);
+    }
+
+    if (!in_array($request->opcao, ["confirmar", "solicitar-reagendamento"])) {
+      return response()->json(["message" => "bad-request"], 400);
+    }
+
+    DB::beginTransaction();
+    $requerimento = Requerimento::with("reagendamentos")->where("protocolo", $protocolo)->first();
+
+    if (!$requerimento) {
+      return response()->json(["message" => "not-found"], 404);
+    }
+
+    if ($requerimento->reagendamentos->count() > 0) {
+      $latestReagendamento = $requerimento->reagendamentos[$requerimento->reagendamentos->count()-1];
+
+      if ($latestReagendamento->status === "confirmado") {
+        return ["message" => "already-confirmado", "protocolo" => $requerimento->protocolo];
+      }
+
+      if ($latestReagendamento->status === "recusado") {
+        return ["message" => "recusado", "protocolo" => $requerimento->protocolo];
+      }
+
+      if ($latestReagendamento->status === "em-analise") {
+        return ["message" => "em-analise", "protocolo" => $requerimento->protocolo];
+      }
+
+      if ($latestReagendamento->status === "aguardando-confirmacao") {
+        if ($request->opcao === "confirmar") {
+          $latestReagendamento->status = "confirmado";
+          $latestReagendamento->confirmado_at = Carbon::now();
+          $latestReagendamento->save();
+
+        } else if ($request->opcao === "solicitar-reagendamento") {
+          $latestReagendamento->status = "reagendamento-solicitado";
+          $latestReagendamento->reagendamento_solicitado_at = Carbon::now();
+          $latestReagendamento->save();
+
+          $newReagendamento = new RequerimentoReagendamento;
+          $newReagendamento->justificativa_requerente = $request->justificativa_requerente;
+          $newReagendamento->status = "em-analise";
+          $newReagendamento->requerimento_id = $requerimento->id;
+
+          try {
+            Mail::to($requerimento->email)->send(new ReagendamentoCreateMail($requerimento, $newReagendamento));
+            $newReagendamento->envio_create = 1;
+  
+          } catch (Exception $e) {
+            $newReagendamento->envio_create = 0;
+          }
+
+          $newReagendamento->save();
+        }
+
+        $requerimento->last_movement_at = Carbon::now();
+        $requerimento->save();
+        DB::commit();
+        return ["message" => "ok", "opcao" => $request->opcao, "protocolo" => $requerimento->protocolo];
+      }
+    } else {
+      if ($requerimento->status === "confirmado") {
+        return ["message" => "already-confirmado", "protocolo" => $requerimento->protocolo];
+      }
+
+      if ($requerimento->status === "recusado") {
+        return ["message" => "recusado", "protocolo" => $requerimento->protocolo];
+      }
+
+      if ($requerimento->status === "em-analise") {
+        return ["message" => "em-analise", "protocolo" => $requerimento->protocolo];
+      }
+
+      if ($requerimento->status === "aguardando-confirmacao") {
+        if ($request->opcao === "confirmar") {
+          $requerimento->status = "confirmado";
+          $requerimento->confirmado_at = Carbon::now();
+          $requerimento->save();
+
+        } else if ($request->opcao === "solicitar-reagendamento") {
+          $requerimento->status = "reagendamento-solicitado";
+          $requerimento->reagendamento_solicitado_at = Carbon::now();
+          $requerimento->save();
+
+          $newReagendamento = new RequerimentoReagendamento;
+          $newReagendamento->justificativa_requerente = $request->justificativa_requerente;
+          $newReagendamento->status = "em-analise";
+          $newReagendamento->requerimento_id = $requerimento->id;
+
+          try {
+            Mail::to($requerimento->email)->send(new ReagendamentoCreateMail($requerimento, $newReagendamento));
+            $newReagendamento->envio_create = 1;
+            
+          } catch (Exception $e) {
+            $newReagendamento->envio_create = 0;
+          }
+          
+          $newReagendamento->save();
+        }
+
+        $requerimento->last_movement_at = Carbon::now();
+        $requerimento->save();
+        DB::commit();
+        return ["message" => "ok", "opcao" => $request->opcao, "protocolo" => $requerimento->protocolo];
+      }
+    }
+  }
   
   public function presenca(Request $request, $id) {
     $requerimento = Requerimento::with("reagendamentos")->findOrFail($id);

@@ -92,6 +92,7 @@ export default function TimePicker({
         disabled={disabled}
         data-weekday-index={dataWeekdayIndex}
       >
+        <option value="">--:--</option>
         {generateTimeDataList(minTime, maxTime, step).map((time) => {
           return (
             <option key={nanoid()} value={time}>

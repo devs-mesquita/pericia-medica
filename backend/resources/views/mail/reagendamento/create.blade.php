@@ -1,0 +1,3 @@
+<p>Olá {{ substr($requerimento->nome, 0, strpos($requerimento->nome, ' ')) }}, a sua solicitação de reagendamento foi criada com sucesso e será analisada pelo nosso departamento.</p>
+<p>Aguarde a resposta com o seu reagendamento (poderá se dar em até 48 horas úteis da sua solicitação), por favor verifique a sua caixa de spam periodicamente.</p>
+<p><b>Protocolo do seu requerimento:</b> {{ $requerimento->protocolo }}</p>
