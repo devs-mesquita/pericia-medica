@@ -38,14 +38,14 @@ export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
       listID: 1,
       linkList: [
         {
-          title: "Principal",
+          title: "Home",
           path: "/home",
           logo: <HomeIcon className="h-5 w-5" />,
           sidebarIsOpen,
         },
       ],
       listLogo: <HomeIcon />,
-      listTitle: "Principal",
+      listTitle: "Home",
     },
     {
       listID: 2,
@@ -70,7 +70,7 @@ export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
         },
         {
           title: "Relatório",
-          path: "/requerimentos/relatorio",
+          path: "/requerimentos/relatorios",
           logo: <FileDownIcon className="h-5 w-5" />,
           sidebarIsOpen,
         },
@@ -88,8 +88,8 @@ export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
           sidebarIsOpen,
         },
         {
-          title: "Reagendamento",
-          path: "/requerimentos/reagendamento",
+          title: "Realocação",
+          path: "/requerimentos/realocacao",
           logo: <FileInputIcon className="h-5 w-5" />,
           sidebarIsOpen,
         },

@@ -13,8 +13,8 @@ import ChangePasswordPage from "./pages/ChangePassword";
 import RequerimentoIndexPage from "./pages/requerimentos/Index";
 import RequerimentoDiarioPage from "./pages/requerimentos/Diario";
 import RequerimentoArquivoPage from "./pages/requerimentos/Arquivo";
-import RequerimentoRelatorioPage from "./pages/requerimentos/Relatorio";
-import RequerimentoReagendamentoPage from "./pages/requerimentos/Reagendamento";
+import RequerimentoRelatoriosPage from "./pages/requerimentos/Relatorios";
+import RequerimentoRealocacaoPage from "./pages/requerimentos/Realocacao";
 import DirecionamentoIndexPage from "./pages/direcionamentos/Index";
 import DirecionamentoEditPage from "./pages/direcionamentos/Edit";
 import DirecionamentoCreatePage from "./pages/direcionamentos/Create";
@@ -22,6 +22,7 @@ import UserIndexPage from "./pages/users/Index";
 import UserEditPage from "./pages/users/Edit";
 import UserCreatePage from "./pages/users/Create";
 import RequerimentoShowPage from "./pages/requerimentos/Show";
+import NotFoundPage from "./pages/NotFound";
 
 export default function App() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
         <Route path="success" element={<SuccessPage />} />
         <Route path="confirmar" element={<ConfirmarPage />} />
         <Route path="login" element={<LoginPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
       {/* Dashboard */}
       <Route
@@ -48,11 +50,8 @@ export default function App() {
           <Route index element={<RequerimentoIndexPage />} />
           <Route path="diario" element={<RequerimentoDiarioPage />} />
           <Route path="arquivo" element={<RequerimentoArquivoPage />} />
-          <Route path="relatorio" element={<RequerimentoRelatorioPage />} />
-          <Route
-            path="reagendamento"
-            element={<RequerimentoReagendamentoPage />}
-          />
+          <Route path="relatorios" element={<RequerimentoRelatoriosPage />} />
+          <Route path="realocacao" element={<RequerimentoRealocacaoPage />} />
           <Route path=":id" element={<RequerimentoShowPage />} />
           <Route path=":id/avaliacao" element={<RequerimentoAvaliacaoPage />} />
         </Route>
@@ -67,7 +66,6 @@ export default function App() {
           <Route path="create" element={<UserCreatePage />} />
         </Route>
       </Route>
-      <Route path="*" element={<p>404 - Página não encontrada.</p>} />
     </Routes>
   );
 }
