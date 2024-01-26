@@ -283,7 +283,7 @@ export default function RequerimentoAvaliacaoPage() {
 
   return (
     <div className="flex flex-1 flex-col gap-4">
-      <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="flex flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20">
           <div className="mb-2 flex w-full items-center justify-between gap-1 border-b-2 border-slate-300 px-2 pb-2 text-lg font-semibold">
             <h1 className="flex flex-1 items-center">
@@ -316,24 +316,114 @@ export default function RequerimentoAvaliacaoPage() {
               ) : null}
             </h1>
           </div>
-          <div className="flex flex-col gap-4 text-base font-semibold">
-            <div className="flex flex-col">
+          <div className="flex flex-col font-semibold">
+            <p>
+              Protocolo:{" "}
+              <span className="font-normal">{requerimento?.protocolo}</span>
+            </p>
+            {requerimento?.last_movement_at && (
               <p>
-                Protocolo:{" "}
-                <span className="font-normal">{requerimento?.protocolo}</span>
+                Última Movimentação:{" "}
+                <span className="font-normal">
+                  {format(
+                    requerimento.last_movement_at,
+                    "dd/LL/yyyy 'às' HH:mm",
+                  )}
+                </span>
               </p>
-              {requerimento?.last_movement_at && (
-                <p>
-                  Última Movimentação:{" "}
-                  <span className="font-normal">
-                    {format(
-                      requerimento.last_movement_at,
-                      "dd/LL/yyyy 'às' HH:mm",
-                    )}
-                  </span>
-                </p>
-              )}
+            )}
+          </div>
+        </div>
+        <div className="row-span-2 flex flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20">
+          <div className="mb-2 flex items-center justify-between gap-1 border-b-2 border-slate-300 px-2 pb-2 text-lg font-semibold">
+            <h1 className="flex items-center">
+              <PaperclipIcon className="h-5 w-5" />
+              <span className="ml-2">Imagens e Documentos</span>
+            </h1>
+          </div>
+          <div className="grid grid-cols-1 gap-4">
+            <div className="flex flex-col">
+              <p className="mb-2 pb-1 text-xs font-semibold md:text-base">
+                Atestado
+              </p>
+              <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+                {requerimento?.atestado_files.map((attachment) => {
+                  return IMG_EXTENSIONS.includes(attachment.extension) ? (
+                    <a
+                      href={`${API_URL}/storage/atestados/${attachment.filename}`}
+                      target="_blank"
+                      key={nanoid()}
+                      className="relative h-[100px] w-[100px] rounded border border-slate-400 bg-slate-300 p-1"
+                    >
+                      <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded text-slate-50/60 opacity-0 hover:bg-black/25 hover:opacity-100">
+                        <ViewIcon className="h-[32px] w-[32px]" />
+                      </div>
+                      <img
+                        className="h-full w-full rounded object-contain"
+                        src={`${API_URL}/storage/atestados/${attachment.filename}`}
+                        alt="Atestado"
+                      />
+                    </a>
+                  ) : (
+                    <a
+                      href={`${API_URL}/storage/atestados/${attachment.filename}`}
+                      target="_blank"
+                      key={nanoid()}
+                      className="relative flex h-[100px] w-[100px] items-center justify-center rounded border border-slate-400 bg-slate-100 p-1 text-blue-500"
+                    >
+                      <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded text-slate-50/60 opacity-0 hover:bg-black/25 hover:opacity-100">
+                        <ViewIcon className="h-[32px] w-[32px]" />
+                      </div>
+                      <FileBarChart2Icon className="h-[64px] w-[64px]" />
+                    </a>
+                  );
+                })}
+              </div>
             </div>
+            {requerimento?.afastamento_files?.length ? (
+              <div className="flex flex-col">
+                <p className="mb-2 pb-1 text-xs font-semibold md:text-base">
+                  Comprovante de Afastamento
+                </p>
+                <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+                  {requerimento?.afastamento_files.map((attachment) => {
+                    return IMG_EXTENSIONS.includes(attachment.extension) ? (
+                      <a
+                        href={`${API_URL}/storage/afastamentos/${attachment.filename}`}
+                        target="_blank"
+                        key={nanoid()}
+                        className="relative h-[100px] w-[100px] rounded border border-slate-400 bg-slate-300 p-1"
+                      >
+                        <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded text-slate-50/60 opacity-0 hover:bg-black/25 hover:opacity-100">
+                          <ViewIcon className="h-[32px] w-[32px]" />
+                        </div>
+                        <img
+                          className="h-full w-full rounded object-contain"
+                          src={`${API_URL}/storage/afastamentos/${attachment.filename}`}
+                          alt="Comprovante de Afastamento"
+                        />
+                      </a>
+                    ) : (
+                      <a
+                        href={`${API_URL}/storage/afastamentos/${attachment.filename}`}
+                        target="_blank"
+                        key={nanoid()}
+                        className="relative flex h-[100px] w-[100px] items-center justify-center rounded border border-slate-400 bg-slate-100 p-1 text-blue-500"
+                      >
+                        <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded text-slate-50/60 opacity-0 hover:bg-black/25 hover:opacity-100">
+                          <ViewIcon className="h-[32px] w-[32px]" />
+                        </div>
+                        <FileBarChart2Icon className="h-[64px] w-[64px]" />
+                      </a>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </div>
+        <div className="flex flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20">
+          <div className="flex flex-col gap-4 text-base font-semibold">
             <div className="flex flex-col">
               <p>
                 Nome Completo:{" "}
@@ -447,94 +537,6 @@ export default function RequerimentoAvaliacaoPage() {
                 </p>
               )}
             </div>
-          </div>
-        </div>
-        <div className="flex flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20">
-          <div className="mb-2 flex items-center justify-between gap-1 border-b-2 border-slate-300 px-2 pb-2 text-lg font-semibold">
-            <h1 className="flex items-center">
-              <PaperclipIcon className="h-5 w-5" />
-              <span className="ml-2">Imagens e Documentos</span>
-            </h1>
-          </div>
-          <div className="grid grid-cols-2">
-            <div className="flex flex-col">
-              <p className="mb-2 pb-1 text-xs font-semibold md:text-base">
-                Atestado
-              </p>
-              <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
-                {requerimento?.atestado_files.map((attachment) => {
-                  return IMG_EXTENSIONS.includes(attachment.extension) ? (
-                    <a
-                      href={`${API_URL}/storage/atestados/${attachment.filename}`}
-                      target="_blank"
-                      key={nanoid()}
-                      className="relative h-[100px] w-[100px] rounded border border-slate-400 bg-slate-300 p-1"
-                    >
-                      <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded text-slate-50/60 opacity-0 hover:bg-black/25 hover:opacity-100">
-                        <ViewIcon className="h-[32px] w-[32px]" />
-                      </div>
-                      <img
-                        className="h-full w-full rounded object-contain"
-                        src={`${API_URL}/storage/atestados/${attachment.filename}`}
-                        alt="Atestado"
-                      />
-                    </a>
-                  ) : (
-                    <a
-                      href={`${API_URL}/storage/atestados/${attachment.filename}`}
-                      target="_blank"
-                      key={nanoid()}
-                      className="relative flex h-[100px] w-[100px] items-center justify-center rounded border border-slate-400 bg-slate-100 p-1 text-blue-500"
-                    >
-                      <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded text-slate-50/60 opacity-0 hover:bg-black/25 hover:opacity-100">
-                        <ViewIcon className="h-[32px] w-[32px]" />
-                      </div>
-                      <FileBarChart2Icon className="h-[64px] w-[64px]" />
-                    </a>
-                  );
-                })}
-              </div>
-            </div>
-            {requerimento?.afastamento_files?.length ? (
-              <div className="flex flex-col">
-                <p className="mb-2 pb-1 text-xs font-semibold md:text-base">
-                  Comprov. de Afastamento
-                </p>
-                <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
-                  {requerimento?.afastamento_files.map((attachment) => {
-                    return IMG_EXTENSIONS.includes(attachment.extension) ? (
-                      <a
-                        href={`${API_URL}/storage/afastamentos/${attachment.filename}`}
-                        target="_blank"
-                        key={nanoid()}
-                        className="relative h-[100px] w-[100px] rounded border border-slate-400 bg-slate-300 p-1"
-                      >
-                        <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded text-slate-50/60 opacity-0 hover:bg-black/25 hover:opacity-100">
-                          <ViewIcon className="h-[32px] w-[32px]" />
-                        </div>
-                        <img
-                          className="h-full w-full rounded object-contain"
-                          src={`${API_URL}/storage/afastamentos/${attachment.filename}`}
-                          alt="Comprovante de Afastamento"
-                        />
-                      </a>
-                    ) : (
-                      <a
-                        href={`${API_URL}/storage/afastamentos/${attachment.filename}`}
-                        target="_blank"
-                        key={nanoid()}
-                        className="relative flex h-[100px] w-[100px] items-center justify-center rounded border border-slate-400 bg-slate-100 p-1 text-blue-500"
-                      >
-                        <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded text-slate-50/60 opacity-0 hover:bg-black/25 hover:opacity-100">
-                          <ViewIcon className="h-[32px] w-[32px]" />
-                        </div>
-                        <FileBarChart2Icon className="h-[64px] w-[64px]" />
-                      </a>
-                    );
-                  })}
-                </div>
-              </div>
-            ) : null}
           </div>
         </div>
         {requerimento?.reagendamentos.length
