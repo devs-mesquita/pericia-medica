@@ -51,6 +51,6 @@ Route::middleware(['api-auth'])->group(function () {
 
   // Super-Admin
   Route::middleware(['super-admin'])->group(function () {
-    Route::post('requerimentos/realocacao', [RequerimentoController::class, 'realocacao']);
+    Route::patch('requerimentos/realocacao', [RequerimentoController::class, 'realocacao']);
   });
 });

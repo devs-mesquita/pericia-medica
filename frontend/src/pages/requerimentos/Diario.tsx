@@ -11,6 +11,8 @@ import {
   BookUserIcon,
   CheckCircle2Icon,
   EyeIcon,
+  MailCheckIcon,
+  MailXIcon,
   XCircleIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -287,6 +289,7 @@ export default function RequerimentosDiarioPage() {
       },
     },
     {
+      size: 50,
       enableColumnFilter: false,
       enableSorting: false,
       accessorKey: "id",
@@ -320,6 +323,33 @@ export default function RequerimentosDiarioPage() {
             : row.original?.avaliador?.name.split(" ")[0] || "";
 
         return lastAvaliador;
+      },
+    },
+    {
+      size: 50,
+      accessorKey: "envio_create",
+      header: "Envio de Emails",
+      enableColumnFilter: false,
+      enableSorting: false,
+      cell: ({ row }) => {
+        let item =
+          row.original.reagendamentos.length > 0
+            ? row.original.reagendamentos[
+                row.original.reagendamentos.length - 1
+              ]
+            : row.original;
+
+        return item.envio_create === 0 ||
+          item.envio_avaliacao === 0 ||
+          item.envio_realocacao === 0 ? (
+          <span title="Um ou mais emails deste requerimento não foram enviados.">
+            <MailXIcon className="h-6 w-6 text-red-500" />
+          </span>
+        ) : (
+          <span title="Todos os emails foram enviados.">
+            <MailCheckIcon className="h-6 w-6 text-green-500" />
+          </span>
+        );
       },
     },
   ];

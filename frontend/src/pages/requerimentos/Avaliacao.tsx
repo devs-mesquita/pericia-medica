@@ -13,6 +13,8 @@ import {
   FileBarChart2Icon,
   FileInputIcon,
   FilePlus2Icon,
+  MailCheckIcon,
+  MailXIcon,
   PaperclipIcon,
   ViewIcon,
 } from "lucide-react";
@@ -332,6 +334,42 @@ export default function RequerimentoAvaliacaoPage() {
                 </span>
               </p>
             )}
+            <p className="flex gap-2">
+              Envio de Emails:{" "}
+              {requerimento?.envio_create !== null ? (
+                requerimento?.envio_create === 0 ? (
+                  <span title="O email inicial não foi enviado.">
+                    <MailXIcon className="h-6 w-6 text-red-500" />
+                  </span>
+                ) : (
+                  <span title="O email inicial foi enviado.">
+                    <MailCheckIcon className="h-6 w-6 text-green-500" />
+                  </span>
+                )
+              ) : null}
+              {requerimento?.envio_avaliacao !== null ? (
+                requerimento?.envio_avaliacao === 0 ? (
+                  <span title="O email de avaliação não foi enviado.">
+                    <MailXIcon className="h-6 w-6 text-red-500" />
+                  </span>
+                ) : (
+                  <span title="O email de avaliação foi enviado.">
+                    <MailCheckIcon className="h-6 w-6 text-green-500" />
+                  </span>
+                )
+              ) : null}
+              {requerimento?.envio_realocacao !== null ? (
+                requerimento?.envio_realocacao === 0 ? (
+                  <span title="O email de realocação não foi enviado.">
+                    <MailXIcon className="h-6 w-6 text-red-500" />
+                  </span>
+                ) : (
+                  <span title="O email de realocação foi enviado.">
+                    <MailCheckIcon className="h-6 w-6 text-green-500" />
+                  </span>
+                )
+              ) : null}
+            </p>
           </div>
         </div>
         <div className="row-span-2 flex flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20">
@@ -606,6 +644,44 @@ export default function RequerimentoAvaliacaoPage() {
                     </h1>
                   </div>
                   <div className="flex flex-col gap-4 text-base font-semibold">
+                    <div className="flex flex-col">
+                      <p className="flex gap-2">
+                        Envio de Emails:{" "}
+                        {reagendamento?.envio_create !== null ? (
+                          reagendamento?.envio_create === 0 ? (
+                            <span title="O email inicial não foi enviado.">
+                              <MailXIcon className="h-6 w-6 text-red-500" />
+                            </span>
+                          ) : (
+                            <span title="O email inicial foi enviado.">
+                              <MailCheckIcon className="h-6 w-6 text-green-500" />
+                            </span>
+                          )
+                        ) : null}
+                        {reagendamento?.envio_avaliacao !== null ? (
+                          reagendamento?.envio_avaliacao === 0 ? (
+                            <span title="O email de avaliação não foi enviado.">
+                              <MailXIcon className="h-6 w-6 text-red-500" />
+                            </span>
+                          ) : (
+                            <span title="O email de avaliação foi enviado.">
+                              <MailCheckIcon className="h-6 w-6 text-green-500" />
+                            </span>
+                          )
+                        ) : null}
+                        {reagendamento?.envio_realocacao !== null ? (
+                          reagendamento?.envio_realocacao === 0 ? (
+                            <span title="O email de realocação não foi enviado.">
+                              <MailXIcon className="h-6 w-6 text-red-500" />
+                            </span>
+                          ) : (
+                            <span title="O email de realocação foi enviado.">
+                              <MailCheckIcon className="h-6 w-6 text-green-500" />
+                            </span>
+                          )
+                        ) : null}
+                      </p>
+                    </div>
                     <div className="flex flex-col">
                       {i === 0 && requerimento?.reagendamento_solicitado_at ? (
                         <p>
