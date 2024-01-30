@@ -541,30 +541,40 @@ class RequerimentoController extends Controller
     $start = Carbon::createFromFormat("Y-m-d", $request->dataCancelada)->startOfDay();
     $end = Carbon::createFromFormat("Y-m-d", $request->dataCancelada)->endOfDay();
 
-    /* $requerimentos = Requerimento::with("direcionamento", "reagendamentos", "reagendamentos.direcionamento")
-    ->whereBetween("agenda_datetime", [$start, $end])
-    ->orWhereRelation("reagendamentos", function($q) use ($start, $end) {
-      $q->whereBetween("agenda_datetime", [$start, $end]);
-    })
-    ->get(); */
-
     $requerimentos = DB::table("requerimentos")
-    ->select(DB::raw('count(*) as quantidade, requerimento_direcionamentos.id as direcionamento_id, requerimento_direcionamentos.name as direcionamento_name'))
-    ->join("requerimento_direcionamentos", "requerimentos.direcionamento_id", "=", "requerimento_direcionamentos.id")
-    ->whereBetween("agenda_datetime", [$start, $end])
-    ->groupBy("direcionamento_id")
-    ->get();
+      ->select(DB::raw('count(*) as quantidade, requerimento_direcionamentos.id as direcionamento_id, requerimento_direcionamentos.name as direcionamento_name'))
+      ->join("requerimento_direcionamentos", "requerimentos.direcionamento_id", "=", "requerimento_direcionamentos.id")
+      ->whereBetween("agenda_datetime", [$start, $end])
+      ->whereIn("status", ["aguardando-confirmacao", "confirmado"])
+      ->groupBy("direcionamento_id")
+      ->get();
 
     $reagendamentos = DB::table("requerimento_reagendamentos")
-    ->join("requerimento_direcionamentos", "requerimento_reagendamentos.direcionamento_id", "=", "requerimento_direcionamentos.id")
-    ->select(DB::raw('count(*) as quantidade, requerimento_direcionamentos.id as direcionamento_id, requerimento_direcionamentos.name as direcionamento_name'))
-    ->groupBy("direcionamento_id")
-    ->whereBetween("agenda_datetime", [$start, $end])
-    ->get();
+      ->join("requerimento_direcionamentos", "requerimento_reagendamentos.direcionamento_id", "=", "requerimento_direcionamentos.id")
+      ->select(DB::raw('count(*) as quantidade, requerimento_direcionamentos.id as direcionamento_id, requerimento_direcionamentos.name as direcionamento_name'))
+      ->groupBy("direcionamento_id")
+      ->whereBetween("agenda_datetime", [$start, $end])
+      ->whereIn("status", ["aguardando-confirmacao", "confirmado"])
+      ->get();
+    
+    /* $realocacoes = [];
+    
+    foreach ($requerimentos as $requerimento) {
+      $realocacoes[$requerimento->direcionamento_id]->quantidade = $requerimento->quantidade + $realocacoes[$requerimento->direcionamento_id]->quantidade || 0;
+      $realocacoes[$requerimento->direcionamento_id]->direcionamento_name = $requerimento->direcionamento_name;
+      $realocacoes[$requerimento->direcionamento_id]->direcionamento_id = $requerimento->direcionamento_id;
+    }
 
-    return [
-      "requerimentos" => $requerimentos,
-      "reagendamentos" => $reagendamentos
+    foreach ($reagendamentos as $reagendamento) {
+      $realocacoes[$reagendamento->direcionamento_id]->quantidade = $reagendamento->quantidade + $realocacoes[$reagendamento->direcionamento_id]->quantidade || 0;
+      $realocacoes[$reagendamento->direcionamento_id]->direcionamento_name = $reagendamento->direcionamento_name;
+      $realocacoes[$reagendamento->direcionamento_id]->direcionamento_id = $reagendamento->direcionamento_id;
+    } */
+
+    return [ "realocacoes" => [
+        ...$requerimentos,
+        ...$reagendamentos
+      ]
     ];
   }
 

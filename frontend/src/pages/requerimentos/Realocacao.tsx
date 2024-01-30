@@ -13,15 +13,20 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 type Realocacao = {
   direcionamento_id: number;
-  direcionamento_name: number;
+  direcionamento_name: string;
   realocar: boolean;
   manter_horario: boolean;
   novo_horario: string;
   quantidade: number;
 };
 
+type RealocacoesObject = Record<number, Realocacao>;
+
 type RealocacaoAPIResponse = {
-  realocacoes: Realocacao[];
+  realocacoes: Pick<
+    Realocacao,
+    "direcionamento_id" | "direcionamento_name" | "quantidade"
+  >[];
 };
 
 type RealocarRequerimentosResponse = {
@@ -30,7 +35,7 @@ type RealocarRequerimentosResponse = {
 
 type RealocacaoForm = {
   justificativa_realocacao: string;
-  realocacoes: Realocacao[];
+  realocacoes: RealocacoesObject;
 };
 
 export default function RequerimentoRealocacaoPage() {
@@ -45,7 +50,7 @@ export default function RequerimentoRealocacaoPage() {
   );
   const [novaData, setNovaData] = React.useState<Date | undefined>(undefined);
   const [justificativa, setJustificativa] = React.useState<string>("");
-  const [realocacoes, setRealocacoes] = React.useState<Realocacao[]>([]);
+  const [realocacoes, setRealocacoes] = React.useState<RealocacoesObject>({});
 
   const realocarRequerimentosMutation = useMutation({
     mutationFn: async (data: RealocacaoForm) => {
@@ -132,7 +137,30 @@ export default function RequerimentoRealocacaoPage() {
 
   React.useEffect(() => {
     if (data?.realocacoes) {
-      setRealocacoes(data.realocacoes);
+      const formattedRealocacoes: RealocacoesObject = {};
+
+      for (let realocacao of data.realocacoes) {
+        if (!formattedRealocacoes[realocacao.direcionamento_id]) {
+          formattedRealocacoes[realocacao.direcionamento_id] = {
+            direcionamento_id: 0,
+            direcionamento_name: "",
+            manter_horario: true,
+            novo_horario: "",
+            quantidade: 0,
+            realocar: true,
+          };
+        }
+
+        formattedRealocacoes[realocacao.direcionamento_id].direcionamento_id =
+          realocacao.direcionamento_id;
+        formattedRealocacoes[realocacao.direcionamento_id].direcionamento_name =
+          realocacao.direcionamento_name;
+        formattedRealocacoes[realocacao.direcionamento_id].quantidade +=
+          realocacao.quantidade;
+      }
+
+      console.log(formattedRealocacoes);
+      setRealocacoes(formattedRealocacoes);
     }
   }, [data]);
 
@@ -157,34 +185,36 @@ export default function RequerimentoRealocacaoPage() {
               disabled={realocarRequerimentosMutation.isPending || isFetching}
             />
           </div>
-          <div className="grid grid-cols-5 border-b-2 border-slate-300 pb-2 font-semibold">
-            <h2>Direcionamento</h2>
+          <div className="grid grid-cols-5 justify-items-center border-b-2 border-slate-300 pb-2 font-semibold">
+            <h2 className="justify-self-start">Direcionamento</h2>
             <h2>Quantidade</h2>
             <h2>Realocar requerimentos?</h2>
             <h2>Manter horários?</h2>
             <h2>Novo horário</h2>
           </div>
           <div className="grid grid-cols-5">
-            {dataCancelada && data.realocacoes.length > 0 ? (
-              data.realocacoes.map((realocacao) => (
-                <div key={nanoid()} className="col-span-5 grid grid-cols-5">
-                  <span>{realocacao.direcionamento_name}</span>
+            {Object.keys(realocacoes).length > 0 ? (
+              Object.values(realocacoes).map((realocacao) => (
+                <div
+                  key={nanoid()}
+                  className="col-span-5 grid grid-cols-5 justify-items-center"
+                >
+                  <span className="justify-self-start">
+                    {realocacao.direcionamento_name}
+                  </span>
                   <span>{realocacao.quantidade}</span>
-                  <span>{realocacao.realocar}</span>
-                  <span>{realocacao.manter_horario}</span>
+                  <span>{realocacao.realocar ? "Sim" : "Não"}</span>
+                  <span>{realocacao.manter_horario ? "Sim" : "Não"}</span>
                   <span>{realocacao.novo_horario}</span>
                 </div>
               ))
             ) : (
               <span className="col-span-5 mt-4 justify-self-center">
-                Selecione uma data a ser cancelada.
+                {isFetching
+                  ? "Selecione uma data a ser cancelada."
+                  : "Nenhum registro foi encontrado."}
               </span>
             )}
-            {dataCancelada && data.realocacoes.length === 0 ? (
-              <span className="col-span-5 mt-4 justify-self-center">
-                Selecione uma data a ser cancelada.
-              </span>
-            ) : null}
           </div>
           <div className="mt-auto flex gap-6">
             <div className="flex flex-col items-start gap-1">
@@ -199,7 +229,7 @@ export default function RequerimentoRealocacaoPage() {
                     date < new Date() ||
                     realocarRequerimentosMutation.isPending ||
                     isFetching ||
-                    data.realocacoes.length === 0
+                    Object.keys(realocacoes).length === 0
                   );
                 }}
               />
@@ -220,7 +250,7 @@ export default function RequerimentoRealocacaoPage() {
                 disabled={
                   realocarRequerimentosMutation.isPending ||
                   isFetching ||
-                  data.realocacoes.length === 0
+                  Object.keys(realocacoes).length === 0
                 }
                 rows={1}
                 cols={40}
