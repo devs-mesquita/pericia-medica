@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useAuthHeader } from "react-auth-kit";
-import { FileInputIcon, LoaderIcon, Space } from "lucide-react";
+import { FileInputIcon, LoaderIcon } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useAtom } from "jotai";
@@ -13,9 +13,11 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 type Realocacao = {
   direcionamento_id: number;
+  direcionamento_name: number;
   realocar: boolean;
   manter_horario: boolean;
   novo_horario: string;
+  quantidade: number;
 };
 
 type RealocacaoAPIResponse = {
@@ -96,7 +98,7 @@ export default function RequerimentoRealocacaoPage() {
       if (!dataCancelada) return { realocacoes: [] } as RealocacaoAPIResponse;
 
       const res = await fetch(
-        `${API_URL}/api/requerimentos/realocacao?${new URLSearchParams({
+        `${API_URL}/api/realocacao?${new URLSearchParams({
           dataCancelada: format(dataCancelada, "yyyy-LL-dd"),
         }).toString()}`,
         {
@@ -163,14 +165,14 @@ export default function RequerimentoRealocacaoPage() {
             <h2>Novo horário</h2>
           </div>
           <div className="grid grid-cols-5">
-            {data.realocacoes.length > 0 ? (
+            {dataCancelada && data.realocacoes.length > 0 ? (
               data.realocacoes.map((realocacao) => (
                 <div key={nanoid()} className="col-span-5 grid grid-cols-5">
-                  <p>1</p>
-                  <p>2</p>
-                  <p>3</p>
-                  <p>4</p>
-                  <p>5</p>
+                  <span>{realocacao.direcionamento_name}</span>
+                  <span>{realocacao.quantidade}</span>
+                  <span>{realocacao.realocar}</span>
+                  <span>{realocacao.manter_horario}</span>
+                  <span>{realocacao.novo_horario}</span>
                 </div>
               ))
             ) : (
@@ -178,6 +180,11 @@ export default function RequerimentoRealocacaoPage() {
                 Selecione uma data a ser cancelada.
               </span>
             )}
+            {dataCancelada && data.realocacoes.length === 0 ? (
+              <span className="col-span-5 mt-4 justify-self-center">
+                Selecione uma data a ser cancelada.
+              </span>
+            ) : null}
           </div>
           <div className="mt-auto flex gap-6">
             <div className="flex flex-col items-start gap-1">

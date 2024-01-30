@@ -536,4 +536,37 @@ class RequerimentoController extends Controller
     $requerimentos = $query->paginate($request->per_page);
     return $requerimentos;
   }
+
+  public function getRealocacoes(Request $request) {
+    $start = Carbon::createFromFormat("Y-m-d", $request->dataCancelada)->startOfDay();
+    $end = Carbon::createFromFormat("Y-m-d", $request->dataCancelada)->endOfDay();
+
+    /* $requerimentos = Requerimento::with("direcionamento", "reagendamentos", "reagendamentos.direcionamento")
+    ->whereBetween("agenda_datetime", [$start, $end])
+    ->orWhereRelation("reagendamentos", function($q) use ($start, $end) {
+      $q->whereBetween("agenda_datetime", [$start, $end]);
+    })
+    ->get(); */
+
+    $requerimentos = DB::table("requerimentos")
+    ->select(DB::raw('count(*) as quantidade, requerimento_direcionamentos.id as direcionamento_id, requerimento_direcionamentos.name as direcionamento_name'))
+    ->join("requerimento_direcionamentos", "requerimentos.direcionamento_id", "=", "requerimento_direcionamentos.id")
+    ->whereBetween("agenda_datetime", [$start, $end])
+    ->groupBy("direcionamento_id")
+    ->get();
+
+    $reagendamentos = DB::table("requerimento_reagendamentos")
+    ->join("requerimento_direcionamentos", "requerimento_reagendamentos.direcionamento_id", "=", "requerimento_direcionamentos.id")
+    ->select(DB::raw('count(*) as quantidade, requerimento_direcionamentos.id as direcionamento_id, requerimento_direcionamentos.name as direcionamento_name'))
+    ->groupBy("direcionamento_id")
+    ->whereBetween("agenda_datetime", [$start, $end])
+    ->get();
+
+    return [
+      "requerimentos" => $requerimentos,
+      "reagendamentos" => $reagendamentos
+    ];
+  }
+
+  public function applyRealocacoes(Request $request) {}
 }

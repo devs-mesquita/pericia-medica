@@ -119,8 +119,4 @@ class RequerimentoDirecionamentoController extends Controller
 
     return ["direcionamento" => $direcionamento];
   }
-
-  public function getRealocacoes(Request $request) {}
-
-  public function applyRealocacoes(Request $request) {}
 }
