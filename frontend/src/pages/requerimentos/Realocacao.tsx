@@ -8,6 +8,7 @@ import { notificationAtom } from "@/store";
 import { format } from "date-fns";
 import DatePicker from "@/components/ui/datepicker";
 import { nanoid } from "nanoid";
+import TimePicker from "@/components/ui/timepicker";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -34,7 +35,9 @@ type RealocarRequerimentosResponse = {
 };
 
 type RealocacaoForm = {
-  justificativa_realocacao: string;
+  justificativaRealocacao: string;
+  novaData: string;
+  dataCancelada: string;
   realocacoes: RealocacoesObject;
 };
 
@@ -54,7 +57,7 @@ export default function RequerimentoRealocacaoPage() {
 
   const realocarRequerimentosMutation = useMutation({
     mutationFn: async (data: RealocacaoForm) => {
-      const res = await fetch(`${API_URL}/api/requerimentos/realocacao`, {
+      const res = await fetch(`${API_URL}/api/realocacao`, {
         method: "POST",
         body: JSON.stringify({ ...data, _method: "PATCH" }),
         headers: {
@@ -89,8 +92,27 @@ export default function RequerimentoRealocacaoPage() {
 
   const handleSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
+
+    if (!dataCancelada) {
+      setNotification({
+        message: "Selecione a data a ser cancelada.",
+        type: "warning",
+      });
+      return;
+    }
+
+    if (!novaData) {
+      setNotification({
+        message: "Selecione a nova data de atendimento.",
+        type: "warning",
+      });
+      return;
+    }
+
     realocarRequerimentosMutation.mutate({
-      justificativa_realocacao: justificativa,
+      dataCancelada: format(dataCancelada, "yyyy-LL-dd"),
+      novaData: format(novaData, "yyyy-LL-dd"),
+      justificativaRealocacao: justificativa,
       realocacoes,
     });
   };
@@ -126,13 +148,7 @@ export default function RequerimentoRealocacaoPage() {
   });
 
   React.useEffect(() => {
-    const interv = setTimeout(() => {
-      refetch();
-    }, 500);
-
-    return () => {
-      clearTimeout(interv);
-    };
+    refetch();
   }, [dataCancelada]);
 
   React.useEffect(() => {
@@ -159,13 +175,12 @@ export default function RequerimentoRealocacaoPage() {
           realocacao.quantidade;
       }
 
-      console.log(formattedRealocacoes);
       setRealocacoes(formattedRealocacoes);
     }
   }, [data]);
 
   return (
-    <div className="flex flex-1 flex-col rounded-md bg-slate-100 p-2 pt-1 shadow shadow-black/20">
+    <div className="flex flex-col rounded-md bg-slate-100 p-2 pt-1 shadow shadow-black/20">
       <h1 className="mb-2 flex items-center justify-center border-b-2 border-slate-300 py-3">
         <FileInputIcon className="h-5 w-5" />
         <span className="ml-2 font-semibold">Realocação de Requerimentos</span>
@@ -174,8 +189,8 @@ export default function RequerimentoRealocacaoPage() {
         onSubmit={handleSubmit}
         className="flex flex-1 flex-col rounded border border-slate-300 py-3"
       >
-        <div className="flex flex-1 flex-col gap-4 px-4">
-          <div className="flex flex-col items-start gap-1">
+        <div className="flex flex-1 flex-col">
+          <div className="mb-6 flex flex-col items-start gap-1 px-4">
             <label htmlFor="name" className="font-semibold">
               Data a ser cancelada:
             </label>
@@ -185,38 +200,7 @@ export default function RequerimentoRealocacaoPage() {
               disabled={realocarRequerimentosMutation.isPending || isFetching}
             />
           </div>
-          <div className="grid grid-cols-5 justify-items-center border-b-2 border-slate-300 pb-2 font-semibold">
-            <h2 className="justify-self-start">Direcionamento</h2>
-            <h2>Quantidade</h2>
-            <h2>Realocar requerimentos?</h2>
-            <h2>Manter horários?</h2>
-            <h2>Novo horário</h2>
-          </div>
-          <div className="grid grid-cols-5">
-            {Object.keys(realocacoes).length > 0 ? (
-              Object.values(realocacoes).map((realocacao) => (
-                <div
-                  key={nanoid()}
-                  className="col-span-5 grid grid-cols-5 justify-items-center"
-                >
-                  <span className="justify-self-start">
-                    {realocacao.direcionamento_name}
-                  </span>
-                  <span>{realocacao.quantidade}</span>
-                  <span>{realocacao.realocar ? "Sim" : "Não"}</span>
-                  <span>{realocacao.manter_horario ? "Sim" : "Não"}</span>
-                  <span>{realocacao.novo_horario}</span>
-                </div>
-              ))
-            ) : (
-              <span className="col-span-5 mt-4 justify-self-center">
-                {isFetching
-                  ? "Selecione uma data a ser cancelada."
-                  : "Nenhum registro foi encontrado."}
-              </span>
-            )}
-          </div>
-          <div className="mt-auto flex gap-6">
+          <div className="mb-6 flex gap-6 px-4">
             <div className="flex flex-col items-start gap-1">
               <label htmlFor="name" className="font-semibold">
                 Nova data de atendimento:
@@ -239,6 +223,7 @@ export default function RequerimentoRealocacaoPage() {
                 Motivo da Realocação:
               </label>
               <textarea
+                required
                 id="justificativa"
                 name="justificativa"
                 placeholder="A justificativa será inclusa no email."
@@ -256,6 +241,108 @@ export default function RequerimentoRealocacaoPage() {
                 cols={40}
               />
             </div>
+          </div>
+          <div className="mb-2 grid grid-cols-5 justify-items-center border-y-2 border-slate-300 px-4 py-2 font-semibold">
+            <h2 className="justify-self-start">Direcionamento</h2>
+            <h2>Quantidade</h2>
+            <h2>Realocar requerimentos?</h2>
+            <h2>Manter horários?</h2>
+            <h2>Novo horário</h2>
+          </div>
+          <div className="mb-2 grid grid-cols-5">
+            {isFetching ? (
+              <span className="col-span-5">
+                <LoaderIcon className="mx-auto animate-spin text-slate-500 duration-2000" />
+              </span>
+            ) : (
+              <>
+                {Object.keys(realocacoes).length > 0 ? (
+                  Object.values(realocacoes).map((realocacao) => (
+                    <div
+                      key={nanoid()}
+                      className="col-span-5 mb-2 grid grid-cols-5 justify-items-center border-b border-slate-300 px-4 pb-2 pt-2"
+                    >
+                      <span className="justify-self-start">
+                        {realocacao.direcionamento_name}
+                      </span>
+                      <span>{realocacao.quantidade}</span>
+                      <span>
+                        <input
+                          disabled={realocarRequerimentosMutation.isPending}
+                          checked={
+                            realocacoes[realocacao.direcionamento_id].realocar
+                          }
+                          onChange={(evt) => {
+                            setRealocacoes((st) => ({
+                              ...st,
+                              [+evt.target.name]: {
+                                ...st[+evt.target.name],
+                                realocar: !st[+evt.target.name].realocar,
+                              },
+                            }));
+                          }}
+                          type="checkbox"
+                          name={`${realocacao.direcionamento_id}`}
+                        />
+                      </span>
+                      <span>
+                        <input
+                          disabled={realocarRequerimentosMutation.isPending}
+                          checked={
+                            realocacoes[realocacao.direcionamento_id]
+                              .manter_horario
+                          }
+                          onChange={(evt) => {
+                            setRealocacoes((st) => ({
+                              ...st,
+                              [+evt.target.name]: {
+                                ...st[+evt.target.name],
+                                manter_horario:
+                                  !st[+evt.target.name].manter_horario,
+                              },
+                            }));
+                          }}
+                          type="checkbox"
+                          name={`${realocacao.direcionamento_id}`}
+                        />
+                      </span>
+                      <span>
+                        <TimePicker
+                          required={!realocacao.manter_horario}
+                          disabled={
+                            realocarRequerimentosMutation.isPending ||
+                            realocacao.manter_horario
+                          }
+                          className="rounded px-2 py-1 text-base disabled:text-slate-400 md:text-lg"
+                          minTime="00:00"
+                          maxTime="23:00"
+                          value={realocacao.novo_horario}
+                          onChange={(evt) => {
+                            setRealocacoes((st) => ({
+                              ...st,
+                              [+evt.target.name]: {
+                                ...st[+evt.target.name],
+                                novo_horario: evt.target.value,
+                              },
+                            }));
+                          }}
+                          step={1800}
+                          name={`${realocacao.direcionamento_id}`}
+                        />
+                        {realocacao.novo_horario}
+                      </span>
+                    </div>
+                  ))
+                ) : (
+                  <span className="col-span-5 mt-4 justify-self-center">
+                    Nenhum registro foi encontrado, selecione a data a ser
+                    cancelada.
+                  </span>
+                )}
+              </>
+            )}
+          </div>
+          <div className="px-4">
             {realocarRequerimentosMutation.isPending ? (
               <button
                 type="button"

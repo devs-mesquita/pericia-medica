@@ -556,20 +556,6 @@ class RequerimentoController extends Controller
       ->whereBetween("agenda_datetime", [$start, $end])
       ->whereIn("status", ["aguardando-confirmacao", "confirmado"])
       ->get();
-    
-    /* $realocacoes = [];
-    
-    foreach ($requerimentos as $requerimento) {
-      $realocacoes[$requerimento->direcionamento_id]->quantidade = $requerimento->quantidade + $realocacoes[$requerimento->direcionamento_id]->quantidade || 0;
-      $realocacoes[$requerimento->direcionamento_id]->direcionamento_name = $requerimento->direcionamento_name;
-      $realocacoes[$requerimento->direcionamento_id]->direcionamento_id = $requerimento->direcionamento_id;
-    }
-
-    foreach ($reagendamentos as $reagendamento) {
-      $realocacoes[$reagendamento->direcionamento_id]->quantidade = $reagendamento->quantidade + $realocacoes[$reagendamento->direcionamento_id]->quantidade || 0;
-      $realocacoes[$reagendamento->direcionamento_id]->direcionamento_name = $reagendamento->direcionamento_name;
-      $realocacoes[$reagendamento->direcionamento_id]->direcionamento_id = $reagendamento->direcionamento_id;
-    } */
 
     return [ "realocacoes" => [
         ...$requerimentos,
@@ -578,5 +564,51 @@ class RequerimentoController extends Controller
     ];
   }
 
-  public function applyRealocacoes(Request $request) {}
+  public function applyRealocacoes(Request $request) {
+    /*
+      justificativa_realocacao: "Justificativa 123...";
+      nova_data: "yyyy-mm-dd" | Y-m-d;
+      data_cancelada: "yyyy-mm-dd" | Y-m-d;
+      realocacoes: {
+        [number]: {
+          direcionamento_id: number;
+          realocar: boolean;
+          manter_horario: boolean;
+          novo_horario: string;
+        }
+      };
+    */
+
+    $start = Carbon::createFromFormat("Y-m-d", $request->dataCancelada)->startOfDay();
+    $end = Carbon::createFromFormat("Y-m-d", $request->dataCancelada)->endOfDay();
+
+    DB::beginTransaction();
+    try {
+      foreach ($request->realocacoes as $direcionamento_id => $realocacao) {
+        if ($realocacao->realocar) {
+          $requerimentos = Requerimento::whereBetween("agenda_datetime", [$start, $end])
+            ->whereIn("status", ["aguardando-confirmacao", "confirmado"])
+            ->where("direcionamento_id", $direcionamento_id)
+            ->get();
+          
+          foreach($requerimentos as $requerimento) {
+            // apply new agenda_datetime, status aguardando-confirmacao, send email
+          }
+          
+          $realocacoes = RequerimentoReagendamento::whereBetween("agenda_datetime", [$start, $end])
+          ->whereIn("status", ["aguardando-confirmacao", "confirmado"])
+          ->where("direcionamento_id", $direcionamento_id)
+            ->get();
+
+          foreach($realocacoes as $realocacao) {
+            // apply new agenda_datetime, status aguardando-confirmacao, send email
+          }
+        }
+      }
+
+      DB::commit();
+    } catch (Exception $e) {
+      DB::rollBack();
+    }
+  }
 }
