@@ -16,8 +16,8 @@ type Realocacao = {
   direcionamento_id: number;
   direcionamento_name: string;
   realocar: boolean;
-  manter_horario: boolean;
-  novo_horario: string;
+  manterHorario: boolean;
+  novoHorario: string;
   quantidade: number;
 };
 
@@ -160,8 +160,8 @@ export default function RequerimentoRealocacaoPage() {
           formattedRealocacoes[realocacao.direcionamento_id] = {
             direcionamento_id: 0,
             direcionamento_name: "",
-            manter_horario: true,
-            novo_horario: "",
+            manterHorario: true,
+            novoHorario: "",
             quantidade: 0,
             realocar: true,
           };
@@ -290,15 +290,15 @@ export default function RequerimentoRealocacaoPage() {
                           disabled={realocarRequerimentosMutation.isPending}
                           checked={
                             realocacoes[realocacao.direcionamento_id]
-                              .manter_horario
+                              .manterHorario
                           }
                           onChange={(evt) => {
                             setRealocacoes((st) => ({
                               ...st,
                               [+evt.target.name]: {
                                 ...st[+evt.target.name],
-                                manter_horario:
-                                  !st[+evt.target.name].manter_horario,
+                                manterHorario:
+                                  !st[+evt.target.name].manterHorario,
                               },
                             }));
                           }}
@@ -308,28 +308,28 @@ export default function RequerimentoRealocacaoPage() {
                       </span>
                       <span>
                         <TimePicker
-                          required={!realocacao.manter_horario}
+                          required={!realocacao.manterHorario}
                           disabled={
                             realocarRequerimentosMutation.isPending ||
-                            realocacao.manter_horario
+                            realocacao.manterHorario
                           }
                           className="rounded px-2 py-1 text-base disabled:text-slate-400 md:text-lg"
                           minTime="00:00"
                           maxTime="23:00"
-                          value={realocacao.novo_horario}
+                          value={realocacao.novoHorario}
                           onChange={(evt) => {
                             setRealocacoes((st) => ({
                               ...st,
                               [+evt.target.name]: {
                                 ...st[+evt.target.name],
-                                novo_horario: evt.target.value,
+                                novoHorario: evt.target.value,
                               },
                             }));
                           }}
                           step={1800}
                           name={`${realocacao.direcionamento_id}`}
                         />
-                        {realocacao.novo_horario}
+                        {realocacao.novoHorario}
                       </span>
                     </div>
                   ))

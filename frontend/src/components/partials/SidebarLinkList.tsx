@@ -29,7 +29,7 @@ export default function SidebarLinkList({
           : "w-[64px] text-xs md:w-full"
       } ${
         dropdownIsOpen ? "bg-indigo-700/50" : ""
-      } relative flex border-b border-slate-900 hover:bg-indigo-600/50`}
+      } relative flex border-b border-black/20 hover:bg-indigo-600/50`}
     >
       <button
         className={`flex w-full items-center text-xs md:py-2 ${

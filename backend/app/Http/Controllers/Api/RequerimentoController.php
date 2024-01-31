@@ -20,11 +20,13 @@ use App\Mail\RequerimentoCreateMail;
 use App\Mail\RequerimentoAgendadoMail;
 use App\Mail\RequerimentoNaoPresencialMail;
 use App\Mail\RequerimentoRecusadoMail;
+use App\Mail\RequerimentoRealocacaoMail;
 
 use App\Mail\ReagendamentoCreateMail;
 use App\Mail\ReagendamentoAgendadoMail;
 use App\Mail\ReagendamentoNaoPresencialMail;
 use App\Mail\ReagendamentoRecusadoMail;
+use App\Mail\ReagendamentoRealocacaoMail;
 
 class RequerimentoController extends Controller
 {
@@ -565,50 +567,105 @@ class RequerimentoController extends Controller
   }
 
   public function applyRealocacoes(Request $request) {
-    /*
-      justificativa_realocacao: "Justificativa 123...";
-      nova_data: "yyyy-mm-dd" | Y-m-d;
-      data_cancelada: "yyyy-mm-dd" | Y-m-d;
-      realocacoes: {
-        [number]: {
-          direcionamento_id: number;
-          realocar: boolean;
-          manter_horario: boolean;
-          novo_horario: string;
-        }
-      };
-    */
-
     $start = Carbon::createFromFormat("Y-m-d", $request->dataCancelada)->startOfDay();
     $end = Carbon::createFromFormat("Y-m-d", $request->dataCancelada)->endOfDay();
+    $dataAtual = Carbon::now();
 
     DB::beginTransaction();
     try {
       foreach ($request->realocacoes as $direcionamento_id => $realocacao) {
-        if ($realocacao->realocar) {
+        if ($realocacao["realocar"]) {
           $requerimentos = Requerimento::whereBetween("agenda_datetime", [$start, $end])
             ->whereIn("status", ["aguardando-confirmacao", "confirmado"])
             ->where("direcionamento_id", $direcionamento_id)
             ->get();
-          
-          foreach($requerimentos as $requerimento) {
-            // apply new agenda_datetime, status aguardando-confirmacao, send email
-          }
-          
-          $realocacoes = RequerimentoReagendamento::whereBetween("agenda_datetime", [$start, $end])
+
+          $reagendamentos = RequerimentoReagendamento::whereBetween("agenda_datetime", [$start, $end])
           ->whereIn("status", ["aguardando-confirmacao", "confirmado"])
           ->where("direcionamento_id", $direcionamento_id)
             ->get();
 
-          foreach($realocacoes as $realocacao) {
-            // apply new agenda_datetime, status aguardando-confirmacao, send email
+          foreach($requerimentos as $requerimento) {
+            $newDate = null;
+
+            if ($realocacao["manterHorario"]) {
+              $newDate = Carbon::createFromFormat("Y-m-d H:i:s", $request->novaData." ".explode(" ", $requerimento->agenda_datetime)[1]);
+            } else {
+              $newDate = Carbon::createFromFormat("Y-m-d H:i:s", $request->novaData." ".$realocacao["novoHorario"].":00");
+            }
+
+            $newRealocacao = new RequerimentoReagendamento;
+            $newRealocacao->requerimento_id = $requerimento->id;
+            $newRealocacao->direcionamento_id = $requerimento->direcionamento_id;
+            $newRealocacao->agenda_datetime = $newDate;
+            $newRealocacao->status = "aguardando-confirmacao";
+            $newRealocacao->save();
+
+            $requerimento->status = "realocado";
+            $requerimento->realocador_id = Auth::user()->id;
+            $requerimento->justificativa_realocacao = $request->justificativaRealocacao;
+            $requerimento->realocado_at = $dataAtual;
+            $requerimento->last_movement_at = $dataAtual;
+            
+            try {
+              Mail::to($requerimento->email)->send(new RequerimentoRealocacaoMail($requerimento, $newRealocacao));
+              $requerimento->envio_realocacao = 1;
+              $newRealocacao->envio_create = 1;
+              
+            } catch (Exception $e) {
+              $newRealocacao->envio_create = 0;
+              $requerimento->envio_realocacao = 0;
+            }
+            $newRealocacao->save();
+            $requerimento->save();
+          }
+
+          foreach($reagendamentos as $reagendamento) {
+            $requerimento = Requerimento::find($reagendamento->requerimento_id);
+            $newDate = null;
+
+            if ($realocacao["manterHorario"]) {
+              $newDate = Carbon::createFromFormat("Y-m-d H:i:s", $request->novaData." ".explode(" ", $reagendamento->agenda_datetime)[1]);
+            } else {
+              $newDate = Carbon::createFromFormat("Y-m-d H:i:s", $request->novaData." ".$realocacao["novoHorario"].":00");
+            }
+
+            $newRealocacao = new RequerimentoReagendamento;
+            $newRealocacao->requerimento_id = $reagendamento->requerimento_id;
+            $newRealocacao->direcionamento_id = $reagendamento->direcionamento_id;
+            $newRealocacao->agenda_datetime = $newDate;
+            $newRealocacao->status = "aguardando-confirmacao";
+            $newRealocacao->save();
+
+            $reagendamento->status = "realocado";
+            $reagendamento->realocado_at = $dataAtual;
+            $reagendamento->realocador_id = Auth::user()->id;
+            $reagendamento->justificativa_realocacao = $request->justificativaRealocacao;
+            
+            $requerimento->last_movement_at = $dataAtual;
+            
+            try {
+              Mail::to($requerimento->email)->send(new ReagendamentoRealocacaoMail($requerimento, $reagendamento, $newRealocacao));
+              $reagendamento->envio_realocacao = 1;
+              $newRealocacao->envio_create = 1;
+              
+            } catch (Exception $e) {
+              $reagendamento->envio_realocacao = 0;
+              $newRealocacao->envio_create = 0;
+            }
+            $newRealocacao->save();
+            $reagendamento->save();
+            $requerimento->save();
           }
         }
       }
 
       DB::commit();
+      return ["message" => "ok"];
+
     } catch (Exception $e) {
       DB::rollBack();
+      return response()->json(["message" => "error", "e" => $e], 400);
     }
   }
 }
