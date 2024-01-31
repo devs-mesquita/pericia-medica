@@ -296,7 +296,7 @@ export default function RequerimentoRealocacaoPage() {
                       </span>
                       <span>
                         <input
-                          disabled={realocarRequerimentosMutation.isPending}
+                          disabled={realocarRequerimentosMutation.isPending || !realocacao.realocar}
                           checked={
                             realocacoes[realocacao.direcionamento_id]
                               .manterHorario
@@ -338,7 +338,6 @@ export default function RequerimentoRealocacaoPage() {
                           step={1800}
                           name={`${realocacao.direcionamento_id}`}
                         />
-                        {realocacao.novoHorario}
                       </span>
                     </div>
                   ))
