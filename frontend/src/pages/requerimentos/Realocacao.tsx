@@ -109,6 +109,15 @@ export default function RequerimentoRealocacaoPage() {
       return;
     }
 
+    if (Object.keys(realocacoes).length === 0) {
+      setNotification({
+        message:
+          "Nenhum registro foi encontrado, selecione a data a ser cancelada.",
+        type: "warning",
+      });
+      return;
+    }
+
     realocarRequerimentosMutation.mutate({
       dataCancelada: format(dataCancelada, "yyyy-LL-dd"),
       novaData: format(novaData, "yyyy-LL-dd"),
