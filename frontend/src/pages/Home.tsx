@@ -16,7 +16,7 @@ export default function HomePage() {
 
   const authHeader = useAuthHeader();
 
-  const { data, isFetching } = useQuery({
+  const { data } = useQuery({
     queryKey: ["requerimentos", "index"],
     queryFn: async () => {
       const res = await fetch(`${API_URL}/api/requerimentos`, {
