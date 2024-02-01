@@ -31,23 +31,22 @@ use App\Mail\ReagendamentoRealocacaoMail;
 class RequerimentoController extends Controller
 {
   public function index(Request $request) {
-    $query = Requerimento::query();
+    $requerimentos = Requerimento::doesntHave("reagendamentos")->get();
 
-    foreach($request->filter as $key => $value) {
-      if ($value) {
-        $query = $query->where($key, 'like', '%'.$value.'%');
-      }
-    }
+    $withReagendamentos = Requerimento::with(["reagendamentos" => function($query) {
+      $query->orderBy("created_at", "desc");
+    }])
+    ->has("reagendamentos")
+    ->get()->toArray();
 
-    foreach($request->sort as $key => $order) {
-      if ($order) {
-        $query = $query->orderBy($key, $order);
-      }
-    }
+    $reagendamentos = array_map(function ($requerimento) {      
+      return $requerimento["reagendamentos"][0];
+    }, $withReagendamentos);
 
-    $direcionamentos = $query->with('reagendamentos')->paginate($request->per_page);
-
-    return $direcionamentos;
+    return [
+      "requerimentos" => $requerimentos,
+      "reagendamentos" => $reagendamentos
+    ];
   }
 
   public function store(Request $request) {
