@@ -52,31 +52,33 @@ export default function RequerimentoShowPage() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="flex flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20">
           <div className="mb-2 flex w-full items-center justify-between gap-1 border-b-2 border-slate-300 px-2 pb-2 text-lg font-semibold">
-            <h1 className="flex flex-1 items-center">
-              <FileBarChart2Icon className="h-5 w-5" />
-              <span className="ml-2">Requerimento</span>
+            <h1 className="flex flex-1 flex-col items-start md:flex-row md:items-center md:gap-2">
+              <p className="flex items-center">
+                <FileBarChart2Icon className="h-5 w-5" />
+                <span className="ml-2">Requerimento</span>
+              </p>
               {requerimento?.status === "em-analise" ? (
-                <span className="ml-auto rounded-full bg-slate-500 px-4 py-1 text-sm text-slate-50">
+                <span className="rounded-full bg-slate-500 px-4 py-1 text-sm text-slate-50">
                   Em Análise
                 </span>
               ) : requerimento?.status === "reagendamento-solicitado" ? (
-                <span className="ml-auto rounded-full bg-amber-500 px-4 py-1 text-sm text-slate-50">
+                <span className="rounded-full bg-amber-500 px-4 py-1 text-sm text-slate-50">
                   Reagendamento Solicitado
                 </span>
               ) : requerimento?.status === "aguardando-confirmacao" ? (
-                <span className="ml-auto rounded-full bg-blue-500 px-4 py-1 text-sm text-slate-50">
+                <span className="rounded-full bg-blue-500 px-4 py-1 text-sm text-slate-50">
                   Aguardando Confirmação
                 </span>
               ) : requerimento?.status === "confirmado" ? (
-                <span className="ml-auto rounded-full bg-green-500 px-4 py-1 text-sm text-slate-50">
+                <span className="rounded-full bg-green-500 px-4 py-1 text-sm text-slate-50">
                   Confirmado
                 </span>
               ) : requerimento?.status === "realocado" ? (
-                <span className="ml-auto rounded-full bg-roxo-lighter px-4 py-1 text-sm text-slate-50">
+                <span className="rounded-full bg-roxo-lighter px-4 py-1 text-sm text-slate-50">
                   Realocado
                 </span>
               ) : requerimento?.status === "recusado" ? (
-                <span className="ml-auto rounded-full bg-red-500 px-4 py-1 text-sm text-slate-50">
+                <span className="rounded-full bg-red-500 px-4 py-1 text-sm text-slate-50">
                   Recusado
                 </span>
               ) : null}
@@ -136,95 +138,7 @@ export default function RequerimentoShowPage() {
             </p>
           </div>
         </div>
-        <div className="row-span-2 flex flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20">
-          <div className="mb-2 flex items-center justify-between gap-1 border-b-2 border-slate-300 px-2 pb-2 text-lg font-semibold">
-            <h1 className="flex items-center">
-              <PaperclipIcon className="h-5 w-5" />
-              <span className="ml-2">Imagens e Documentos</span>
-            </h1>
-          </div>
-          <div className="grid grid-cols-1 gap-4">
-            <div className="flex flex-col">
-              <p className="mb-2 pb-1 text-xs font-semibold md:text-base">
-                Atestado
-              </p>
-              <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
-                {requerimento?.atestado_files.map((attachment) => {
-                  return IMG_EXTENSIONS.includes(attachment.extension) ? (
-                    <a
-                      href={`${API_URL}/storage/atestados/${attachment.filename}`}
-                      target="_blank"
-                      key={nanoid()}
-                      className="relative h-[100px] w-[100px] rounded border border-slate-400 bg-slate-300 p-1"
-                    >
-                      <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded text-slate-50/60 opacity-0 hover:bg-black/25 hover:opacity-100">
-                        <ViewIcon className="h-[32px] w-[32px]" />
-                      </div>
-                      <img
-                        className="h-full w-full rounded object-contain"
-                        src={`${API_URL}/storage/atestados/${attachment.filename}`}
-                        alt="Atestado"
-                      />
-                    </a>
-                  ) : (
-                    <a
-                      href={`${API_URL}/storage/atestados/${attachment.filename}`}
-                      target="_blank"
-                      key={nanoid()}
-                      className="relative flex h-[100px] w-[100px] items-center justify-center rounded border border-slate-400 bg-slate-100 p-1 text-blue-500"
-                    >
-                      <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded text-slate-50/60 opacity-0 hover:bg-black/25 hover:opacity-100">
-                        <ViewIcon className="h-[32px] w-[32px]" />
-                      </div>
-                      <FileBarChart2Icon className="h-[64px] w-[64px]" />
-                    </a>
-                  );
-                })}
-              </div>
-            </div>
-            {requerimento?.afastamento_files?.length ? (
-              <div className="flex flex-col">
-                <p className="mb-2 pb-1 text-xs font-semibold md:text-base">
-                  Comprovante de Afastamento
-                </p>
-                <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
-                  {requerimento?.afastamento_files.map((attachment) => {
-                    return IMG_EXTENSIONS.includes(attachment.extension) ? (
-                      <a
-                        href={`${API_URL}/storage/afastamentos/${attachment.filename}`}
-                        target="_blank"
-                        key={nanoid()}
-                        className="relative h-[100px] w-[100px] rounded border border-slate-400 bg-slate-300 p-1"
-                      >
-                        <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded text-slate-50/60 opacity-0 hover:bg-black/25 hover:opacity-100">
-                          <ViewIcon className="h-[32px] w-[32px]" />
-                        </div>
-                        <img
-                          className="h-full w-full rounded object-contain"
-                          src={`${API_URL}/storage/afastamentos/${attachment.filename}`}
-                          alt="Comprovante de Afastamento"
-                        />
-                      </a>
-                    ) : (
-                      <a
-                        href={`${API_URL}/storage/afastamentos/${attachment.filename}`}
-                        target="_blank"
-                        key={nanoid()}
-                        className="relative flex h-[100px] w-[100px] items-center justify-center rounded border border-slate-400 bg-slate-100 p-1 text-blue-500"
-                      >
-                        <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded text-slate-50/60 opacity-0 hover:bg-black/25 hover:opacity-100">
-                          <ViewIcon className="h-[32px] w-[32px]" />
-                        </div>
-                        <FileBarChart2Icon className="h-[64px] w-[64px]" />
-                      </a>
-                    );
-                  })}
-                </div>
-              </div>
-            ) : null}
-          </div>
-        </div>
-        <div className="flex flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20">
+        <div className="flex flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20 md:col-start-1">
           <div className="flex flex-col gap-4 text-base font-semibold">
             <div className="flex flex-col">
               <p>
@@ -341,6 +255,94 @@ export default function RequerimentoShowPage() {
             </div>
           </div>
         </div>
+        <div className="flex flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20 md:col-start-2 md:row-span-2 md:row-start-1">
+          <div className="mb-2 flex items-center justify-between gap-1 border-b-2 border-slate-300 px-2 pb-2 text-lg font-semibold">
+            <h1 className="flex items-center">
+              <PaperclipIcon className="h-5 w-5" />
+              <span className="ml-2">Imagens e Documentos</span>
+            </h1>
+          </div>
+          <div className="grid grid-cols-1 gap-4">
+            <div className="flex flex-col">
+              <p className="mb-2 pb-1 text-xs font-semibold md:text-base">
+                Atestado
+              </p>
+              <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+                {requerimento?.atestado_files.map((attachment) => {
+                  return IMG_EXTENSIONS.includes(attachment.extension) ? (
+                    <a
+                      href={`${API_URL}/storage/atestados/${attachment.filename}`}
+                      target="_blank"
+                      key={nanoid()}
+                      className="relative h-[100px] w-[100px] rounded border border-slate-400 bg-slate-300 p-1"
+                    >
+                      <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded text-slate-50/60 opacity-0 hover:bg-black/25 hover:opacity-100">
+                        <ViewIcon className="h-[32px] w-[32px]" />
+                      </div>
+                      <img
+                        className="h-full w-full rounded object-contain"
+                        src={`${API_URL}/storage/atestados/${attachment.filename}`}
+                        alt="Atestado"
+                      />
+                    </a>
+                  ) : (
+                    <a
+                      href={`${API_URL}/storage/atestados/${attachment.filename}`}
+                      target="_blank"
+                      key={nanoid()}
+                      className="relative flex h-[100px] w-[100px] items-center justify-center rounded border border-slate-400 bg-slate-100 p-1 text-blue-500"
+                    >
+                      <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded text-slate-50/60 opacity-0 hover:bg-black/25 hover:opacity-100">
+                        <ViewIcon className="h-[32px] w-[32px]" />
+                      </div>
+                      <FileBarChart2Icon className="h-[64px] w-[64px]" />
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+            {requerimento?.afastamento_files?.length ? (
+              <div className="flex flex-col">
+                <p className="mb-2 pb-1 text-xs font-semibold md:text-base">
+                  Comprovante de Afastamento
+                </p>
+                <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+                  {requerimento?.afastamento_files.map((attachment) => {
+                    return IMG_EXTENSIONS.includes(attachment.extension) ? (
+                      <a
+                        href={`${API_URL}/storage/afastamentos/${attachment.filename}`}
+                        target="_blank"
+                        key={nanoid()}
+                        className="relative h-[100px] w-[100px] rounded border border-slate-400 bg-slate-300 p-1"
+                      >
+                        <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded text-slate-50/60 opacity-0 hover:bg-black/25 hover:opacity-100">
+                          <ViewIcon className="h-[32px] w-[32px]" />
+                        </div>
+                        <img
+                          className="h-full w-full rounded object-contain"
+                          src={`${API_URL}/storage/afastamentos/${attachment.filename}`}
+                          alt="Comprovante de Afastamento"
+                        />
+                      </a>
+                    ) : (
+                      <a
+                        href={`${API_URL}/storage/afastamentos/${attachment.filename}`}
+                        target="_blank"
+                        key={nanoid()}
+                        className="relative flex h-[100px] w-[100px] items-center justify-center rounded border border-slate-400 bg-slate-100 p-1 text-blue-500"
+                      >
+                        <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded text-slate-50/60 opacity-0 hover:bg-black/25 hover:opacity-100">
+                          <ViewIcon className="h-[32px] w-[32px]" />
+                        </div>
+                        <FileBarChart2Icon className="h-[64px] w-[64px]" />
+                      </a>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </div>
         {requerimento?.reagendamentos.length
           ? requerimento.reagendamentos.map((reagendamento, i, arr) => {
               if (
@@ -358,50 +360,48 @@ export default function RequerimentoShowPage() {
               return (
                 <div
                   key={nanoid()}
-                  className="col-span-2 flex flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20"
+                  className="col-span-full flex flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20"
                 >
                   <div className="mb-2 flex items-center justify-between gap-1 border-b-2 border-slate-300 px-2 pb-2 text-lg font-semibold">
-                    <h1 className="flex items-center">
+                    <h1 className="flex flex-1 flex-col items-start md:flex-row md:items-center md:gap-2">
                       {(i === 0 && requerimento?.reagendamento_solicitado_at) ||
                       arr[i - 1]?.reagendamento_solicitado_at ? (
-                        <>
+                        <p className="flex items-center">
                           <FilePlus2Icon className="h-5 w-5" />
-                          <span className="mx-2">
+                          <span>
                             Pedido de Reagendamento {reagendamentoIndex}
                           </span>
-                        </>
+                        </p>
                       ) : (i === 0 && requerimento?.realocado_at) ||
                         arr[i - 1]?.realocado_at ? (
-                        <>
+                        <p className="flex items-center">
                           <FileInputIcon className="h-5 w-5" />
-                          <span className="mx-2">
-                            Realocação {realocacaoIndex}
-                          </span>
-                        </>
+                          <span>Realocação {realocacaoIndex}</span>
+                        </p>
                       ) : null}
                       {reagendamento.status === "em-analise" ? (
-                        <span className="ml-auto rounded-full bg-slate-500 px-4 py-1 text-sm text-slate-50">
+                        <span className="rounded-full bg-slate-500 px-4 py-1 text-sm text-slate-50">
                           Em Análise
                         </span>
                       ) : reagendamento.status ===
                         "reagendamento-solicitado" ? (
-                        <span className="ml-auto rounded-full bg-amber-500 px-4 py-1 text-sm text-slate-50">
+                        <span className="rounded-full bg-amber-500 px-4 py-1 text-sm text-slate-50">
                           Reagendamento Solicitado
                         </span>
                       ) : reagendamento.status === "aguardando-confirmacao" ? (
-                        <span className="ml-auto rounded-full bg-blue-500 px-4 py-1 text-sm text-slate-50">
+                        <span className="rounded-full bg-blue-500 px-4 py-1 text-sm text-slate-50">
                           Aguardando Confirmação
                         </span>
                       ) : reagendamento.status === "confirmado" ? (
-                        <span className="ml-auto rounded-full bg-green-500 px-4 py-1 text-sm text-slate-50">
+                        <span className="rounded-full bg-green-500 px-4 py-1 text-sm text-slate-50">
                           Confirmado
                         </span>
                       ) : reagendamento.status === "realocado" ? (
-                        <span className="ml-auto rounded-full bg-roxo-lighter px-4 py-1 text-sm text-slate-50">
+                        <span className="rounded-full bg-roxo-lighter px-4 py-1 text-sm text-slate-50">
                           Realocado
                         </span>
                       ) : reagendamento.status === "recusado" ? (
-                        <span className="ml-auto rounded-full bg-red-500 px-4 py-1 text-sm text-slate-50">
+                        <span className="rounded-full bg-red-500 px-4 py-1 text-sm text-slate-50">
                           Recusado
                         </span>
                       ) : null}

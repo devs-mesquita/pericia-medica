@@ -43,9 +43,14 @@ class RequerimentoController extends Controller
       return $requerimento["reagendamentos"][0];
     }, $withReagendamentos);
 
+    $requerimentosRealocados = Requerimento::whereIn("status", ["reagendamento-solicitado", "realocado"])->get();
+    $reagendamentosRealocados = RequerimentoReagendamento::whereIn("status", ["reagendamento-solicitado", "realocado"])->get();
+
     return [
       "requerimentos" => $requerimentos,
-      "reagendamentos" => $reagendamentos
+      "reagendamentos" => $reagendamentos,
+      "requerimentosRealocados" => $requerimentosRealocados,
+      "reagendamentosRealocados" => $reagendamentosRealocados
     ];
   }
 
