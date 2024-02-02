@@ -7,8 +7,16 @@ import { DateRange } from "react-day-picker";
 import { useAuthHeader } from "react-auth-kit";
 import { useAtom } from "jotai";
 import { notificationAtom } from "@/store";
+import { Requerimento } from "@/types/interfaces";
+import requerimentoToPDF from "@/lib/requerimentoPDF";
 
-const API_URL = import.meta.env.VITE_API_KEY;
+const API_URL = import.meta.env.VITE_API_URL;
+
+type RelatorioMutationResponse = {
+  requerimentos: Requerimento[];
+  from: string;
+  to: string;
+};
 
 export default function RequerimentoRelatoriosPage() {
   document.title = "Relatórios";
@@ -26,7 +34,7 @@ export default function RequerimentoRelatoriosPage() {
 
   const relatorioMutation = useMutation({
     mutationFn: async (dateRange: { from: Date; to: Date }) => {
-      const res = await fetch(`${API_URL}/api/relatorios`, {
+      const res = await fetch(`${API_URL}/api/requerimentos/relatorio`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -34,8 +42,8 @@ export default function RequerimentoRelatoriosPage() {
           Authorization: authHeader(),
         },
         body: JSON.stringify({
-          from: `${format(dateRange.from, "yyyy-LL-dd")} 00:00:01`,
-          to: `${format(dateRange.to, "yyyy-LL-dd")} 23:59:59`,
+          from: `${format(dateRange.from, "yyyy-LL-dd")}`,
+          to: `${format(dateRange.to, "yyyy-LL-dd")}`,
         }),
       });
 
@@ -43,11 +51,15 @@ export default function RequerimentoRelatoriosPage() {
         throw await res.json();
       }
 
-      return await res.json();
+      return (await res.json()) as RelatorioMutationResponse;
     },
     onSuccess: (data) => {
       console.log(data);
-      // generate pdf
+      requerimentoToPDF({
+        requerimentos: data.requerimentos,
+        from: new Date(data.from),
+        to: new Date(data.from),
+      });
     },
     onError: (err) => {
       console.log(err);
@@ -97,8 +109,8 @@ export default function RequerimentoRelatoriosPage() {
               Selecione o intervalo:
             </label>
             <DateRangePicker
-              disabled={(date) => {
-                return date > new Date() || relatorioMutation.isPending;
+              disabled={() => {
+                return relatorioMutation.isPending;
               }}
               date={dateRange}
               setDate={setDateRange}

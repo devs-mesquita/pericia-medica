@@ -676,17 +676,28 @@ class RequerimentoController extends Controller
       return response()->json(["message" => "missing-daterange"], 400);
     }
 
+    $from = Carbon::createFromFormat("Y-m-d", $request->from)->startOfDay();
+    $to = Carbon::createFromFormat("Y-m-d", $request->to)->endOfDay();
+
     $requerimentos = Requerimento::with(
       "direcionamento",
       "reagendamentos",
       "reagendamentos.direcionamento"
-    )->whereBetween("agenda_datetime", [$from, $to])
-    ->where(function ($qry) {
+    )
+    ->where(function ($qry) use ($from, $to) {
       $qry->whereIn("status", ["confirmado"])
-        ->orWhereRelation("reagendamentos", function($q) {
-          $q->whereIn("status", ["confirmado"]);
-      });
+        ->whereBetween("agenda_datetime", [$from, $to])
+        ->orWhereRelation("reagendamentos", function($q) use ($from, $to) {
+          $q->whereIn("status", ["confirmado"])
+          ->whereBetween("agenda_datetime", [$from, $to]);
+        });
     })
     ->get();
+
+    return [
+      "requerimentos" => $requerimentos,
+      "from" => $from,
+      "to" => $to
+    ];
   }
 }

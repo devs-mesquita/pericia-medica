@@ -22,6 +22,7 @@ Route::middleware(['api-auth'])->group(function () {
   Route::post('changepassword', [UserController::class, 'changePassword']);
 
   Route::get('requerimentos', [RequerimentoController::class, 'index']);
+  Route::post('requerimentos/relatorio', [RequerimentoController::class, 'relatorio']);
   Route::get('requerimentos/{id}', [RequerimentoController::class, 'show']);
   Route::post('requerimentos/query', [RequerimentoController::class, 'query']);
   
