@@ -69,7 +69,7 @@ export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
           sidebarIsOpen,
         },
         {
-          title: "Relatório",
+          title: "Relatórios",
           path: "/requerimentos/relatorios",
           logo: <FileDownIcon className="h-5 w-5" />,
           sidebarIsOpen,

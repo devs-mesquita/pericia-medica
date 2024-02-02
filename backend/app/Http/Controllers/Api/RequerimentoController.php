@@ -440,8 +440,6 @@ class RequerimentoController extends Controller
     return ["message" => "ok", "presenca" => $request->presenca];
   }
 
-  public function realocacao(Request $request) {}
-
   public function query(Request $request) {
     $query = Requerimento::query();
     
@@ -671,5 +669,24 @@ class RequerimentoController extends Controller
       DB::rollBack();
       return response()->json(["message" => "error", "e" => $e], 400);
     }
+  }
+
+  public function relatorio(Request $request) {
+    if (!$request->from || !$request->to) {
+      return response()->json(["message" => "missing-daterange"], 400);
+    }
+
+    $requerimentos = Requerimento::with(
+      "direcionamento",
+      "reagendamentos",
+      "reagendamentos.direcionamento"
+    )->whereBetween("agenda_datetime", [$from, $to])
+    ->where(function ($qry) {
+      $qry->whereIn("status", ["confirmado"])
+        ->orWhereRelation("reagendamentos", function($q) {
+          $q->whereIn("status", ["confirmado"]);
+      });
+    })
+    ->get();
   }
 }
