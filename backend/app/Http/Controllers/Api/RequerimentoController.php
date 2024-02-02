@@ -711,8 +711,11 @@ class RequerimentoController extends Controller
         // foreach, resend failed emails
 
       DB::commit();
+      return;
+
     } catch (Exception $e) {
       DB::rollBack();
+      return;
     }
   }
 }
