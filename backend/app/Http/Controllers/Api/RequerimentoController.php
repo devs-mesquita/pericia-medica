@@ -700,4 +700,19 @@ class RequerimentoController extends Controller
       "to" => $to
     ];
   }
+
+  public function resendFailedEmails() {
+    DB::beginTransaction();
+    try {
+      // get requerimentos where envio_create = 0 || envio_avaliacao = 0 || envio_realocacao = 0
+        // foreach, resend failed emails
+
+      // get reagendamentos where envio_create = 0 || envio_avaliacao = 0 || envio_realocacao = 0
+        // foreach, resend failed emails
+
+      DB::commit();
+    } catch (Exception $e) {
+      DB::rollBack();
+    }
+  }
 }
