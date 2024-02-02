@@ -705,17 +705,167 @@ class RequerimentoController extends Controller
     DB::beginTransaction();
     try {
       // get requerimentos where envio_create = 0 || envio_avaliacao = 0 || envio_realocacao = 0
-        // foreach, resend failed emails
+      $requerimentos = Requerimento::with(
+        "reagendamentos",
+        "direcionamento",
+        "reagendamentos.direcionamento"
+        )->where("envio_create", 0)
+        ->orWhere("envio_avaliacao", 0)
+        ->orWhere("envio_realocacao", 0)
+        ->get();
+        
+      // foreach, resend failed emails
+      foreach($requerimentos as $requerimento) {
+        if ($requerimento->envio_create === 0) {
+          try {
+            Mail::to($requerimento->email)->send(new RequerimentoCreateMail($requerimento));
+            $requerimento->envio_create = 1;
+    
+          } catch (Exception $e) {
+            $requerimento->envio_create = 0;
+          }
+          $requerimento->save();
+        }
 
+        if ($requerimento->envio_avaliacao === 0) {
+          if ($requerimento->status === "recusado") {
+            try {
+              Mail::to($requerimento->email)->send(new RequerimentoRecusadoMail($requerimento));
+              $requerimento->envio_avaliacao = 1;
+            } catch (Exception $e) {
+              $requerimento->envio_avaliacao = 0;
+            }
+            $requerimento->save();
+
+          } else if ($requerimento->direcionamento->atendimento_presencial) {
+            try {
+              Mail::to($requerimento->email)->send(new RequerimentoAgendadoMail($requerimento));
+              $requerimento->envio_avaliacao = 1;
+    
+            } catch (Exception $e) {
+              $requerimento->envio_avaliacao = 0;
+            }
+            $requerimento->save();
+
+          } else if (!$requerimento->direcionamento->atendimento_presencial) {
+            try {
+              Mail::to($requerimento->email)->send(new RequerimentoNaoPresencialMail($requerimento));
+              $requerimento->envio_avaliacao = 1;
+
+            } catch (Exception $e) {
+              $requerimento->envio_avaliacao = 0;
+            }
+            $requerimento->save();
+          }
+        }
+      }
+      
       // get reagendamentos where envio_create = 0 || envio_avaliacao = 0 || envio_realocacao = 0
-        // foreach, resend failed emails
+      $reagendamentos = RequerimentoReagendamento::with(
+        "requerimento",
+        "direcionamento",
+        )->where("envio_create", 0)
+        ->orWhere("envio_avaliacao", 0)
+        ->orWhere("envio_realocacao", 0)
+        ->get();
+        
+      // foreach, resend failed emails
+      foreach($reagendamentos as $reagendamento) {
+        if ($reagendamento->envio_create === 0) {
+          $firstReagendamento = RequerimentoReagendamentos::where("requerimento_id", $reagendamento->requerimento_id)->first();
+
+          if ($firstReagendamento->id === $reagendamento->id) {
+            if ($reagendamento->requerimento->realocado_at) {
+              try {
+                Mail::to($reagendamento->requerimento->email)->send(new RequerimentoRealocacaoMail($reagendamento->requerimento, $reagendamento));
+                $reagendamento->requerimento->envio_realocacao = 1;
+                $reagendamento->envio_create = 1;
+                
+              } catch (Exception $e) {
+                $reagendamento->envio_create = 0;
+                $reagendamento->requerimento->envio_realocacao = 0;
+              }
+              $reagendamento->save();
+              $reagendamento->requerimento->save();
+              
+            } else if ($reagendamento->requerimento->reagendamento_solicitado_at) {
+              try {
+                Mail::to($reagendamento->requerimento->email)->send(new ReagendamentoCreateMail($reagendamento->requerimento, $reagendamento));
+                $reagendamento->envio_create = 1;
+      
+              } catch (Exception $e) {
+                $reagendamento->envio_create = 0;
+              }
+              $reagendamento->save();
+            }
+
+          } else {
+            $upperReagendamento = RequerimentoReagendamentos::where("requerimento_id", $reagendamento->requerimento_id)->where("id", "<", $reagendamento->id)->latest();
+
+            if ($upperReagendamento->realocado_at) {
+              try {
+                Mail::to($reagendamento->requerimento->email)->send(new ReagendamentoRealocacaoMail($reagendamento->requerimento, $upperReagendamento, $reagendamento));
+                $upperReagendamento->envio_realocacao = 1;
+                $reagendamento->envio_create = 1;
+                
+              } catch (Exception $e) {
+                $upperReagendamento->envio_realocacao = 0;
+                $reagendamento->envio_create = 0;
+              }
+              $upperReagendamento->save();
+              $reagendamento->save();
+              
+            } else if ($upperReagendamento->reagendamento_solicitado_at) {
+              try {
+                Mail::to($reagendamento->requerimento->email)->send(new ReagendamentoCreateMail($reagendamento->requerimento, $reagendamento));
+                $reagendamento->envio_create = 1;
+      
+              } catch (Exception $e) {
+                $reagendamento->envio_create = 0;
+              }
+              $reagendamento->save();
+            }
+          }
+        }
+        if ($reagendamento->envio_avaliacao === 0) {
+          if ($reagendamento->status === "recusado") {
+            try {
+              Mail::to($reagendamento->requerimento->email)->send(new ReagendamentoRecusadoMail($reagendamento->requerimento, $reagendamento));
+              $reagendamento->envio_avaliacao = 1;
+            } catch (Exception $e) {
+              $reagendamento->envio_avaliacao = 0;
+            }
+            $reagendamento->save();
+
+          } else if ($reagendamento->direcionamento->atendimento_presencial) {
+            try {
+              Mail::to($reagendamento->requerimento->email)->send(new ReagendamentoAgendadoMail($reagendamento->requerimento, $reagendamento));
+              $reagendamento->envio_avaliacao = 1;
+    
+            } catch (Exception $e) {
+              $reagendamento->envio_avaliacao = 0;
+            }
+            $reagendamento->save();
+
+          } else if (!$reagendamento->direcionamento->atendimento_presencial) {
+            try {
+              Mail::to($reagendamento->requerimento->email)->send(new ReagendamentoNaoPresencialMail($reagendamento->requerimento, $reagendamento));
+              $reagendamento->envio_avaliacao = 1;
+
+            } catch (Exception $e) {
+              $reagendamento->envio_avaliacao = 0;
+            }
+            $reagendamento->save();
+          }
+        }
+      }
 
       DB::commit();
-      return;
+      return ["message" => "ok"];
 
     } catch (Exception $e) {
       DB::rollBack();
-      return;
+      return response()->json(["message" => "error", "e" => $e]);
     }
   }
 }

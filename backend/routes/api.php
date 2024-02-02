@@ -54,5 +54,6 @@ Route::middleware(['api-auth'])->group(function () {
   Route::middleware(['super-admin'])->group(function () {
     Route::get('/realocacao', [RequerimentoController::class, 'getRealocacoes']);
     Route::patch('/realocacao', [RequerimentoController::class, 'applyRealocacoes']);
+    Route::post('/resend-failed-emails', [RequerimentoController::class, 'resendFailedEmails']);
   });
 });
