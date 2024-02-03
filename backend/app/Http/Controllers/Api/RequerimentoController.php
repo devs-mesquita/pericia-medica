@@ -701,7 +701,7 @@ class RequerimentoController extends Controller
     ];
   }
 
-  public function resendFailedEmails() {
+  public static function resendFailedEmails() {
     DB::beginTransaction();
     try {
       // get requerimentos where envio_create = 0 || envio_avaliacao = 0 || envio_realocacao = 0
