@@ -992,7 +992,9 @@ class RequerimentoController extends Controller
       $newRequerimento->envio_create = 1;
       $newRequerimento->presenca = $requerimento->presenca === -1 ? null : $requerimento->presenca;
       $newRequerimento->observacao_avaliador = $requerimento->observacao || null;
-      $newRequerimento->avaliador_id = $requerimento->user_id || null;
+      if ($requerimento->user_id) {
+        $newRequerimento->avaliador_id = $requerimento->user_id || null;
+      }
 
       if ($requerimento->direcionamento && $requerimento->direcionamento !== "Recusado") {
         $newRequerimento->direcionamento_id = $direcionamentosArr[$requerimento->direcionamento];
@@ -1015,14 +1017,18 @@ class RequerimentoController extends Controller
         /* Avaliado */
         if ($requerimento->data_reagenda) {
           $newReagendamento->avaliado_at = Carbon::now();
-          $newReagendamento->avaliador_id = $requerimento->user_id || null;
+          if ($requerimento->user_id) {
+            $newReagendamento->avaliador_id = $requerimento->user_id || null;
+          }
           $newReagendamento->observacao_avaliador = $requerimento->observacao_reagenda || null;
           $newReagendamento->envio_avaliacao = 1;
           
           if ($statuses[$requerimento->status] === "recusado" || $requerimento->direcionamento === "Recusado") {
             $newReagendamento->observacao_avaliador = $requerimento->observacao_reagenda || null;
             $newReagendamento->justificativa_recusa = $requerimento->motivo_recusa;
-            $newReagendamento->avaliador_id = $requerimento->user_id || null;
+            if ($requerimento->user_id) {
+              $newReagendamento->avaliador_id = $requerimento->user_id;
+            }
             $newReagendamento->status = "recusado";
           } else {
             $newReagendamento->direcionamento_id = $direcionamentosArr[$requerimento->direcionamento];
