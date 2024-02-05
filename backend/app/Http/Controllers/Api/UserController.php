@@ -44,7 +44,7 @@ class UserController extends Controller
       }
 
       $user = User::create([
-          'name' => $request->name,
+          'name' => mb_strtoupper($request->name),
           'email' => $request->email,
           'password' => Hash::make(config('app.user_default_password', '')),
           'role' => $request->role
