@@ -120,7 +120,7 @@ export default function requerimentoToPDF({
 
   const pageCount = doc.getNumberOfPages();
 
-  for (var i = 1; i <= pageCount; i++) {
+  for (let i = 1; i <= pageCount; i++) {
     doc.setPage(i);
     doc.addImage(
       "/logo-transparent.png",
@@ -131,7 +131,7 @@ export default function requerimentoToPDF({
       canvasHeight,
     );
 
-    let pageCurrent = doc.getCurrentPageInfo().pageNumber; //Current Page
+    const pageCurrent = doc.getCurrentPageInfo().pageNumber; //Current Page
     doc.setFontSize(12);
     doc.text(
       "Página: " + pageCurrent + "/" + pageCount,

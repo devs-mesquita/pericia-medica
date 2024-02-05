@@ -179,7 +179,7 @@ export default function RequerimentosIndexPage() {
       enableColumnFilter: true,
       enableSorting: true,
       cell: ({ row }) => {
-        let lastDirecionamento =
+        const lastDirecionamento =
           row.original.reagendamentos.length > 0
             ? row.original.reagendamentos[
                 row.original.reagendamentos.length - 1
@@ -196,7 +196,7 @@ export default function RequerimentosIndexPage() {
       enableColumnFilter: false,
       enableSorting: true,
       cell: ({ row }) => {
-        let lastDate =
+        const lastDate =
           row.original.reagendamentos.length > 0
             ? row.original.reagendamentos[
                 row.original.reagendamentos.length - 1
@@ -300,7 +300,7 @@ export default function RequerimentosIndexPage() {
       enableColumnFilter: false,
       enableSorting: true,
       cell: ({ row }) => {
-        let lastAvaliador =
+        const lastAvaliador =
           row.original.reagendamentos.length > 0
             ? row.original.reagendamentos[
                 row.original.reagendamentos.length - 1
@@ -317,7 +317,7 @@ export default function RequerimentosIndexPage() {
       enableColumnFilter: false,
       enableSorting: false,
       cell: ({ row }) => {
-        let item =
+        const item =
           row.original.reagendamentos.length > 0
             ? row.original.reagendamentos[
                 row.original.reagendamentos.length - 1

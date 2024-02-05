@@ -53,6 +53,8 @@ export default function RequerimentoRealocacaoPage() {
   );
   const [novaData, setNovaData] = React.useState<Date | undefined>(undefined);
   const [justificativa, setJustificativa] = React.useState<string>("");
+  const [justificativaOutro, setJustificativaOutro] =
+    React.useState<string>("");
   const [realocacoes, setRealocacoes] = React.useState<RealocacoesObject>({});
 
   const realocarRequerimentosMutation = useMutation({
@@ -121,7 +123,8 @@ export default function RequerimentoRealocacaoPage() {
     realocarRequerimentosMutation.mutate({
       dataCancelada: format(dataCancelada, "yyyy-LL-dd"),
       novaData: format(novaData, "yyyy-LL-dd"),
-      justificativaRealocacao: justificativa,
+      justificativaRealocacao:
+        justificativa === "outro" ? justificativaOutro : justificativa,
       realocacoes,
     });
   };
@@ -164,7 +167,7 @@ export default function RequerimentoRealocacaoPage() {
     if (data?.realocacoes) {
       const formattedRealocacoes: RealocacoesObject = {};
 
-      for (let realocacao of data.realocacoes) {
+      for (const realocacao of data.realocacoes) {
         if (!formattedRealocacoes[realocacao.direcionamento_id]) {
           formattedRealocacoes[realocacao.direcionamento_id] = {
             direcionamento_id: 0,
@@ -209,7 +212,7 @@ export default function RequerimentoRealocacaoPage() {
               disabled={realocarRequerimentosMutation.isPending || isFetching}
             />
           </div>
-          <div className="mb-6 flex gap-6 px-4">
+          <div className="mb-6 flex flex-col items-start gap-6 px-4 lg:flex-row">
             <div className="flex flex-col items-start gap-1">
               <label htmlFor="name" className="font-semibold">
                 Nova data de atendimento:
@@ -231,24 +234,46 @@ export default function RequerimentoRealocacaoPage() {
               <label htmlFor="name" className="font-semibold">
                 Motivo da Realocação:
               </label>
-              <textarea
+              <select
                 required
-                id="justificativa"
                 name="justificativa"
-                placeholder="A justificativa será inclusa no email."
-                className="w-full resize-none rounded border border-slate-300 p-2 text-sm disabled:cursor-not-allowed"
-                value={justificativa}
+                id="justificativa"
+                defaultValue={justificativa}
                 onChange={(evt) => {
                   setJustificativa(evt.target.value);
                 }}
+                className="w-full resize-none rounded border border-slate-300 p-2 text-sm disabled:cursor-not-allowed"
                 disabled={
                   realocarRequerimentosMutation.isPending ||
                   isFetching ||
                   Object.keys(realocacoes).length === 0
                 }
-                rows={1}
-                cols={40}
-              />
+              >
+                <option value="">Selecione</option>
+                <option value="Horário Alterado">Horário Alterado</option>
+                <option value="outro">Outro</option>
+              </select>
+              {justificativa === "outro" ? (
+                <textarea
+                  required={justificativa === "outro"}
+                  id="justificativaOutro"
+                  name="justificativaOutro"
+                  placeholder="A justificativa será inclusa no email."
+                  className="w-full resize-none rounded border border-slate-300 p-2 text-sm disabled:cursor-not-allowed"
+                  value={justificativaOutro}
+                  onChange={(evt) => {
+                    setJustificativaOutro(evt.target.value);
+                  }}
+                  disabled={
+                    justificativa !== "outro" ||
+                    realocarRequerimentosMutation.isPending ||
+                    isFetching ||
+                    Object.keys(realocacoes).length === 0
+                  }
+                  rows={1}
+                  cols={40}
+                />
+              ) : null}
             </div>
           </div>
           <div className="mb-2 grid grid-cols-5 justify-items-center border-y-2 border-slate-300 px-4 py-2 font-semibold">
@@ -296,7 +321,10 @@ export default function RequerimentoRealocacaoPage() {
                       </span>
                       <span>
                         <input
-                          disabled={realocarRequerimentosMutation.isPending || !realocacao.realocar}
+                          disabled={
+                            realocarRequerimentosMutation.isPending ||
+                            !realocacao.realocar
+                          }
                           checked={
                             realocacoes[realocacao.direcionamento_id]
                               .manterHorario

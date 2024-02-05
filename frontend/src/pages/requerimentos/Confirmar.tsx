@@ -13,6 +13,7 @@ type ConfirmarRequerimentoForm = {
   protocolo: string;
   opcao: "" | "confirmar" | "solicitar-reagendamento";
   justificativa_requerente: string;
+  justificativa_outro: string;
 };
 type ConfirmarRequerimentoResponse = {
   protocolo: string;
@@ -59,7 +60,13 @@ export default function RequerimentoConfirmarPage() {
         `${API_URL}/api/requerimentos/${form.protocolo.toUpperCase()}/confirmacao`,
         {
           method: "POST",
-          body: JSON.stringify(form),
+          body: JSON.stringify({
+            ...form,
+            justificativa_requerente:
+              form.justificativa_requerente === "outro"
+                ? form.justificativa_outro
+                : form.justificativa_requerente,
+          }),
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
@@ -95,10 +102,13 @@ export default function RequerimentoConfirmarPage() {
     protocolo: "",
     opcao: "",
     justificativa_requerente: "",
+    justificativa_outro: "",
   });
 
   const handleChange = (
-    evt: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    evt: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
   ) => {
     setForm((st) => ({ ...st, [evt.target.name]: evt.target.value }));
   };
@@ -180,17 +190,33 @@ export default function RequerimentoConfirmarPage() {
         {form.opcao === "solicitar-reagendamento" && (
           <div className="flex flex-1 flex-col gap-1">
             <label htmlFor="justificativa_requerente">Justificativa:</label>
-            <input
+            <select
               required={form.opcao === "solicitar-reagendamento"}
               onChange={handleChange}
               disabled={confirmarRequerimentoMutation.isPending}
               id="justificativa_requerente"
               name="justificativa_requerente"
               className="rounded border border-slate-300 p-2 outline-none focus:border-slate-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-600/80"
-              type="text"
-              placeholder="Descreva a justificativa para o reagendamento."
-              maxLength={150}
-            />
+            >
+              <option value="">Selecione...</option>
+              <option value="motivo-1">Motivo Um</option>
+              <option value="outro">Outro</option>
+            </select>
+            {form.justificativa_requerente === "outro" ? (
+              <textarea
+                required={
+                  form.opcao === "solicitar-reagendamento" &&
+                  form.justificativa_requerente === "outro"
+                }
+                onChange={handleChange}
+                disabled={confirmarRequerimentoMutation.isPending}
+                id="justificativa_requerente"
+                name="justificativa_requerente"
+                className="rounded border border-slate-300 p-2 outline-none focus:border-slate-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-600/80"
+                placeholder="Descreva a justificativa para o reagendamento."
+                maxLength={150}
+              ></textarea>
+            ) : null}
           </div>
         )}
       </div>

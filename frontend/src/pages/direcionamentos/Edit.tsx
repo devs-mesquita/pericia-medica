@@ -18,6 +18,14 @@ type UpdateDirecionamentoResponse = {
   message: string;
 };
 
+type DirecionamentoConfig = {
+  weekdayIndex: number;
+  weekday: string;
+  start: string;
+  isEnabled: boolean;
+  end: string;
+}[];
+
 export default function DirecionamentoEditPage() {
   document.title = "Modificar Direcionamento";
   const authHeader = useAuthHeader();
@@ -194,7 +202,7 @@ export default function DirecionamentoEditPage() {
       const { direcionamento } = data;
       const parsedConfig = JSON.parse(
         data.direcionamento.config,
-      ) as typeof form.config;
+      ) as DirecionamentoConfig;
 
       console.log(data, parsedConfig);
       setForm({

@@ -981,7 +981,7 @@ class RequerimentoController extends Controller
       $newRequerimento->id = $requerimento->id;
       $newRequerimento->nome = mb_strtoupper($requerimento->nome);
       $newRequerimento->matricula = $requerimento->matricula;
-      $newRequerimento->protocolo = $newRequerimento->protocolo;
+      $newRequerimento->protocolo = $requerimento->protocolo;
       $newRequerimento->local_lotacao = $requerimento->local_lotacao;
       $newRequerimento->inicio_expediente = explode(" ", $requerimento->horario_trabalho)[0];
       $newRequerimento->fim_expediente = explode(" ", $requerimento->horario_trabalho)[2];
@@ -991,15 +991,15 @@ class RequerimentoController extends Controller
       $newRequerimento->last_movement_at = $requerimento->updated_at;
       $newRequerimento->envio_create = 1;
       $newRequerimento->presenca = $requerimento->presenca === -1 ? null : $requerimento->presenca;
-      $newRequerimento->observacao_avaliador = $requerimento->observacao || null;
+      $newRequerimento->observacao_avaliador = $requerimento->observacao;
       if ($requerimento->user_id) {
-        $newRequerimento->avaliador_id = $requerimento->user_id || null;
+        $newRequerimento->avaliador_id = $requerimento->user_id;
       }
 
       if ($requerimento->direcionamento && $requerimento->direcionamento !== "Recusado") {
         $newRequerimento->direcionamento_id = $direcionamentosArr[$requerimento->direcionamento];
       }
-      if (count(explode(" ", $requerimento->data_agenda || "")) > 1) {
+      if (strlen($requerimento->data_agenda) > 1 && strlen($requerimento->hora_agenda) > 1) {
         $newRequerimento->agenda_datetime = Carbon::createFromFormat("Y-m-d H:i:s", explode(" ", $requerimento->data_agenda)[0]." ".$requerimento->hora_agenda.":00");
       }
 
@@ -1008,23 +1008,26 @@ class RequerimentoController extends Controller
         $newReagendamento = new RequerimentoReagendamento;
         $newReagendamento->requerimento_id = $requerimento->id;
         $newRequerimento->status = "reagendamento-solicitado";
-        if($requerimento->data_pedidoreagenda) {
-          $newRequerimento->reagendamento_solicitado_at = Carbon::now();
+        if (strlen($requerimento->data_pedidoreagenda) > 1) {
+          $newRequerimento->reagendamento_solicitado_at = Carbon::createFromFormat("d/m/Y", explode(" ", $requerimento->data_pedidoreagenda)[0]);
         }
         $newReagendamento->justificativa_requerente = $requerimento->justificativa_reagenda;
         $newReagendamento->envio_create = 1;
 
         /* Avaliado */
         if ($requerimento->data_reagenda) {
-          $newReagendamento->avaliado_at = Carbon::now();
-          if ($requerimento->user_id) {
-            $newReagendamento->avaliador_id = $requerimento->user_id || null;
+          if (strlen($requerimento->data_reagenda) > 1) {
+            $newReagendamento->avaliado_at = Carbon::createFromFormat("d/m/Y", explode(" ", $requerimento->data_reagenda)[0]);
           }
-          $newReagendamento->observacao_avaliador = $requerimento->observacao_reagenda || null;
+
+          if ($requerimento->user_id) {
+            $newReagendamento->avaliador_id = $requerimento->user_id;
+          }
+          $newReagendamento->observacao_avaliador = $requerimento->observacao_reagenda;
           $newReagendamento->envio_avaliacao = 1;
           
           if ($statuses[$requerimento->status] === "recusado" || $requerimento->direcionamento === "Recusado") {
-            $newReagendamento->observacao_avaliador = $requerimento->observacao_reagenda || null;
+            $newReagendamento->observacao_avaliador = $requerimento->observacao_reagenda;
             $newReagendamento->justificativa_recusa = $requerimento->motivo_recusa;
             if ($requerimento->user_id) {
               $newReagendamento->avaliador_id = $requerimento->user_id;
@@ -1032,12 +1035,14 @@ class RequerimentoController extends Controller
             $newReagendamento->status = "recusado";
           } else {
             $newReagendamento->direcionamento_id = $direcionamentosArr[$requerimento->direcionamento];
-            if (count(explode(" ", $requerimento->data_reagendada || "")) > 1) {
+            if (strlen($requerimento->data_reagendada) > 1) {
               $newReagendamento->agenda_datetime = Carbon::createFromFormat("Y-m-d H:i:s", explode(" ", $requerimento->data_reagendada)[0]." ".$requerimento->hora_reagendada.":00");
             }
             $newReagendamento->status = $statuses[$requerimento->status];
             if ($statuses[$requerimento->status] === "confirmado") {
-              $newReagendamento->confirmado_at = Carbon::now();
+              if (strlen($requerimento->data_confirmacaoreagenda) > 1) {
+                $newReagendamento->confirmado_at = Carbon::createFromFormat("d/m/Y", explode(" ", $requerimento->data_confirmacaoreagenda)[0]);
+              }
             }
           }
         } else {
@@ -1053,15 +1058,15 @@ class RequerimentoController extends Controller
           if ($requerimento->direcionamento === "Recusado") {
             $newRequerimento->status = "recusado";
             $newRequerimento->justificativa_recusa = $requerimento->motivo_recusa;
-            if ($requerimento->data_avaliacao) {
-              $newRequerimento->avaliado_at = Carbon::now();
+            if (strlen($requerimento->data_avaliacao) > 1) {
+              $newRequerimento->avaliado_at = Carbon::createFromFormat("d/m/Y", explode(" ", $requerimento->data_avaliacao)[0]);
             }
             $newRequerimento->envio_avaliacao = 1;
             
           } else {
             $newRequerimento->status = $statuses[$requerimento->status];
-            if ($requerimento->data_confirmacao) {
-              $newRequerimento->confirmado_at = Carbon::now();
+            if (strlen($requerimento->data_confirmacao) > 1) {
+              $newRequerimento->confirmado_at = Carbon::createFromFormat("d/m/Y", explode(" ", $requerimento->data_confirmacao)[0]);
             }
           }
           

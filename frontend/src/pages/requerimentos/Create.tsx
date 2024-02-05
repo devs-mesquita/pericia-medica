@@ -50,16 +50,16 @@ export default function RequerimentoCreatePage() {
       const formData = new FormData();
 
       const formKeys = Object.keys(form) as Array<keyof typeof form>;
-      for (let key of formKeys) {
+      for (const key of formKeys) {
         formData.append(key, form[key]);
       }
 
-      for (let file of atestadoFiles) {
+      for (const file of atestadoFiles) {
         formData.append("atestado_files[]", file);
       }
 
       if (form.acumula_matricula === "sim") {
-        for (let file of afastamentoFiles) {
+        for (const file of afastamentoFiles) {
           formData.append("afastamento_files[]", file);
         }
       }

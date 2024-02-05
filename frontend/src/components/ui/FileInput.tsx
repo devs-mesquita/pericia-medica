@@ -53,7 +53,7 @@ export default function FileInput({
     // Check allowed file types
     // Append to the files list
     setErrorMessages(new Set([]));
-    for (let file of evt.target.files) {
+    for (const file of evt.target.files) {
       if (file.size > maxFileSizeKb * 1000) {
         setFailedFilenames((st) => [...st, file.name]);
         setErrorMessages((st) => {
