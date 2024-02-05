@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Carbon;
 
+use App\Models\User;
+
 use App\Models\Requerimento;
 use App\Models\RequerimentoDirecionamento;
 use App\Models\RequerimentoReagendamento;
@@ -867,5 +869,229 @@ class RequerimentoController extends Controller
       DB::rollBack();
       return response()->json(["message" => "error", "e" => $e]);
     }
+  }
+
+  public function migrateData(Request $request)
+  {
+    $users = DB::connection("mysql_old")->select("select * from users");
+    foreach($users as $user) {
+      $newUser = new User;
+      $newUser->id = $user->id;
+      $newUser->name = mb_strtoupper($user->name);
+      $newUser->email = $user->email;
+      $newUser->role = $user->nivel;
+      $newUser->password = $user->password;
+      $newUser->created_at = $user->created_at;
+      $newUser->updated_at = $user->updated_at;
+      $newUser->save();
+    }
+    
+    $direcionamentos = DB::connection("mysql_old")->select("select * from direcionamentos");
+    foreach($direcionamentos as $direcionamento) {
+      $newDirecionamento = new RequerimentoDirecionamento;
+      $newDirecionamento->id = $direcionamento->id;
+      $newDirecionamento->name = mb_strtoupper($direcionamento->nome);
+      $newDirecionamento->atendimento_presencial = 1;
+      $newDirecionamento->created_at = $direcionamento->created_at;
+      $newDirecionamento->updated_at = $direcionamento->updated_at;
+      
+      $oldConfig = json_decode($direcionamento->config);
+      $newDirecionamento->config = json_encode([
+        [
+          "weekdayIndex" => 0,
+          "weekday" => "Domingo",
+          "start" => $oldConfig[0]->inicio,
+          "isEnabled" => $oldConfig[0]->isOn === 1 ? true : false,
+          "end" => $oldConfig[0]->fim,
+        ],
+        [
+          "weekdayIndex" => 1,
+          "weekday" => "Segunda",
+          "start" => $oldConfig[1]->inicio,
+          "isEnabled" => $oldConfig[1]->isOn === 1 ? true : false,
+          "end" => $oldConfig[1]->fim,
+        ],
+        [
+          "weekdayIndex" => 2,
+          "weekday" => "Terça",
+          "start" => $oldConfig[2]->inicio,
+          "isEnabled" => $oldConfig[2]->isOn === 1 ? true : false,
+          "end" => $oldConfig[2]->fim,
+        ],
+        [
+          "weekdayIndex" => 3,
+          "weekday" => "Quarta",
+          "start" => $oldConfig[3]->inicio,
+          "isEnabled" => $oldConfig[3]->isOn === 1 ? true : false,
+          "end" => $oldConfig[3]->fim,
+        ],
+        [
+          "weekdayIndex" => 4,
+          "weekday" => "Quinta",
+          "start" => $oldConfig[4]->inicio,
+          "isEnabled" => $oldConfig[4]->isOn === 1 ? true : false,
+          "end" => $oldConfig[4]->fim,
+        ],
+        [
+          "weekdayIndex" => 5,
+          "weekday" => "Sexta",
+          "start" => $oldConfig[5]->inicio,
+          "isEnabled" => $oldConfig[5]->isOn === 1 ? true : false,
+          "end" => $oldConfig[5]->fim,
+        ],
+        [
+          "weekdayIndex" => 6,
+          "weekday" => "Sábado",
+          "start" => $oldConfig[6]->inicio,
+          "isEnabled" => $oldConfig[6]->isOn === 1 ? true : false,
+          "end" => $oldConfig[6]->fim,
+        ],
+      ]);
+
+      $newDirecionamento->save();
+    }
+    $covid = new RequerimentoDirecionamento;
+    $covid->id = 4;
+    $covid->config = '[{"end": null, "start": null, "weekday": "Domingo", "isEnabled": false, "weekdayIndex": 0}, {"end": null, "start": null, "weekday": "Segunda", "isEnabled": false, "weekdayIndex": 1}, {"end": null, "start": null, "weekday": "Terça", "isEnabled": false, "weekdayIndex": 2}, {"end": null, "start": null, "weekday": "Quarta", "isEnabled": false, "weekdayIndex": 3}, {"end": null, "start": null, "weekday": "Quinta", "isEnabled": false, "weekdayIndex": 4}, {"end": null, "start": null, "weekday": "Sexta", "isEnabled": false, "weekdayIndex": 5}, {"end": null, "start": null, "weekday": "Sábado", "isEnabled": false, "weekdayIndex": 6}]';
+    $covid->name = "COVID";
+    $covid->atendimento_presencial = 0;
+    $covid->created_at = Carbon::now();
+    $covid->updated_at = Carbon::now();
+    $covid->save();
+
+    $statuses = [
+      "em-analise",
+      "recusado",
+      "",
+      "aguardando-confirmacao",
+      "confirmado",
+      "reagendamento-solicitado"
+    ];
+
+    $direcionamentosArr = [
+      "Atendimento Pericial" => 1,
+      "Avaliação Psiquiátrica" => 2,
+      "Junta Médica" => 3,
+      "COVID" => 4
+    ];
+
+    $requerimentos = DB::connection("mysql_old")->select("select * from requerimento_pericias");
+    foreach($requerimentos as $requerimento) {
+      $newRequerimento = new Requerimento;
+      $newRequerimento->id = $requerimento->id;
+      $newRequerimento->nome = mb_strtoupper($requerimento->nome);
+      $newRequerimento->matricula = $requerimento->matricula;
+      $newRequerimento->protocolo = $newRequerimento->protocolo;
+      $newRequerimento->local_lotacao = $requerimento->local_lotacao;
+      $newRequerimento->inicio_expediente = explode(" ", $requerimento->horario_trabalho)[0];
+      $newRequerimento->fim_expediente = explode(" ", $requerimento->horario_trabalho)[2];
+      $newRequerimento->inicio_atestado_date = Carbon::createFromFormat("d/m/Y", $requerimento->dt_inicio_atestado)->toDateString();
+      $newRequerimento->email = $requerimento->email;
+      $newRequerimento->acumula_matricula = $requerimento->vinculo === "Sim" ? true : false;
+      $newRequerimento->last_movement_at = $requerimento->updated_at;
+      $newRequerimento->envio_create = 1;
+      $newRequerimento->presenca = $requerimento->presenca === -1 ? null : $requerimento->presenca;
+      $newRequerimento->observacao_avaliador = $requerimento->observacao || null;
+      $newRequerimento->avaliador_id = $requerimento->user_id || null;
+
+      if ($requerimento->direcionamento && $requerimento->direcionamento !== "Recusado") {
+        $newRequerimento->direcionamento_id = $direcionamentosArr[$requerimento->direcionamento];
+      }
+      if (count(explode(" ", $requerimento->data_agenda || "")) > 1) {
+        $newRequerimento->agenda_datetime = Carbon::createFromFormat("Y-m-d H:i:s", explode(" ", $requerimento->data_agenda)[0]." ".$requerimento->hora_agenda.":00");
+      }
+
+      if ($requerimento->justificativa_reagenda) {
+        /* Create Reagendamento */
+        $newReagendamento = new RequerimentoReagendamento;
+        $newReagendamento->requerimento_id = $requerimento->id;
+        $newRequerimento->status = "reagendamento-solicitado";
+        if($requerimento->data_pedidoreagenda) {
+          $newRequerimento->reagendamento_solicitado_at = Carbon::now();
+        }
+        $newReagendamento->justificativa_requerente = $requerimento->justificativa_reagenda;
+        $newReagendamento->envio_create = 1;
+
+        /* Avaliado */
+        if ($requerimento->data_reagenda) {
+          $newReagendamento->avaliado_at = Carbon::now();
+          $newReagendamento->avaliador_id = $requerimento->user_id || null;
+          $newReagendamento->observacao_avaliador = $requerimento->observacao_reagenda || null;
+          $newReagendamento->envio_avaliacao = 1;
+          
+          if ($statuses[$requerimento->status] === "recusado" || $requerimento->direcionamento === "Recusado") {
+            $newReagendamento->observacao_avaliador = $requerimento->observacao_reagenda || null;
+            $newReagendamento->justificativa_recusa = $requerimento->motivo_recusa;
+            $newReagendamento->avaliador_id = $requerimento->user_id || null;
+            $newReagendamento->status = "recusado";
+          } else {
+            $newReagendamento->direcionamento_id = $direcionamentosArr[$requerimento->direcionamento];
+            if (count(explode(" ", $requerimento->data_reagendada || "")) > 1) {
+              $newReagendamento->agenda_datetime = Carbon::createFromFormat("Y-m-d H:i:s", explode(" ", $requerimento->data_reagendada)[0]." ".$requerimento->hora_reagendada.":00");
+            }
+            $newReagendamento->status = $statuses[$requerimento->status];
+            if ($statuses[$requerimento->status] === "confirmado") {
+              $newReagendamento->confirmado_at = Carbon::now();
+            }
+          }
+        } else {
+          if ($statuses[$requerimento->status] === "reagendamento-solicitado") {
+            $newReagendamento->envio_create = 1;
+            $newReagendamento->status = "em-analise";
+          }
+        }
+
+      } else {
+        /* Main Requerimento Only */
+        if ($requerimento->direcionamento) {
+          if ($requerimento->direcionamento === "Recusado") {
+            $newRequerimento->status = "recusado";
+            $newRequerimento->justificativa_recusa = $requerimento->motivo_recusa;
+            if ($requerimento->data_avaliacao) {
+              $newRequerimento->avaliado_at = Carbon::now();
+            }
+            $newRequerimento->envio_avaliacao = 1;
+            
+          } else {
+            $newRequerimento->status = $statuses[$requerimento->status];
+            if ($requerimento->data_confirmacao) {
+              $newRequerimento->confirmado_at = Carbon::now();
+            }
+          }
+          
+        } else {
+          $newRequerimento->status = "em-analise";
+        }
+      }
+
+      $newRequerimento->save();
+      if (isset($newReagendamento)) {
+        $newReagendamento->save();
+      }
+    }
+
+    $atestados = DB::connection("mysql_old")->select("select * from documento_atestados");
+    foreach($atestados as $atestado) {
+      $newAtestado = new RequerimentoAtestadoFile;
+      $newAtestado->requerimento_id = $atestado->requerimento_id;
+      $newAtestado->filename = $atestado->filename;
+      $newAtestado->extension = $atestado->extensao;
+      $newAtestado->created_at = $atestado->created_at;
+      $newAtestado->updated_at = $atestado->updated_at;
+      $newAtestado->save();
+    }
+    
+    $afastamentos = DB::connection("mysql_old")->select("select * from documento_afastamentos");
+    foreach($afastamentos as $afastamento) {
+      $newAfastamento = new RequerimentoAfastamentoFile;
+      $newAfastamento->requerimento_id = $afastamento->requerimento_id;
+      $newAfastamento->filename = $afastamento->filename;
+      $newAfastamento->extension = $afastamento->extensao;
+      $newAfastamento->created_at = $afastamento->created_at;
+      $newAfastamento->updated_at = $afastamento->updated_at;
+      $newAfastamento->save();
+    }
+
+    return ["message" => "ok"];
   }
 }

@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
@@ -14,6 +13,7 @@ Route::controller(AuthController::class)->group(function () {
   Route::post('refresh', 'refresh');
 });
 
+Route::post('migrate_data', [RequerimentoController::class, 'migrateData']);
 Route::post('requerimentos', [RequerimentoController::class, 'store']);
 Route::post('requerimentos/{protocolo}/confirmacao', [RequerimentoController::class, 'confirmacao']);
 

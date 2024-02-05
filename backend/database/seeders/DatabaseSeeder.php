@@ -13,11 +13,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\User::firstOrCreate(["email" => "root@mesquita.rj.gov.br"], [
+        /* \App\Models\User::firstOrCreate(["email" => "root@mesquita.rj.gov.br"], [
             "name" => "Root User",
             "email" => "root@mesquita.rj.gov.br",
             "role"    => "Super-Admin",
             "password" => Hash::make(config("app.user_default_password", "")),
-        ]);
+        ]); */
     }
 }

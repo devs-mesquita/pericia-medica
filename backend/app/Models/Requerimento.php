@@ -12,6 +12,7 @@ class Requerimento extends Model
     use HasFactory;
 
     protected $fillable = [
+      'id',
       'nome',
       'matricula',
       'protocolo',

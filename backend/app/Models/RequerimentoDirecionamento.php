@@ -12,6 +12,7 @@ class RequerimentoDirecionamento extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+      'id',
       'name',
       'config',
       'atendimento_presencial',

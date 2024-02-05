@@ -11,6 +11,7 @@ class RequerimentoReagendamento extends Model
     use HasFactory;
 
     protected $fillable = [
+      'id',
       'requerimento_id',
       'justificativa_requerente',
       'envio_create',
