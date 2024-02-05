@@ -79,7 +79,7 @@ class RequerimentoController extends Controller
 
       $requerimento = Requerimento::create([
         'protocolo' => $protocolo,
-        'nome' => $request->nome,
+        'nome' => mb_strtoupper($request->nome),
         'matricula' => $request->matricula,
         'local_lotacao' => $request->local_lotacao,
         'email' => $request->email,
