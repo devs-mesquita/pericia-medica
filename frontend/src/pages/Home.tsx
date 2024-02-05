@@ -109,7 +109,7 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-6 shadow shadow-black/20">
+      <div className="row-start-6 flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-6 shadow shadow-black/20 md:col-start-2 md:row-start-3 lg:col-start-auto lg:row-start-4">
         <h2 className="md:text-md text-center text-xl font-bold lg:text-xl">
           ARQUIVADOS
         </h2>
@@ -150,7 +150,7 @@ export default function HomePage() {
           )}
         </p>
       </div>
-      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-6 text-blue-600 shadow shadow-black/20">
+      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-6 text-blue-600 shadow shadow-black/20 md:row-start-5 lg:row-start-auto">
         <h2 className="md:text-md text-center text-xl font-bold lg:text-xl">
           AGUARDANDO CONFIRMAÇÃO
         </h2>
@@ -244,10 +244,10 @@ export default function HomePage() {
         <p className="my-auto self-center text-8xl font-semibold md:text-7xl lg:text-8xl">
           {data ? (
             data.requerimentosRealocados.filter(
-              (r) => r.status === "reagendamento-solicitado",
+              (r) => r.status === "realocado",
             ).length +
             data.reagendamentosRealocados.filter(
-              (r) => r.status === "reagendamento-solicitado",
+              (r) => r.status === "realocado",
             ).length
           ) : (
             <LoaderIcon className="animate-spin text-slate-700 duration-2000" />
