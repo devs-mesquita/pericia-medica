@@ -1,15 +1,15 @@
-version: '3.8'
+version: "3.8"
 services:
   mysql_container:
     image: mysql:8
     environment:
       - MYSQL_ROOT_PASSWORD=secret
     volumes:
-      - spm_db:/var/lib/mysql
+      - pericia_medica_db:/var/lib/mysql
     ports:
       - "3306:3306"
     restart: always
-    
+
   frontend:
     build: ./frontend
     ports:
@@ -24,7 +24,8 @@ services:
       - "3001:80"
     volumes:
       - ./backend/storage/:/var/www/html/storage/:delegated
+      #- /filestorages:/filestorages
     restart: always
 
 volumes:
-  spm_db:
+  pericia_medica_db:
