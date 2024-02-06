@@ -199,7 +199,12 @@ export default function RequerimentoConfirmarPage() {
               className="rounded border border-slate-300 p-2 outline-none focus:border-slate-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-600/80"
             >
               <option value="">Selecione...</option>
-              <option value="motivo-1">Motivo Um</option>
+              <option value="Consulta/médico agendado no mesmo dia/horário.">
+                Consulta/Médico agendado no mesmo dia/horário.
+              </option>
+              <option value="Trabalho em outro local neste mesmo horário.">
+                Trabalho em outro local neste mesmo horário.
+              </option>
               <option value="outro">Outro</option>
             </select>
             {form.justificativa_requerente === "outro" ? (
