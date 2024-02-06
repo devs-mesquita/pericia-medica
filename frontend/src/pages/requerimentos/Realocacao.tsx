@@ -291,10 +291,12 @@ export default function RequerimentoRealocacaoPage() {
             ) : (
               <>
                 {Object.keys(realocacoes).length > 0 ? (
-                  Object.values(realocacoes).map((realocacao) => (
+                  Object.values(realocacoes).map((realocacao, i, arr) => (
                     <div
                       key={nanoid()}
-                      className="col-span-5 mb-2 grid grid-cols-5 justify-items-center border-b border-slate-300 px-4 pb-2 pt-2"
+                      className={`col-span-5 ${
+                        arr.length < i + 2 ? "" : "mb-2 border-b pb-2"
+                      } grid grid-cols-5 justify-items-center border-slate-300 px-4 pt-2`}
                     >
                       <span className="justify-self-start">
                         {realocacao.direcionamento_name}
@@ -378,7 +380,7 @@ export default function RequerimentoRealocacaoPage() {
               </>
             )}
           </div>
-          <div className="px-4">
+          <div className="border-t-2 border-slate-300 px-4 pt-4">
             {realocarRequerimentosMutation.isPending ? (
               <button
                 type="button"
