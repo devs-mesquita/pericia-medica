@@ -6,6 +6,8 @@ export interface User {
   role: "Guest" | "User" | "Admin" | "Super-Admin";
 }
 
+export type AuthUser = { user: User } | null | undefined;
+
 export type AppNotification = {
   message: string;
   type: "error" | "success" | "warning" | "";

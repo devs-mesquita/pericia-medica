@@ -44,7 +44,7 @@ export default function requerimentoToPDF({
     margin: 15,
     columnStyles: {
       1: {
-        minCellWidth: 85,
+        minCellWidth: 75,
       },
     },
     startY: 70,

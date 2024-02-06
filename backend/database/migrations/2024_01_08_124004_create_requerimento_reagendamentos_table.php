@@ -19,9 +19,9 @@ return new class extends Migration
             $table->enum('status', ['em-analise', 'aguardando-confirmacao', 'recusado', 'realocado', 'reagendamento-solicitado', 'confirmado']);
             $table->dateTime('avaliado_at')->nullable();
             $table->dateTime('agenda_datetime')->nullable();
-            $table->string('observacao_avaliador')->nullable();
-            $table->string('justificativa_recusa')->nullable();
-            $table->string('justificativa_realocacao')->nullable();
+            $table->text('observacao_avaliador')->nullable();
+            $table->text('justificativa_recusa')->nullable();
+            $table->text('justificativa_realocacao')->nullable();
             $table->dateTime('realocado_at')->nullable();
             $table->boolean('envio_avaliacao')->nullable();
             $table->boolean('envio_realocacao')->nullable();

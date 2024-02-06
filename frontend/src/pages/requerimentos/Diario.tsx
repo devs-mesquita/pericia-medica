@@ -1,6 +1,6 @@
 import * as React from "react";
 import { DataTable, Paginated } from "@/components/DataTable/data-table";
-import type { Requerimento } from "@/types/interfaces";
+import type { AuthUser, Requerimento } from "@/types/interfaces";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAuthHeader } from "react-auth-kit";
+import { useAuthHeader, useAuthUser } from "react-auth-kit";
 import { useAtom } from "jotai";
 import { notificationAtom } from "@/store";
 import ConfirmationDialog, {
@@ -38,6 +38,9 @@ export default function RequerimentosDiarioPage() {
   document.title = "Agenda Diária";
 
   const authHeader = useAuthHeader();
+  const authUserFn = useAuthUser();
+  const authUser = authUserFn() as AuthUser;
+
   const setNotification = useAtom(notificationAtom)[1];
   const queryClient = useQueryClient();
 
@@ -236,7 +239,9 @@ export default function RequerimentosDiarioPage() {
               : "Ausente";
         }
 
-        return (
+        return ["Super-Admin", "Admin", "User"].includes(
+          authUser?.user.role || "",
+        ) ? (
           <div className="flex w-full items-center justify-start gap-4">
             <form
               onSubmit={(evt) => {
@@ -285,7 +290,7 @@ export default function RequerimentosDiarioPage() {
               </button>
             </form>
           </div>
-        );
+        ) : null;
       },
     },
     {

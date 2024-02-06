@@ -38,10 +38,6 @@ export default function HomePage() {
     },
   });
 
-  React.useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   return (
     <div className="grid place-items-stretch gap-4 p-2 md:grid-cols-2 md:p-0 lg:grid-cols-3">
       <div className="col-span-full flex flex-col items-center gap-2 rounded bg-slate-100 p-4 shadow shadow-black/20">

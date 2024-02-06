@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\RequerimentoController;
 use App\Http\Controllers\Api\RequerimentoDirecionamentoController;
 
+Route::post('migrate_data', [RequerimentoController::class, 'migrateData']);
+
 Route::controller(AuthController::class)->group(function () {
   Route::get('checkpassword', 'checkDefaultPassword');
   Route::post('login', 'login');
@@ -13,7 +15,6 @@ Route::controller(AuthController::class)->group(function () {
   Route::post('refresh', 'refresh');
 });
 
-Route::post('migrate_data', [RequerimentoController::class, 'migrateData']);
 Route::post('requerimentos', [RequerimentoController::class, 'store']);
 Route::post('requerimentos/{protocolo}/confirmacao', [RequerimentoController::class, 'confirmacao']);
 

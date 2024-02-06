@@ -14,11 +14,13 @@ import {
 import { SidebarLinkProps } from "./SidebarLink";
 import SidebarLinkList from "./SidebarLinkList";
 import { nanoid } from "nanoid";
-import { useSignOut } from "react-auth-kit";
+import { useSignOut, withAuthUser } from "react-auth-kit";
+import { AuthUser } from "@/types/interfaces";
 
 interface SideBarProps {
   className?: string;
   sidebarIsOpen: boolean;
+  authState: AuthUser;
 }
 
 interface SidebarLinkList {
@@ -26,9 +28,10 @@ interface SidebarLinkList {
   linkList: SidebarLinkProps[];
   listTitle: string;
   listLogo: JSX.Element;
+  disabled?: boolean;
 }
 
-export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
+function Sidebar({ className, sidebarIsOpen, authState }: SideBarProps) {
   const [openedDropdown, setOpenedDropdown] = React.useState<number>(-1);
 
   const signOut = useSignOut();
@@ -79,6 +82,7 @@ export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
       listTitle: "Requerimentos",
     },
     {
+      disabled: !["Admin", "Super-Admin"].includes(authState?.user.role || ""),
       listID: 3,
       linkList: [
         {
@@ -118,18 +122,20 @@ export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
         </h2>
       </div>
       <div className="flex-1 font-semibold">
-        {sidebarLinkList.map((link) => (
-          <SidebarLinkList
-            sidebarIsOpen={sidebarIsOpen}
-            key={nanoid()}
-            listID={link.listID}
-            linkList={link.linkList}
-            listLogo={link.listLogo}
-            listTitle={link.listTitle}
-            dropdownIsOpen={openedDropdown === link.listID}
-            setDropdownOpen={setOpenedDropdown}
-          />
-        ))}
+        {sidebarLinkList.map((link) =>
+          !link.disabled ? (
+            <SidebarLinkList
+              sidebarIsOpen={sidebarIsOpen}
+              key={nanoid()}
+              listID={link.listID}
+              linkList={link.linkList}
+              listLogo={link.listLogo}
+              listTitle={link.listTitle}
+              dropdownIsOpen={openedDropdown === link.listID}
+              setDropdownOpen={setOpenedDropdown}
+            />
+          ) : null,
+        )}
         <button
           className={`flex hover:bg-indigo-600/50 ${className || ""} ${
             sidebarIsOpen
@@ -169,3 +175,5 @@ export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
     </nav>
   );
 }
+
+export default withAuthUser(Sidebar as any);

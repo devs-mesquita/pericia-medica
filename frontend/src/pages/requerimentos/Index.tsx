@@ -1,6 +1,6 @@
 import * as React from "react";
 import { DataTable, Paginated } from "@/components/DataTable/data-table";
-import type { Requerimento } from "@/types/interfaces";
+import type { AuthUser, Requerimento } from "@/types/interfaces";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAuthHeader } from "react-auth-kit";
+import { useAuthHeader, useAuthUser } from "react-auth-kit";
 import { useAtom } from "jotai";
 import { notificationAtom } from "@/store";
 import ConfirmationDialog, {
@@ -39,6 +39,10 @@ export default function RequerimentosIndexPage() {
   document.title = "Requerimentos Em Análise";
 
   const authHeader = useAuthHeader();
+
+  const authUserFn = useAuthUser();
+  const authUser = authUserFn() as AuthUser;
+
   const setNotification = useAtom(notificationAtom)[1];
   const queryClient = useQueryClient();
 
@@ -215,7 +219,17 @@ export default function RequerimentosIndexPage() {
       cell: ({ row }) => {
         return (
           <div className="flex w-full justify-start gap-3">
-            {row.original.status === "em-analise" ||
+            <Link
+              className="rounded bg-cyan-500 p-2 text-white hover:bg-cyan-600"
+              to={`/requerimentos/${row.getValue("id")}`}
+              title="Visualizar requerimento."
+            >
+              <EyeIcon className="h-5 w-5" />
+            </Link>
+            {(["Super-Admin", "Admin", "User"].includes(
+              authUser?.user.role || "",
+            ) &&
+              row.original.status === "em-analise") ||
             (row.original.reagendamentos.length &&
               row.original.reagendamentos[
                 row.original.reagendamentos.length - 1
@@ -228,14 +242,10 @@ export default function RequerimentosIndexPage() {
                 <EditIcon className="h-5 w-5" />
               </Link>
             ) : null}
-            <Link
-              className="rounded bg-cyan-500 p-2 text-white hover:bg-cyan-600"
-              to={`/requerimentos/${row.getValue("id")}`}
-              title="Visualizar requerimento."
-            >
-              <EyeIcon className="h-5 w-5" />
-            </Link>
-            {row.original.status === "aguardando-confirmacao" ||
+            {(["Super-Admin", "Admin", "User"].includes(
+              authUser?.user.role || "",
+            ) &&
+              row.original.status === "aguardando-confirmacao") ||
             (row.original.reagendamentos.length &&
               row.original.reagendamentos[
                 row.original.reagendamentos.length - 1
