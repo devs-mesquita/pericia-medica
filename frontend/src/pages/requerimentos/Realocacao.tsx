@@ -372,9 +372,9 @@ export default function RequerimentoRealocacaoPage() {
                     </div>
                   ))
                 ) : (
-                  <span className="col-span-5 mt-4 justify-self-center">
-                    Nenhum registro foi encontrado, selecione a data a ser
-                    cancelada.
+                  <span className="col-span-5 my-4 justify-self-center">
+                    Nenhum registro foi encontrado, selecione a{" "}
+                    <span className="font-bold">Data a ser cancelada</span>.
                   </span>
                 )}
               </>
