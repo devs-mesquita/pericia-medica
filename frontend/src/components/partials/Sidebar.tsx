@@ -169,4 +169,4 @@ function Sidebar({ className, sidebarIsOpen, authState }: SideBarProps) {
   );
 }
 
-export default withAuthUser(Sidebar as any);
+export default withAuthUser<SideBarProps>(Sidebar);
