@@ -18,7 +18,7 @@ class AuthController extends Controller
           'password' => 'required|string',
       ]);
       $credentials = $request->only('email', 'password');
-      $token = Auth::attempt($credentials);
+      $token = Auth::guard('api')->attempt($credentials);
       
       if (!$token) {
           return response()->json([
@@ -26,7 +26,7 @@ class AuthController extends Controller
           ], 401);
       }
 
-      $user = User::find(Auth::id());
+      $user = User::find(Auth::guard('api')->id());
       return response()->json([
           'user' => $user,
           'usingDefaultPassword' => Hash::check(config('app.user_default_password', ''), $user->password),
@@ -40,7 +40,7 @@ class AuthController extends Controller
 
   public function logout()
   {
-      Auth::logout();
+      Auth::guard('api')->logout();
       return response()->json([
           'message' => 'ok',
       ]);
@@ -49,9 +49,9 @@ class AuthController extends Controller
   public function refresh()
   {
       return response()->json([
-          'user' => User::find(Auth::id()),
+          'user' => User::find(Auth::guard('api')->id()),
           'authorization' => [
-              'token' => Auth::refresh(),
+              'token' => Auth::guard('api')->refresh(),
               'type' => 'bearer',
               'expires_in' => 60 * 24 * 365.25
           ]
@@ -60,7 +60,7 @@ class AuthController extends Controller
 
   public function checkDefaultPassword(Request $request)
   {
-    $user = User::find(Auth::user()?->id);
+    $user = User::find(Auth::guard('api')->user()?->id);
       
     if ($user === null) {
       return response()->json([

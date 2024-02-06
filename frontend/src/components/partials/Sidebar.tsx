@@ -14,13 +14,12 @@ import {
 import { SidebarLinkProps } from "./SidebarLink";
 import SidebarLinkList from "./SidebarLinkList";
 import { nanoid } from "nanoid";
-import { useSignOut, withAuthUser } from "react-auth-kit";
+import { useSignOut, useAuthUser } from "react-auth-kit";
 import { AuthUser } from "@/types/interfaces";
 
 interface SideBarProps {
   className?: string;
   sidebarIsOpen: boolean;
-  authState: AuthUser;
 }
 
 interface SidebarLinkList {
@@ -31,10 +30,13 @@ interface SidebarLinkList {
   disabled?: boolean;
 }
 
-function Sidebar({ className, sidebarIsOpen, authState }: SideBarProps) {
+export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
   const [openedDropdown, setOpenedDropdown] = React.useState<number>(-1);
 
   const signOut = useSignOut();
+
+  const authUserFn = useAuthUser();
+  const authState = authUserFn() as AuthUser;
 
   const sidebarLinkList: SidebarLinkList[] = [
     {
@@ -168,5 +170,3 @@ function Sidebar({ className, sidebarIsOpen, authState }: SideBarProps) {
     </nav>
   );
 }
-
-export default withAuthUser<SideBarProps>(Sidebar);
