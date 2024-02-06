@@ -1,4 +1,3 @@
-import * as React from "react";
 import { useAuthHeader } from "react-auth-kit";
 import { useQuery } from "@tanstack/react-query";
 import { Reagendamento, Requerimento } from "@/types/interfaces";
@@ -239,9 +238,8 @@ export default function HomePage() {
         </h2>
         <p className="my-auto self-center text-8xl font-semibold md:text-7xl lg:text-8xl">
           {data ? (
-            data.requerimentosRealocados.filter(
-              (r) => r.status === "realocado",
-            ).length +
+            data.requerimentosRealocados.filter((r) => r.status === "realocado")
+              .length +
             data.reagendamentosRealocados.filter(
               (r) => r.status === "realocado",
             ).length
