@@ -153,13 +153,6 @@ function Sidebar({ className, sidebarIsOpen, authState }: SideBarProps) {
         </button>
       </div>
       <div className="mt-auto flex justify-center p-2">
-        {/* <img
-          alt="Banner da Prefeitura de Mesquita"
-          src="/banner192x64.png"
-          className={`rounded-md shadow shadow-black/30 ${
-            sidebarIsOpen ? "hidden md:block" : "hidden"
-          }`}
-        /> */}
         <picture>
           <source media="(max-width: 767px)" srcSet="/logo192.png" />
           <source

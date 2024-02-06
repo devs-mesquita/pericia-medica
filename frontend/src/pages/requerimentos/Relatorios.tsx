@@ -54,7 +54,6 @@ export default function RequerimentoRelatoriosPage() {
       return (await res.json()) as RelatorioMutationResponse;
     },
     onSuccess: (data) => {
-      console.log(data);
       requerimentoToPDF({
         requerimentos: data.requerimentos,
         from: new Date(data.from),
