@@ -3,12 +3,12 @@ import SidebarLink, { SidebarLinkProps } from "./SidebarLink";
 import { nanoid } from "nanoid";
 
 interface SidebarLinkListProps {
-  listID: number;
+  listID: string;
   listLogo: JSX.Element;
   listTitle: string;
   linkList: SidebarLinkProps[];
   dropdownIsOpen: boolean;
-  setDropdownOpen: React.Dispatch<React.SetStateAction<number>>;
+  setDropdownOpen: React.Dispatch<React.SetStateAction<string>>;
   sidebarIsOpen: boolean;
 }
 
@@ -32,6 +32,7 @@ export default function SidebarLinkList({
       } relative flex border-b border-black/20 hover:bg-indigo-600/50`}
     >
       <button
+        id={listID}
         className={`flex w-full items-center text-xs md:py-2 ${
           sidebarIsOpen
             ? "mx-auto flex-col px-2 md:mx-0 md:flex-row md:justify-center md:py-4"
@@ -39,7 +40,7 @@ export default function SidebarLinkList({
         }`}
         onClick={() => {
           setDropdownOpen((st) => {
-            return st === listID ? -1 : listID;
+            return st === listID ? "" : listID;
           });
         }}
       >

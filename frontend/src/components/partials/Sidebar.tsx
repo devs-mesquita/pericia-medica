@@ -23,7 +23,7 @@ interface SideBarProps {
 }
 
 interface SidebarLinkList {
-  listID: number;
+  listID: string;
   linkList: SidebarLinkProps[];
   listTitle: string;
   listLogo: JSX.Element;
@@ -31,7 +31,7 @@ interface SidebarLinkList {
 }
 
 export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
-  const [openedDropdown, setOpenedDropdown] = React.useState<number>(-1);
+  const [openedDropdown, setOpenedDropdown] = React.useState<string>("");
 
   const signOut = useSignOut();
 
@@ -40,7 +40,7 @@ export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
 
   const sidebarLinkList: SidebarLinkList[] = [
     {
-      listID: 1,
+      listID: "home",
       linkList: [
         {
           title: "Home",
@@ -53,7 +53,7 @@ export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
       listTitle: "Home",
     },
     {
-      listID: 2,
+      listID: "requerimentos",
       linkList: [
         {
           title: "Em Análise",
@@ -85,7 +85,7 @@ export default function Sidebar({ className, sidebarIsOpen }: SideBarProps) {
     },
     {
       disabled: !["Admin", "Super-Admin"].includes(authState?.user.role || ""),
-      listID: 3,
+      listID: "administração",
       linkList: [
         {
           title: "Direcionamentos",
