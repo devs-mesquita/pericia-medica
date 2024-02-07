@@ -54,12 +54,12 @@ export default function HomePage() {
             <LoaderIcon className="animate-spin text-slate-700 duration-2000" />
           )}
         </p>
-        <div className="flex w-full flex-col items-start  justify-center gap-2 md:flex-row lg:gap-6">
-          <div className="flex items-center gap-2 text-sm font-semibold text-slate-500">
+        <div className="grid w-full gap-2  md:grid-cols-2 md:gap-x-4 lg:grid-cols-4 lg:justify-items-center lg:gap-6">
+          <div className="flex items-center gap-2 text-sm font-semibold text-slate-500 md:justify-self-end">
             <span className="rounded-full bg-slate-500 p-2"></span>
             Em Análise
           </div>
-          <div className="flex items-center gap-2 text-sm font-semibold text-blue-500">
+          <div className="flex items-center gap-2 text-sm font-semibold text-blue-500 md:row-start-2 md:justify-self-end lg:row-start-auto">
             <span className="rounded-full bg-blue-500 p-2"></span>
             Aguardando Confirmação
           </div>
@@ -73,7 +73,7 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-6 shadow shadow-black/20">
+      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-4 shadow shadow-black/20">
         <h2 className="md:text-md text-center text-xl font-bold lg:text-xl">
           ATIVOS
         </h2>
@@ -104,7 +104,7 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-      <div className="row-start-6 flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-6 shadow shadow-black/20 md:col-start-2 md:row-start-3 lg:col-start-auto lg:row-start-4">
+      <div className="row-start-6 flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-4 shadow shadow-black/20 md:col-start-2 md:row-start-3 lg:col-start-auto lg:row-start-4">
         <h2 className="md:text-md text-center text-xl font-bold lg:text-xl">
           ARQUIVADOS
         </h2>
@@ -132,7 +132,7 @@ export default function HomePage() {
         </div>
       </div>
       {/* Singles */}
-      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-6 text-slate-700 shadow shadow-black/20">
+      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-4 text-slate-700 shadow shadow-black/20">
         <h2 className="md:text-md text-center text-xl font-bold lg:text-xl">
           EM ANÁLISE
         </h2>
@@ -145,7 +145,7 @@ export default function HomePage() {
           )}
         </p>
       </div>
-      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-6 text-blue-600 shadow shadow-black/20 md:row-start-5 lg:row-start-auto">
+      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-4 text-blue-600 shadow shadow-black/20 md:row-start-5 lg:row-start-auto">
         <h2 className="md:text-md text-center text-xl font-bold lg:text-xl">
           AGUARDANDO CONFIRMAÇÃO
         </h2>
@@ -162,7 +162,7 @@ export default function HomePage() {
           )}
         </p>
       </div>
-      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-6 text-green-600 shadow shadow-black/20">
+      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-4 text-green-600 shadow shadow-black/20">
         <h2 className="md:text-md text-center text-xl font-bold lg:text-xl">
           CONFIRMADOS
         </h2>
@@ -175,7 +175,7 @@ export default function HomePage() {
           )}
         </p>
       </div>
-      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-6 text-red-600 shadow shadow-black/20">
+      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-4 text-red-600 shadow shadow-black/20">
         <h2 className="md:text-md text-center text-xl font-bold lg:text-xl">
           RECUSADOS
         </h2>
@@ -215,7 +215,7 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-6 text-amber-600 shadow shadow-black/20">
+      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-4 text-amber-600 shadow shadow-black/20">
         <h2 className="md:text-md text-center text-xl font-bold lg:text-xl">
           REAGENDAMENTOS SOLICITADOS
         </h2>
@@ -232,7 +232,7 @@ export default function HomePage() {
           )}
         </p>
       </div>
-      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-6 text-roxo-lighter shadow shadow-black/20">
+      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-4 text-roxo-lighter shadow shadow-black/20">
         <h2 className="md:text-md text-center text-xl font-bold lg:text-xl">
           REALOCADOS
         </h2>
