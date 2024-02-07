@@ -93,7 +93,7 @@ export default function FileInput({
         } flex cursor-pointer items-center justify-center gap-2 rounded border-2 border-blue-500 bg-blue-500 px-2 py-1 text-white focus-within:border-black hover:border-blue-600 hover:bg-blue-600`}
       >
         <FileInputIcon className="h-5 w-5" />
-        <label htmlFor={id}>Adicionar Arquivo</label>
+        <label htmlFor={id} className="cursor-pointer">Adicionar Arquivo</label>
         <input
           disabled={disabled}
           onChange={handleChange}
