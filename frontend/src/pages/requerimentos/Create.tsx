@@ -472,7 +472,7 @@ export default function RequerimentoCreatePage() {
                   disabled={requerimentoMutation.isPending}
                   files={atestadoFiles}
                   setFiles={setAtestadoFiles}
-                  inputName="atestado_files"
+                  id="atestado_files"
                   fileTypes={[
                     "image/*",
                     ".png",
@@ -533,7 +533,7 @@ export default function RequerimentoCreatePage() {
                     disabled={requerimentoMutation.isPending}
                     files={afastamentoFiles}
                     setFiles={setAfastamentoFiles}
-                    inputName="afastamento_files"
+                    id="afastamento_files"
                     fileTypes={[
                       "image/*",
                       ".png",
@@ -555,6 +555,9 @@ export default function RequerimentoCreatePage() {
           <div className="flex justify-center rounded-b-md border border-t-0 border-black/20 bg-slate-200 p-2">
             <button
               disabled={requerimentoMutation.isPending}
+              title={
+                requerimentoMutation.isPending ? "Carregando..." : "Enviar"
+              }
               className="rounded-lg bg-green-600 px-3 py-1 text-lg font-medium text-white drop-shadow hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-green-400"
             >
               {requerimentoMutation.isPending ? (

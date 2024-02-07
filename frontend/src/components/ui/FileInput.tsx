@@ -5,7 +5,7 @@ import React from "react";
 type FileInputProps = {
   fileTypes?: string[];
   maxFileSizeKb?: number;
-  inputName: string;
+  id: string;
   files: File[];
   setFiles: React.Dispatch<React.SetStateAction<File[]>>;
   disabled?: boolean;
@@ -28,7 +28,7 @@ export default function FileInput({
     "application/msword",
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   ],
-  inputName,
+  id,
   disabled,
   className,
 }: FileInputProps) {
@@ -86,25 +86,21 @@ export default function FileInput({
   };
 
   return (
-    <div className="flex flex-col justify-start">
-      <div className="flex">
-        <label
-          htmlFor={inputName}
-          className={`${
-            className || ""
-          } flex items-center justify-center gap-2 rounded bg-blue-500 px-2 py-1 text-white hover:bg-blue-600`}
-          role="button"
-        >
-          <FileInputIcon className="h-5 w-5" />
-          Adicionar Arquivo
-        </label>
+    <div className="flex flex-col items-start justify-start">
+      <div
+        className={`${
+          className || ""
+        } flex cursor-pointer items-center justify-center gap-2 rounded border-2 border-blue-500 bg-blue-500 px-2 py-1 text-white focus-within:border-black hover:border-blue-600 hover:bg-blue-600`}
+      >
+        <FileInputIcon className="h-5 w-5" />
+        <label htmlFor={id}>Adicionar Arquivo</label>
         <input
           disabled={disabled}
           onChange={handleChange}
           type="file"
           name="atestado[]"
-          id={inputName}
-          className="invisible absolute"
+          id={id}
+          className="absolute left-0 h-[1px] w-[1px]"
           accept={fileTypes.join(",")}
         />
       </div>
@@ -133,9 +129,16 @@ export default function FileInput({
                 key={nanoid()}
                 className="flex items-center gap-2 rounded border border-slate-400 p-1 pl-2 text-sm"
               >
-                {file.name.slice(0, 10)}...
-                {file.name.split(".")[file.name.split(".").length - 1]}{" "}
+                {file.name.length >= 12 ? (
+                  <>
+                    {file.name.slice(0, 10)}...
+                    {file.name.split(".")[file.name.split(".").length - 1]}{" "}
+                  </>
+                ) : (
+                  file.name
+                )}
                 <button
+                  title="Remover arquivo."
                   onClick={() => removeFileAt(i)}
                   type="button"
                   className="rounded p-1 hover:bg-slate-300"
@@ -160,6 +163,7 @@ export default function FileInput({
                   ]
                 }{" "}
                 <button
+                  title="Remover arquivo."
                   onClick={() => removeFailedFileAt(i)}
                   type="button"
                   className="rounded p-1 hover:bg-red-200"
