@@ -89,6 +89,14 @@ export default function RequerimentoShowPage() {
               Protocolo:{" "}
               <span className="font-normal">{requerimento?.protocolo}</span>
             </p>
+            {requerimento?.created_at && (
+              <p>
+                Data/Hora de Criação:{" "}
+                <span className="font-normal">
+                  {format(requerimento.created_at, "dd/LL/yyyy 'às' HH:mm")}
+                </span>
+              </p>
+            )}
             {requerimento?.last_movement_at && (
               <p>
                 Última Movimentação:{" "}
