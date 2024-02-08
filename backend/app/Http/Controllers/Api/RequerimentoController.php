@@ -499,10 +499,10 @@ class RequerimentoController extends Controller
         case "diario":
           $query = $query->where(function ($qry) {
             $qry->whereBetween("agenda_datetime", [Carbon::now()->startOfDay(), Carbon::now()->endOfDay()])
-              ->whereIn("status", ["confirmado"])
+              ->whereIn("status", ["confirmado", "aguardando-confirmacao"])
               ->orWhereRelation("reagendamentos", function($q) {
                 $q->whereBetween("agenda_datetime", [Carbon::now()->startOfDay(), Carbon::now()->endOfDay()])
-                ->whereIn("status", ["confirmado"]);
+                ->whereIn("status", ["confirmado", "aguardando-confirmacao"]);
               });
           });
           break;

@@ -118,6 +118,7 @@ export default function RequerimentosDiarioPage() {
       },
     },
     {
+      size: 213,
       accessorKey: "status",
       header: "Status",
       enableColumnFilter: true,
