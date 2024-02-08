@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\RequerimentoController;
 use App\Http\Controllers\Api\RequerimentoDirecionamentoController;
 
-Route::post('migrate_data', [RequerimentoController::class, 'migrateData']);
+#Route::('migrate_data', [RequerimentoController::class, 'migrateData']);
 
 Route::controller(AuthController::class)->group(function () {
   Route::get('checkpassword', 'checkDefaultPassword');
