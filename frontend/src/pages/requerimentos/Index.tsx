@@ -92,9 +92,9 @@ export default function RequerimentosIndexPage() {
       enableColumnFilter: true,
       enableSorting: true,
       cell: ({ row }) => {
-        return row.original.nome.length <= 10
+        return <span title={row.original.nome}>{row.original.nome.length <= 10
           ? row.original.nome
-          : `${row.original.nome.slice(0, 10)}...`;
+          : `${row.original.nome.slice(0, 10)}...`}</span>;
       },
     },
     {
