@@ -1,31 +1,33 @@
 version: "3.8"
 services:
-  mysql_container:
-    image: mysql:8
-    environment:
-      - MYSQL_ROOT_PASSWORD=secret
-    volumes:
-      - pericia_medica_db:/var/lib/mysql
-    ports:
-      - "3306:3306"
-    restart: always
+  #  mysql_container:
+  #    image: mysql:8
+  #    environment:
+  #      - MYSQL_ROOT_PASSWORD=secret
+  #    volumes:
+  #      - pericia_medica_db:/var/lib/mysql
+  #    ports:
+  #      - "3306:3306"
+  #    restart: always
 
-  frontend:
+  frontend_pericia_medica:
     build: ./frontend
     ports:
-      - "3000:80"
+      - "3023:80"
     restart: always
+    network_mode: bridge
 
-  backend:
-    depends_on:
-      - mysql_container
+  backend_pericia_medica:
+    #    depends_on:
+    #      - mysql_container
     build: ./backend
     ports:
-      - "3001:80"
+      - "3024:80"
     volumes:
       - ./backend/storage/:/var/www/html/storage/:delegated
       #- /filestorages:/filestorages
     restart: always
+    network_mode: bridge
 
-volumes:
-  pericia_medica_db:
+# volumes:
+  #  pericia_medica_db:
