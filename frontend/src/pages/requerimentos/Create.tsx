@@ -1,5 +1,4 @@
 import React from "react";
-import InputMask from "react-input-mask";
 import Footer from "@/components/partials/Footer";
 import FileInput from "@/components/ui/FileInput";
 import { useMutation } from "@tanstack/react-query";
@@ -9,6 +8,7 @@ import { useAtom } from "jotai";
 import TopNotification from "@/components/ui/TopNotification";
 import { useNavigate } from "react-router-dom";
 import { LoaderIcon } from "lucide-react";
+import { IMaskInput } from "react-imask";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -122,6 +122,16 @@ export default function RequerimentoCreatePage() {
 
   const handleSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
+    if (form.matricula.length < 7) {
+      location.hash = "";
+      setNotification({
+        type: "warning",
+        message: "A matrícula deve conter 6 dígitos. Ex.: 001.234",
+      });
+      location.hash = "notifications";
+      return;
+    }
+
     if (atestadoFiles.length === 0) {
       location.hash = "";
       setNotification({
@@ -206,17 +216,20 @@ export default function RequerimentoCreatePage() {
                 />
               </div>
               <div className="flex flex-1 flex-col gap-1">
-                <label htmlFor="">Matrícula (6 dígitos):</label>
-                <InputMask
+                <label htmlFor="matricula">Matrícula (6 dígitos):</label>
+                <IMaskInput
+                  id="matricula"
                   disabled={requerimentoMutation.isPending}
                   value={form.matricula}
-                  onChange={handleChange}
-                  maskChar=""
+                  onAccept={(value) => {
+                    setForm((st) => ({ ...st, matricula: value }));
+                  }}
+                  mask="000.000"
                   name="matricula"
                   className="rounded border border-slate-300 p-2 outline-none focus:border-slate-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-600/80"
-                  mask="999.999"
-                  type="text"
                   placeholder="000.000"
+                  minLength={7}
+                  maxLength={7}
                   required
                 />
               </div>
