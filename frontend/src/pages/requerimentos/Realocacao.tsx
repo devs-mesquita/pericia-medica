@@ -192,7 +192,7 @@ export default function RequerimentoRealocacaoPage() {
   }, [data]);
 
   return (
-    <div className="flex flex-col rounded-md bg-slate-100 p-2 pt-1 shadow shadow-black/20">
+    <div className="flex flex-col rounded-md bg-slate-50 p-2 pt-1 shadow shadow-black/30">
       <h1 className="mb-2 flex items-center justify-center border-b-2 border-slate-300 py-3">
         <FileInputIcon className="h-5 w-5" />
         <span className="ml-2 font-semibold">Realocação de Requerimentos</span>

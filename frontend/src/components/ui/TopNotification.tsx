@@ -10,12 +10,12 @@ export default function TopNotification() {
         <div
           className={`grid grid-cols-[1fr_2fr_1fr] px-4 py-1 font-bold ${
             notification.type === "error"
-              ? "bg-red-400 text-red-900"
+              ? "bg-red-300 text-red-900"
               : notification.type === "success"
-                ? "bg-green-400 text-green-900"
+                ? "bg-green-300 text-green-900"
                 : notification.type === "warning"
-                  ? "bg-yellow-500 text-yellow-900"
-                  : "bg-blue-400 text-blue-900"
+                  ? "bg-yellow-300 text-yellow-900"
+                  : "bg-blue-300 text-blue-900"
           }`}
         >
           <span className="col-start-2 text-center">

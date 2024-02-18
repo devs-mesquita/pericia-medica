@@ -44,7 +44,7 @@ const defaultMessages: Record<string, AppNotification> = {
 
 export default function LoginPage() {
   document.title = "Login";
-  
+
   const navigate = useNavigate();
   const signIn = useSignIn();
   const isAuthenticated = useIsAuthenticated();
@@ -126,14 +126,14 @@ export default function LoginPage() {
   ) : (
     <form
       onSubmit={handleSubmit}
-      className="mx-auto mt-8 w-[300px] rounded-lg shadow shadow-black/20 md:w-[500px]"
+      className="mx-auto mt-8 w-[300px] rounded-lg shadow shadow-black/30 md:w-[500px]"
     >
-      <div className="border-b border-black/5">
-        <h2 className="rounded-t-xl bg-slate-600/10 p-2 text-center text-xl tracking-wide shadow shadow-black/20">
+      <div className="border-b border-slate-300">
+        <h2 className="rounded-t-xl bg-slate-50 p-2 text-center text-xl tracking-wide">
           SEMAD
         </h2>
       </div>
-      <div className="p-4">
+      <div className="bg-slate-50 p-4">
         <div className="mb-4 flex flex-col">
           <label htmlFor="email">Email:</label>
           <input
@@ -161,10 +161,10 @@ export default function LoginPage() {
           />
         </div>
       </div>
-      <div className="shadow-black20 flex justify-center rounded-b-xl border-t border-black/10 p-2 shadow">
+      <div className="shadow-black20 flex justify-center rounded-b-xl border-t border-black/10 bg-slate-50 p-2 shadow">
         <button
           disabled={loginMutation.isPending}
-          className="rounded-3xl border border-slate-600/20 bg-slate-400/20 px-4 py-1 text-center shadow shadow-black/30 outline-none hover:bg-slate-500/30 focus:border-indigo-600 disabled:cursor-not-allowed disabled:hover:bg-red-100/50"
+          className="rounded-3xl border border-slate-600/20 bg-slate-100 px-4 py-1 text-center shadow shadow-black/20 outline-none hover:bg-slate-200 focus:border-indigo-600 disabled:cursor-not-allowed"
         >
           {loginMutation.isPending ? (
             <LoaderIcon className="animate-spin text-slate-700 duration-2000" />

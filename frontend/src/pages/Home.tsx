@@ -39,11 +39,11 @@ export default function HomePage() {
 
   return (
     <div className="grid place-items-stretch gap-4 p-2 md:grid-cols-2 md:p-0 lg:grid-cols-3">
-      <div className="col-span-full flex flex-col items-center gap-2 rounded bg-slate-100 p-4 shadow shadow-black/20">
+      <div className="col-span-full flex flex-col items-center gap-2 rounded bg-slate-50 p-4 shadow shadow-black/20">
         <h1 className="text-3xl font-bold">REQUERIMENTOS</h1>
       </div>
       {/* Totals */}
-      <div className="col-span-full flex flex-col items-center gap-2 rounded bg-slate-100 p-4 shadow shadow-black/20">
+      <div className="col-span-full flex flex-col items-center gap-2 rounded bg-slate-50 p-4 shadow shadow-black/20">
         <h2 className="md:text-md text-center text-xl font-bold lg:text-xl">
           TOTAL
         </h2>
@@ -73,7 +73,7 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-4 shadow shadow-black/20">
+      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-50 p-4 shadow shadow-black/20">
         <h2 className="md:text-md text-center text-xl font-bold lg:text-xl">
           ATIVOS
         </h2>
@@ -104,7 +104,7 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-      <div className="row-start-6 flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-4 shadow shadow-black/20 md:col-start-2 md:row-start-3 lg:col-start-auto lg:row-start-4">
+      <div className="row-start-6 flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-50 p-4 shadow shadow-black/20 md:col-start-2 md:row-start-3 lg:col-start-auto lg:row-start-4">
         <h2 className="md:text-md text-center text-xl font-bold lg:text-xl">
           ARQUIVADOS
         </h2>
@@ -132,7 +132,7 @@ export default function HomePage() {
         </div>
       </div>
       {/* Singles */}
-      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-4 text-slate-700 shadow shadow-black/20">
+      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-50 p-4 text-slate-700 shadow shadow-black/20">
         <h2 className="md:text-md text-center text-xl font-bold lg:text-xl">
           EM ANÁLISE
         </h2>
@@ -145,7 +145,7 @@ export default function HomePage() {
           )}
         </p>
       </div>
-      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-4 text-blue-600 shadow shadow-black/20 md:row-start-5 lg:row-start-auto">
+      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-50 p-4 text-blue-600 shadow shadow-black/20 md:row-start-5 lg:row-start-auto">
         <h2 className="md:text-md text-center text-xl font-bold lg:text-xl">
           AGUARDANDO CONFIRMAÇÃO
         </h2>
@@ -162,7 +162,7 @@ export default function HomePage() {
           )}
         </p>
       </div>
-      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-4 text-green-600 shadow shadow-black/20">
+      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-50 p-4 text-green-600 shadow shadow-black/20">
         <h2 className="md:text-md text-center text-xl font-bold lg:text-xl">
           CONFIRMADOS
         </h2>
@@ -175,7 +175,7 @@ export default function HomePage() {
           )}
         </p>
       </div>
-      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-4 text-red-600 shadow shadow-black/20">
+      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-50 p-4 text-red-600 shadow shadow-black/20">
         <h2 className="md:text-md text-center text-xl font-bold lg:text-xl">
           RECUSADOS
         </h2>
@@ -189,10 +189,10 @@ export default function HomePage() {
         </p>
       </div>
       {/* Reagendamentos */}
-      <div className="col-span-full flex flex-col items-center gap-2 rounded bg-slate-100 p-4 shadow shadow-black/20">
+      <div className="col-span-full flex flex-col items-center gap-2 rounded bg-slate-50 p-4 shadow shadow-black/20">
         <h1 className="text-3xl font-bold">REAGENDAMENTOS / REALOCAÇÕES</h1>
       </div>
-      <div className="col-span-full flex flex-col items-center gap-2 rounded bg-slate-100 p-4 shadow shadow-black/20">
+      <div className="col-span-full flex flex-col items-center gap-2 rounded bg-slate-50 p-4 shadow shadow-black/20">
         <h2 className="md:text-md text-center text-xl font-bold lg:text-xl">
           TOTAL
         </h2>
@@ -205,8 +205,8 @@ export default function HomePage() {
           )}
         </p>
         <div className="flex w-full flex-col items-start  justify-center gap-2 md:flex-row lg:gap-6">
-          <div className="flex items-center gap-2 text-sm font-semibold text-amber-500">
-            <span className="rounded-full bg-amber-500 p-2"></span>
+          <div className="flex items-center gap-2 text-sm font-semibold text-amber-600">
+            <span className="rounded-full bg-amber-600 p-2"></span>
             Reagendamentos Solicitados
           </div>
           <div className="flex items-center gap-2 text-sm font-semibold text-roxo-lighter">
@@ -215,7 +215,7 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-4 text-amber-600 shadow shadow-black/20">
+      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-50 p-4 text-amber-600 shadow shadow-black/20">
         <h2 className="md:text-md text-center text-xl font-bold lg:text-xl">
           REAGENDAMENTOS SOLICITADOS
         </h2>
@@ -232,7 +232,7 @@ export default function HomePage() {
           )}
         </p>
       </div>
-      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-100 p-4 text-roxo-lighter shadow shadow-black/20">
+      <div className="flex aspect-[3.5/2] flex-col items-center gap-2 rounded bg-slate-50 p-4 text-roxo-lighter shadow shadow-black/20">
         <h2 className="md:text-md text-center text-xl font-bold lg:text-xl">
           REALOCADOS
         </h2>

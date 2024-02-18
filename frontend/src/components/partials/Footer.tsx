@@ -2,7 +2,7 @@ export default function Footer() {
   return (
     <footer
       id="footer"
-      className="z-20 grid grid-cols-2 items-center gap-2 bg-slate-100 p-1 text-[9px] font-bold text-slate-600 shadow-[1px_-1px_2px_0px_rgb(0,0,0,0.75)] shadow-black/30 md:flex"
+      className="z-20 grid grid-cols-2 items-center gap-2 bg-slate-50 p-1 text-[9px] font-bold text-slate-600 shadow-[1px_-1px_2px_0px_rgb(0,0,0,0.75)] shadow-black/30 md:flex"
     >
       <div className="flex-1 text-center">
         © 2024, EQUIPE DE DESENVOLVIMENTO DE SISTEMAS

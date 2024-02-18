@@ -126,13 +126,13 @@ export default function ChangePasswordPage() {
   };
 
   return (
-    <div className="mx-auto mb-auto mt-16 rounded-lg shadow">
-      <div className="rounded-t-lg border border-black/10 bg-slate-100 p-2 text-center">
+    <div className="mx-auto mb-auto mt-16 rounded-lg shadow shadow-black/30">
+      <div className="rounded-t-lg border border-slate-300 bg-slate-50 p-2 text-center">
         <h1 className="font-semibold">Alterar Senha</h1>
       </div>
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-2 rounded-b-lg border border-t-0 border-black/10 bg-slate-100"
+        className="flex flex-col gap-2 rounded-b-lg border border-t-0 border-slate-300 bg-slate-50"
       >
         <div className="flex flex-col gap-4 px-4 pb-2 pt-4">
           <div className="group flex flex-1 flex-col gap-1">
@@ -145,7 +145,7 @@ export default function ChangePasswordPage() {
                 onChange={handleChange}
                 disabled={changePasswordMutation.isPending}
                 name="currentPassword"
-                className="rounded px-2 outline-none disabled:cursor-not-allowed disabled:bg-slate-300"
+                className="rounded px-2 outline-none disabled:cursor-not-allowed disabled:bg-slate-50"
                 placeholder="••••••"
                 type={formUI.showCurrentPassword ? "text" : "password"}
               />

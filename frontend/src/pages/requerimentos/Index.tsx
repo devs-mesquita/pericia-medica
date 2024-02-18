@@ -92,9 +92,13 @@ export default function RequerimentosIndexPage() {
       enableColumnFilter: true,
       enableSorting: true,
       cell: ({ row }) => {
-        return <span title={row.original.nome}>{row.original.nome.length <= 10
-          ? row.original.nome
-          : `${row.original.nome.slice(0, 10)}...`}</span>;
+        return (
+          <span title={row.original.nome}>
+            {row.original.nome.length <= 10
+              ? row.original.nome
+              : `${row.original.nome.slice(0, 10)}...`}
+          </span>
+        );
       },
     },
     {
@@ -424,7 +428,7 @@ export default function RequerimentosIndexPage() {
   }, [columnFilters, sorting, pagination]);
 
   return (
-    <div className="flex flex-1 flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20">
+    <div className="flex flex-1 flex-col rounded-md bg-slate-50 p-3 shadow shadow-black/20">
       <DataTable
         isFetching={isFetching}
         columnFilters={columnFilters}

@@ -10,7 +10,7 @@ export default function RegularLayout() {
     <div className="flex min-h-[100vh] flex-col font-roboto">
       <RegularNavbar />
       <TopNotification />
-      <main id="content" className="flex flex-1 flex-col bg-slate-100">
+      <main id="content" className="flex flex-1 flex-col bg-white">
         <Outlet />
       </main>
       <Footer />

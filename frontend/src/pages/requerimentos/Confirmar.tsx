@@ -123,12 +123,12 @@ export default function RequerimentoConfirmarPage() {
       onSubmit={handleSubmit}
       className="mt-6 flex max-w-[500px] flex-col self-center rounded-lg shadow-sm shadow-black/30 md:w-[700px] lg:w-[975px] xl:w-[1152px]"
     >
-      <div className="rounded-t-md border border-b-0 border-black/20 bg-slate-200 p-2">
+      <div className="rounded-t-md border border-b-0 border-black/20 bg-slate-50 p-2">
         <h1 className="text-center text-xl font-normal">
           Confirmação de Requerimento
         </h1>
       </div>
-      <div className="flex flex-col gap-4 border border-black/20 bg-slate-100 p-4 md:gap-5">
+      <div className="flex flex-col gap-4 border border-black/20 bg-slate-50 p-4 md:gap-5">
         <div className="flex flex-1 flex-col gap-1">
           <label htmlFor="">Protocolo do Requerimento:</label>
           <input
@@ -161,7 +161,7 @@ export default function RequerimentoConfirmarPage() {
               />
               <label
                 htmlFor="confirmar"
-                className="rounded-l border border-green-500 border-r-slate-600 p-2 font-bold text-green-500 peer-checked:bg-green-500 peer-checked:text-white"
+                className="rounded-l border border-green-700 border-r-slate-600 p-2 font-bold text-green-700 peer-checked:bg-green-700 peer-checked:text-white"
               >
                 Confirmar Presença
               </label>
@@ -180,7 +180,7 @@ export default function RequerimentoConfirmarPage() {
               />
               <label
                 htmlFor="solicitar-reagendamento"
-                className="rounded-r border border-l-0 border-red-500 p-2 font-bold text-red-500 peer-checked:bg-red-500 peer-checked:text-white"
+                className="rounded-r border border-l-0 border-red-600 p-2 font-bold text-red-600 peer-checked:bg-red-600 peer-checked:text-white"
               >
                 Solicitar Reagendamento
               </label>
@@ -225,10 +225,10 @@ export default function RequerimentoConfirmarPage() {
           </div>
         )}
       </div>
-      <div className="flex justify-center rounded-b-md border border-t-0 border-black/20 bg-slate-200 p-2">
+      <div className="flex justify-center rounded-b-md border border-t-0 border-black/20 bg-slate-50 p-2">
         <button
           disabled={confirmarRequerimentoMutation.isPending}
-          className="rounded-lg bg-green-600 px-3 py-1 text-lg font-medium text-white drop-shadow hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-green-400"
+          className="rounded-lg bg-green-700 px-3 py-1 text-lg font-medium text-white drop-shadow hover:bg-green-800 disabled:cursor-not-allowed disabled:bg-green-400"
         >
           {confirmarRequerimentoMutation.isPending ? (
             <LoaderIcon className="animate-spin text-green-100 duration-2000" />

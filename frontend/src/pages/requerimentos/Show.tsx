@@ -50,7 +50,7 @@ export default function RequerimentoShowPage() {
   return (
     <div className="flex flex-1 flex-col gap-4">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div className="flex flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20">
+        <div className="flex flex-col rounded-md bg-slate-50 p-3 shadow shadow-black/30">
           <div className="mb-2 flex w-full items-center justify-between gap-1 border-b-2 border-slate-300 px-2 pb-2 text-lg font-semibold">
             <h1 className="flex flex-1 flex-col items-start md:flex-row md:items-center md:gap-2">
               <p className="flex items-center">
@@ -146,7 +146,7 @@ export default function RequerimentoShowPage() {
             </p>
           </div>
         </div>
-        <div className="flex flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20 md:col-start-1">
+        <div className="flex flex-col rounded-md bg-slate-50 p-3 shadow shadow-black/30 md:col-start-1">
           <div className="flex flex-col gap-4 text-base font-semibold">
             <div className="flex flex-col">
               <p>
@@ -263,7 +263,7 @@ export default function RequerimentoShowPage() {
             </div>
           </div>
         </div>
-        <div className="flex flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20 md:col-start-2 md:row-span-2 md:row-start-1">
+        <div className="flex flex-col rounded-md bg-slate-50 p-3 shadow shadow-black/30 md:col-start-2 md:row-span-2 md:row-start-1">
           <div className="mb-2 flex items-center justify-between gap-1 border-b-2 border-slate-300 px-2 pb-2 text-lg font-semibold">
             <h1 className="flex items-center">
               <PaperclipIcon className="h-5 w-5" />
@@ -298,7 +298,7 @@ export default function RequerimentoShowPage() {
                       href={`${API_URL}/storage/atestados/${attachment.filename}`}
                       target="_blank"
                       key={nanoid()}
-                      className="relative flex h-[100px] w-[100px] items-center justify-center rounded border border-slate-400 bg-slate-100 p-1 text-blue-500"
+                      className="relative flex h-[100px] w-[100px] items-center justify-center rounded border border-slate-400 bg-slate-50 p-1 text-blue-500"
                     >
                       <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded text-slate-50/60 opacity-0 hover:bg-black/25 hover:opacity-100">
                         <ViewIcon className="h-[32px] w-[32px]" />
@@ -337,7 +337,7 @@ export default function RequerimentoShowPage() {
                         href={`${API_URL}/storage/afastamentos/${attachment.filename}`}
                         target="_blank"
                         key={nanoid()}
-                        className="relative flex h-[100px] w-[100px] items-center justify-center rounded border border-slate-400 bg-slate-100 p-1 text-blue-500"
+                        className="relative flex h-[100px] w-[100px] items-center justify-center rounded border border-slate-400 bg-slate-50 p-1 text-blue-500"
                       >
                         <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded text-slate-50/60 opacity-0 hover:bg-black/25 hover:opacity-100">
                           <ViewIcon className="h-[32px] w-[32px]" />
@@ -368,7 +368,7 @@ export default function RequerimentoShowPage() {
               return (
                 <div
                   key={nanoid()}
-                  className="col-span-full flex flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20"
+                  className="col-span-full flex flex-col rounded-md bg-slate-50 p-3 shadow shadow-black/30"
                 >
                   <div className="mb-2 flex items-center justify-between gap-1 border-b-2 border-slate-300 px-2 pb-2 text-lg font-semibold">
                     <h1 className="flex flex-1 flex-col items-start md:flex-row md:items-center md:gap-2">

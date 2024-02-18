@@ -90,10 +90,10 @@ export default function FileInput({
       <div
         className={`${
           className || ""
-        } flex cursor-pointer items-center justify-center gap-2 rounded border-2 border-blue-500 bg-blue-500 px-2 py-1 text-white focus-within:border-black hover:border-blue-600 hover:bg-blue-600`}
+        } flex cursor-pointer items-center justify-center gap-2 rounded border-2 border-blue-600 bg-blue-600 px-2 py-1 text-white focus-within:border-black hover:border-blue-700 hover:bg-blue-700`}
       >
         <FileInputIcon className="h-5 w-5" />
-        <label htmlFor={id} className="cursor-pointer">
+        <label htmlFor={id} className="cursor-pointer font-semibold">
           Adicionar Arquivo
         </label>
         <input
@@ -111,7 +111,7 @@ export default function FileInput({
           {[...errorMessages.values()].map((msg) => (
             <span
               key={nanoid()}
-              className="my-2 rounded bg-red-200 p-2 text-sm text-red-500"
+              className="my-2 rounded bg-red-200 p-2 text-sm text-red-800"
             >
               {ERROR_MESSAGES[msg]}
             </span>
@@ -119,7 +119,7 @@ export default function FileInput({
         </>
       )}
       {failedFilenames.length > 0 && (
-        <p className="text-xs text-red-500">
+        <p className="text-xs text-red-700">
           * Atenção: Os arquivos destacados em vermelho não serão enviados.
         </p>
       )}
@@ -156,7 +156,7 @@ export default function FileInput({
             {failedFilenames.map((failedFilename, i) => (
               <span
                 key={nanoid()}
-                className="flex items-center gap-2 rounded border border-red-600 p-1 pl-2 text-sm text-red-500"
+                className="flex items-center gap-2 rounded border border-red-600 p-1 pl-2 text-sm text-red-700"
               >
                 {failedFilename.slice(0, 10)}...
                 {

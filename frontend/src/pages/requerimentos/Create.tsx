@@ -164,10 +164,11 @@ export default function RequerimentoCreatePage() {
     <div className="flex min-h-[100vh] flex-col">
       <header
         id="navbar"
-        className="relative z-20 flex items-center justify-between bg-slate-100 p-2 text-xs shadow-[1px_2px_2px_0px_rgb(0,0,0,0.75)] shadow-black/20 md:text-sm"
+        className="relative z-20 flex items-center justify-between bg-slate-50 p-2 text-xs shadow-[1px_2px_2px_0px_rgb(0,0,0,0.75)] shadow-black/20 md:text-sm"
       >
         <div className="flex w-1/2 justify-center md:w-1/3">
           <img
+            width={192}
             src="/banner192x64.png"
             alt="Banner da Prefeitura de Mesquita"
             className="w-[180px] rounded-lg shadow shadow-black/20 md:w-[192px] md:rounded-lg"
@@ -177,7 +178,7 @@ export default function RequerimentoCreatePage() {
           <a
             href="/manual-de-utilizacao.pdf"
             target="_blank"
-            className="rounded-3xl bg-blue-500 px-4 py-2 text-sm font-bold text-white shadow-md shadow-black/20 hover:bg-blue-600 sm:text-base"
+            className="rounded-3xl bg-blue-600 px-4 py-2 text-sm font-bold text-white shadow-md shadow-black/20 hover:bg-blue-700 sm:text-base"
           >
             Manual de Utilização
           </a>
@@ -189,18 +190,18 @@ export default function RequerimentoCreatePage() {
       </div>
       <main
         id="content"
-        className="relative flex flex-1 items-start justify-center bg-slate-100 px-8 py-6 md:px-0"
+        className="relative flex flex-1 items-start justify-center bg-white px-8 py-6 md:px-0"
       >
         <form
           onSubmit={handleSubmit}
           className="flex max-w-[750px] flex-col rounded-lg shadow-sm shadow-black/30 md:w-[700px] lg:w-[975px] xl:w-[1152px]"
         >
-          <div className="rounded-t-md border border-b-0 border-black/20 bg-slate-200 p-2">
+          <div className="rounded-t-md border border-b-0 border-black/20 bg-slate-50 p-2">
             <h1 className="text-center text-xl font-thin text-black">
               Requerimento de Perícia Médica
             </h1>
           </div>
-          <div className="flex flex-col gap-4 border border-black/20 bg-slate-100 p-4 md:gap-5">
+          <div className="flex flex-col gap-4 border border-black/20 bg-slate-50 p-4 md:gap-5">
             <div className="flex flex-col gap-4 md:flex-row">
               <div className="flex flex-1 flex-col gap-1">
                 <label htmlFor="">Nome Completo:</label>
@@ -373,76 +374,85 @@ export default function RequerimentoCreatePage() {
                 </select>
               </div>
               <div className="flex flex-1 flex-col gap-1">
-                <label htmlFor="">Horário de Trabalho no Município:</label>
-                <div className="flex flex-col gap-2 md:flex-row">
-                  <select
-                    disabled={requerimentoMutation.isPending}
-                    name="inicio_expediente"
-                    defaultValue={form.inicio_expediente}
-                    required
-                    className="w-full rounded border border-slate-300 p-2 text-sm outline-none focus:border-slate-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-600/80"
-                    onChange={handleChange}
-                  >
-                    <option value="">Início do Expediente</option>
-                    <option value="00:00">00:00</option>
-                    <option value="01:00">01:00</option>
-                    <option value="02:00">02:00</option>
-                    <option value="03:00">03:00</option>
-                    <option value="04:00">04:00</option>
-                    <option value="05:00">05:00</option>
-                    <option value="06:00">06:00</option>
-                    <option value="07:00">07:00</option>
-                    <option value="08:00">08:00</option>
-                    <option value="09:00">09:00</option>
-                    <option value="10:00">10:00</option>
-                    <option value="11:00">11:00</option>
-                    <option value="12:00">12:00</option>
-                    <option value="13:00">13:00</option>
-                    <option value="14:00">14:00</option>
-                    <option value="15:00">15:00</option>
-                    <option value="16:00">16:00</option>
-                    <option value="17:00">17:00</option>
-                    <option value="18:00">18:00</option>
-                    <option value="19:00">19:00</option>
-                    <option value="20:00">20:00</option>
-                    <option value="21:00">21:00</option>
-                    <option value="22:00">22:00</option>
-                    <option value="23:00">23:00</option>
-                  </select>
-                  <select
-                    disabled={requerimentoMutation.isPending}
-                    defaultValue={form.fim_expediente}
-                    name="fim_expediente"
-                    required
-                    className="w-full rounded border border-slate-300 p-2 text-sm outline-none focus:border-slate-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-600/80"
-                    onChange={handleChange}
-                  >
-                    <option value="">Fim do Expediente</option>
-                    <option value="00:00">00:00</option>
-                    <option value="01:00">01:00</option>
-                    <option value="02:00">02:00</option>
-                    <option value="03:00">03:00</option>
-                    <option value="04:00">04:00</option>
-                    <option value="05:00">05:00</option>
-                    <option value="06:00">06:00</option>
-                    <option value="07:00">07:00</option>
-                    <option value="08:00">08:00</option>
-                    <option value="09:00">09:00</option>
-                    <option value="10:00">10:00</option>
-                    <option value="11:00">11:00</option>
-                    <option value="12:00">12:00</option>
-                    <option value="13:00">13:00</option>
-                    <option value="14:00">14:00</option>
-                    <option value="15:00">15:00</option>
-                    <option value="16:00">16:00</option>
-                    <option value="17:00">17:00</option>
-                    <option value="18:00">18:00</option>
-                    <option value="19:00">19:00</option>
-                    <option value="20:00">20:00</option>
-                    <option value="21:00">21:00</option>
-                    <option value="22:00">22:00</option>
-                    <option value="23:00">23:00</option>
-                  </select>
+                <div className="flex flex-col gap-4 md:flex-row">
+                  <div className="flex flex-1 flex-col gap-1">
+                    <label htmlFor="inicio_expediente">
+                      Início do Expediente:
+                    </label>
+                    <select
+                      disabled={requerimentoMutation.isPending}
+                      id="inicio_expediente"
+                      name="inicio_expediente"
+                      defaultValue={form.inicio_expediente}
+                      required
+                      className="w-full rounded border border-slate-300 p-2 text-sm outline-none focus:border-slate-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-600/80"
+                      onChange={handleChange}
+                    >
+                      <option value="">Horário Inicial</option>
+                      <option value="00:00">00:00</option>
+                      <option value="01:00">01:00</option>
+                      <option value="02:00">02:00</option>
+                      <option value="03:00">03:00</option>
+                      <option value="04:00">04:00</option>
+                      <option value="05:00">05:00</option>
+                      <option value="06:00">06:00</option>
+                      <option value="07:00">07:00</option>
+                      <option value="08:00">08:00</option>
+                      <option value="09:00">09:00</option>
+                      <option value="10:00">10:00</option>
+                      <option value="11:00">11:00</option>
+                      <option value="12:00">12:00</option>
+                      <option value="13:00">13:00</option>
+                      <option value="14:00">14:00</option>
+                      <option value="15:00">15:00</option>
+                      <option value="16:00">16:00</option>
+                      <option value="17:00">17:00</option>
+                      <option value="18:00">18:00</option>
+                      <option value="19:00">19:00</option>
+                      <option value="20:00">20:00</option>
+                      <option value="21:00">21:00</option>
+                      <option value="22:00">22:00</option>
+                      <option value="23:00">23:00</option>
+                    </select>
+                  </div>
+                  <div className="flex flex-1 flex-col gap-1">
+                    <label htmlFor="fim_expediente">Fim do Expediente:</label>
+                    <select
+                      disabled={requerimentoMutation.isPending}
+                      defaultValue={form.fim_expediente}
+                      id="fim_expediente"
+                      name="fim_expediente"
+                      required
+                      className="w-full rounded border border-slate-300 p-2 text-sm outline-none focus:border-slate-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-600/80"
+                      onChange={handleChange}
+                    >
+                      <option value="">Horário Final</option>
+                      <option value="00:00">00:00</option>
+                      <option value="01:00">01:00</option>
+                      <option value="02:00">02:00</option>
+                      <option value="03:00">03:00</option>
+                      <option value="04:00">04:00</option>
+                      <option value="05:00">05:00</option>
+                      <option value="06:00">06:00</option>
+                      <option value="07:00">07:00</option>
+                      <option value="08:00">08:00</option>
+                      <option value="09:00">09:00</option>
+                      <option value="10:00">10:00</option>
+                      <option value="11:00">11:00</option>
+                      <option value="12:00">12:00</option>
+                      <option value="13:00">13:00</option>
+                      <option value="14:00">14:00</option>
+                      <option value="15:00">15:00</option>
+                      <option value="16:00">16:00</option>
+                      <option value="17:00">17:00</option>
+                      <option value="18:00">18:00</option>
+                      <option value="19:00">19:00</option>
+                      <option value="20:00">20:00</option>
+                      <option value="21:00">21:00</option>
+                      <option value="22:00">22:00</option>
+                      <option value="23:00">23:00</option>
+                    </select>
+                  </div>
                 </div>
               </div>
             </div>
@@ -478,7 +488,7 @@ export default function RequerimentoCreatePage() {
             <div className="flex flex-col gap-4">
               <div className="flex flex-col">
                 <label htmlFor="">Imagem/Documento do Atestado Médico:</label>
-                <span className="mb-1 text-xs text-red-500">
+                <span className="mb-1 text-xs text-red-700">
                   * Certifique-se de que a foto/documento do atestado é legível.
                 </span>
                 <FileInput
@@ -538,7 +548,7 @@ export default function RequerimentoCreatePage() {
                   <label htmlFor="">
                     Imagem/Documento do Comprovante de Afastamento:
                   </label>
-                  <span className="mb-1 text-xs text-red-500">
+                  <span className="mb-1 text-xs text-red-700">
                     * Caso o servidor possua outro vínculo ou acumule matrícula,
                     incluir comprovante de afastamento.
                   </span>
@@ -565,13 +575,13 @@ export default function RequerimentoCreatePage() {
               )}
             </div>
           </div>
-          <div className="flex justify-center rounded-b-md border border-t-0 border-black/20 bg-slate-200 p-2">
+          <div className="flex justify-center rounded-b-md border border-t-0 border-black/20 bg-slate-50 p-2">
             <button
               disabled={requerimentoMutation.isPending}
               title={
                 requerimentoMutation.isPending ? "Carregando..." : "Enviar"
               }
-              className="rounded-lg bg-green-600 px-3 py-1 text-lg font-medium text-white drop-shadow hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-green-400"
+              className="rounded-lg bg-green-700 px-3 py-1 text-lg font-medium text-white drop-shadow hover:bg-green-800 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {requerimentoMutation.isPending ? (
                 <LoaderIcon className="animate-spin text-green-100 duration-2000" />

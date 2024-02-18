@@ -105,7 +105,7 @@ export default function DashboardLayout() {
         <TopNotification />
         <main
           id="content"
-          className="flex flex-1 flex-col overflow-auto bg-slate-200 p-2 md:p-4"
+          className="flex flex-1 flex-col overflow-auto bg-white p-2 md:p-4"
         >
           <Outlet />
         </main>

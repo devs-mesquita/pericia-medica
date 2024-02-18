@@ -97,12 +97,12 @@ export default function UserCreatePage() {
 
   return (
     <div className="mx-auto w-full max-w-[700px] rounded-lg shadow">
-      <div className="rounded-t-lg border border-black/10 bg-slate-100 p-2 text-center">
+      <div className="rounded-t-lg border border-slate-300 bg-slate-50 p-2 text-center">
         <h1 className="font-semibold">Novo Usuário</h1>
       </div>
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-2 rounded-b-lg border border-t-0 border-black/10 bg-slate-100"
+        className="flex flex-col gap-2 rounded-b-lg border border-t-0 border-slate-300 bg-slate-50"
       >
         <div className="flex flex-col gap-4 px-4 pb-2 pt-4">
           <div className="group flex flex-1 flex-col gap-1">

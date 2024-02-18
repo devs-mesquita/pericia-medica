@@ -12,7 +12,7 @@ export default function RequerimentoSuccessPage() {
   const data = location.state as SuccessPageState;
 
   return data.message === "new-requirement" ? (
-    <div className="mx-4 mt-10 flex max-w-[600px] flex-col border border-green-300 bg-green-100 px-4 py-3 text-center shadow sm:mx-auto">
+    <div className="mx-4 mt-10 flex max-w-[600px] flex-col border border-green-300 bg-green-50 px-4 py-3 text-center shadow sm:mx-auto">
       <h2 className="text-lg font-bold text-green-800">
         Requerimento registrado com sucesso.
       </h2>
@@ -28,7 +28,7 @@ export default function RequerimentoSuccessPage() {
       <p>A resposta com o agendamento poderá se dar em até 48 horas úteis.</p>
     </div>
   ) : data.message === "already-confirmado" || data.message === "confirmar" ? (
-    <div className="mx-4 mt-10 flex max-w-[600px] flex-col border border-green-300 bg-green-100 px-4 py-3 text-center shadow sm:mx-auto">
+    <div className="mx-4 mt-10 flex max-w-[600px] flex-col border border-green-300 bg-green-50 px-4 py-3 text-center shadow sm:mx-auto">
       <h2 className="text-lg font-bold text-green-800">
         Requerimento confirmado com sucesso.
       </h2>
@@ -42,7 +42,7 @@ export default function RequerimentoSuccessPage() {
       </p>
     </div>
   ) : data.message === "solicitar-reagendamento" ? (
-    <div className="mx-4 mt-10 flex max-w-[600px] flex-col border border-green-300 bg-green-100 px-4 py-3 text-center shadow sm:mx-auto">
+    <div className="mx-4 mt-10 flex max-w-[600px] flex-col border border-green-300 bg-green-50 px-4 py-3 text-center shadow sm:mx-auto">
       <h2 className="text-lg font-bold text-green-800">
         Reagendamento solicitado com sucesso.
       </h2>
@@ -58,7 +58,7 @@ export default function RequerimentoSuccessPage() {
       <p>A resposta com o reagendamento poderá se dar em até 48 horas úteis.</p>
     </div>
   ) : data.message === "recusado" ? (
-    <div className="mx-4 mt-10 flex max-w-[600px] flex-col border border-red-300 bg-red-100 px-4 py-3 text-center shadow sm:mx-auto">
+    <div className="mx-4 mt-10 flex max-w-[600px] flex-col border border-red-300 bg-red-50 px-4 py-3 text-center shadow sm:mx-auto">
       <h2 className="text-lg font-bold text-red-800">
         Este requerimento foi recusado.
       </h2>
@@ -69,7 +69,7 @@ export default function RequerimentoSuccessPage() {
       <p>O requerimento foi recusado após análise.</p>
     </div>
   ) : data.message === "em-analise" ? (
-    <div className="mx-4 mt-10 flex max-w-[600px] flex-col border border-slate-300 bg-slate-100 px-4 py-3 text-center shadow sm:mx-auto">
+    <div className="mx-4 mt-10 flex max-w-[600px] flex-col border border-slate-300 bg-slate-50 px-4 py-3 text-center shadow sm:mx-auto">
       <h2 className="text-lg font-bold text-slate-800">
         Este requerimento está em análise.
       </h2>

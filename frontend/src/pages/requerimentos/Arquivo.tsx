@@ -434,7 +434,7 @@ export default function RequerimentosArquivoPage() {
   }, [columnFilters, sorting, pagination]);
 
   return (
-    <div className="flex flex-1 flex-col rounded-md bg-slate-100 p-3 shadow shadow-black/20">
+    <div className="flex flex-1 flex-col rounded-md bg-slate-50 p-3 shadow shadow-black/20">
       <DataTable
         isFetching={isFetching}
         columnFilters={columnFilters}
