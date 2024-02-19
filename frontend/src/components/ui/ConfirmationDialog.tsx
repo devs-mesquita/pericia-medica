@@ -85,7 +85,7 @@ export default function ConfirmationDialog({
               <button
                 onClick={handleAccept}
                 disabled={isPending}
-                className="flex-1 rounded bg-green-600 bg-gradient-to-r px-4 py-1 font-semibold text-white shadow shadow-black/20 hover:bg-green-700 hover:text-white disabled:bg-slate-500/10"
+                className="flex-1 rounded bg-green-700 bg-gradient-to-r px-4 py-1 font-semibold text-white shadow shadow-black/20 hover:bg-green-800 hover:text-white disabled:bg-slate-500/10"
               >
                 CONFIRMAR
               </button>

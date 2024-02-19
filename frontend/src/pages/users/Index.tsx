@@ -324,7 +324,7 @@ export default function UserIndexPage() {
               <span className="ml-2">Usuários</span>
             </h1>
             <Link
-              className="rounded bg-green-500 p-1 text-white hover:bg-green-600"
+              className="rounded bg-green-700 p-1 text-white hover:bg-green-800"
               to="/users/create"
             >
               <PlusSquareIcon className="h-5 w-5" />
