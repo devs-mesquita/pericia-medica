@@ -100,7 +100,7 @@ export default function FileInput({
           disabled={disabled}
           onChange={handleChange}
           type="file"
-          name="atestado[]"
+          name="files"
           id={id}
           className="absolute left-0 h-[1px] w-[1px]"
           accept={fileTypes.join(",")}
