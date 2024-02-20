@@ -129,7 +129,7 @@ class RequerimentoController extends Controller
         } catch (Exception $e) {
           $requerimento->envio_create = 0;
         }
-        $requerimento->update();
+        $requerimento->save();
       }
 
       DB::commit();
