@@ -1114,8 +1114,7 @@ class RequerimentoController extends Controller
 
       foreach ($requerimentos as $requerimento) {
         $oldReq = DB::connection("mysql_old")
-        ->select("select * from requerimento_pericias where protocolo = '".$requerimento->protocolo."';")
-        ->first();
+        ->select("select * from requerimento_pericias where protocolo = '".$requerimento->protocolo."';")[0];
 
         if (!$oldReq) {
           continue;
