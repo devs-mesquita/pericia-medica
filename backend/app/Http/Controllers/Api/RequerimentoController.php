@@ -1114,13 +1114,13 @@ class RequerimentoController extends Controller
 
       foreach ($requerimentos as $requerimento) {
         $oldReq = DB::connection("mysql_old")
-        ->select("select * from requerimento_pericias where protocolo = '".$requerimento->protocolo."';")[0];
+        ->select("select * from requerimento_pericias where protocolo = '".$requerimento->protocolo."';");
 
-        if (!$oldReq) {
+        if (count($oldReq) === 0) {
           continue;
         }
 
-        $requerimento->created_at = $oldReq->created_at;
+        $requerimento->created_at = $oldReq[0]->created_at;
         $requerimento->save();
       }
       DB::commit();
