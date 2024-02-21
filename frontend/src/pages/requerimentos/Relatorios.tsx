@@ -57,7 +57,7 @@ export default function RequerimentoRelatoriosPage() {
       requerimentoToPDF({
         requerimentos: data.requerimentos,
         from: new Date(data.from),
-        to: new Date(data.from),
+        to: new Date(data.to),
       });
     },
     onError: (err) => {

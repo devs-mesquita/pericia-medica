@@ -6,8 +6,6 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\RequerimentoController;
 use App\Http\Controllers\Api\RequerimentoDirecionamentoController;
 
-#Route::('migrate_data', [RequerimentoController::class, 'migrateData']);
-
 Route::controller(AuthController::class)->group(function () {
   Route::get('checkpassword', 'checkDefaultPassword');
   Route::post('login', 'login');
@@ -56,5 +54,8 @@ Route::middleware(['api-auth'])->group(function () {
     Route::get('/realocacao', [RequerimentoController::class, 'getRealocacoes']);
     Route::patch('/realocacao', [RequerimentoController::class, 'applyRealocacoes']);
     Route::post('/resend-failed-emails', [RequerimentoController::class, 'resendFailedEmails']);
+
+    #Route::post('migrate_data', [RequerimentoController::class, 'migrateData']);
+    Route::post('update_data', [RequerimentoController::class, 'updateData']);
   });
 });

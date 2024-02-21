@@ -162,7 +162,7 @@ export default function RequerimentoShowPage() {
                 <span className="font-normal">
                   {requerimento?.inicio_atestado_date &&
                     format(
-                      requerimento.inicio_atestado_date || "",
+                      `${requerimento.inicio_atestado_date} 12:00:00` || "",
                       "dd/LL/yyyy",
                     )}
                 </span>

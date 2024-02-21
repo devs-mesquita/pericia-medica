@@ -1105,4 +1105,29 @@ class RequerimentoController extends Controller
 
     return ["message" => "ok"];
   }
+
+  public function updateData ()
+  {
+    DB::beginTransaction();
+    try {
+      $requerimentos = Requerimento::get();
+
+      foreach ($requerimentos as $requerimento) {
+        $oldReq = DB::connection("mysql_old")
+        ->select("select * from requerimento_pericias where protocolo = ".$requerimento->protocolo)
+        ->first();
+
+        if (!$oldReq) {
+          continue;
+        }
+
+        $requerimento->created_at = $oldReq->created_at;
+        $requerimento->save();
+      }
+      return ["message" => "ok"];
+
+    } catch (Exception $e) {
+      return $e;
+    }
+  }
 }
