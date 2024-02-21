@@ -56,6 +56,6 @@ Route::middleware(['api-auth'])->group(function () {
     Route::post('/resend-failed-emails', [RequerimentoController::class, 'resendFailedEmails']);
 
     #Route::post('migrate_data', [RequerimentoController::class, 'migrateData']);
-    Route::post('update_data', [RequerimentoController::class, 'updateData']);
+    #Route::post('update_data', [RequerimentoController::class, 'updateData']);
   });
 });
