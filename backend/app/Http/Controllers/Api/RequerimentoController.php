@@ -1114,7 +1114,7 @@ class RequerimentoController extends Controller
 
       foreach ($requerimentos as $requerimento) {
         $oldReq = DB::connection("mysql_old")
-        ->select("select * from requerimento_pericias where protocolo = ".$requerimento->protocolo)
+        ->select("select * from requerimento_pericias where protocolo = '".$requerimento->protocolo."';")
         ->first();
 
         if (!$oldReq) {
@@ -1124,9 +1124,11 @@ class RequerimentoController extends Controller
         $requerimento->created_at = $oldReq->created_at;
         $requerimento->save();
       }
+      DB::commit();
       return ["message" => "ok"];
 
     } catch (Exception $e) {
+      DB::rollBack();
       return $e;
     }
   }
