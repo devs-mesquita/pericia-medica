@@ -122,15 +122,15 @@ class RequerimentoController extends Controller
           ]);
         };
 
-        try {
-          Mail::to($requerimento->email)->send(new RequerimentoCreateMail($requerimento));
-          $requerimento->envio_create = 1;
-
-        } catch (Exception $e) {
-          $requerimento->envio_create = 0;
-        }
-        $requerimento->save();
       }
+
+      try {
+        Mail::to($requerimento->email)->send(new RequerimentoCreateMail($requerimento));
+        $requerimento->envio_create = 1;
+      } catch (Exception $e) {
+        $requerimento->envio_create = 0;
+      }
+      $requerimento->save();
 
       DB::commit();
       return response()->json([
