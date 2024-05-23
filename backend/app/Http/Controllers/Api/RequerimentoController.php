@@ -127,7 +127,7 @@ class RequerimentoController extends Controller
       try {
         Mail::to($requerimento->email)->send(new RequerimentoCreateMail($requerimento));
         $requerimento->envio_create = 1;
-      } catch (Exception $e) {
+      } catch (\Exception $e) {
         $requerimento->envio_create = 0;
       }
       $requerimento->save();
@@ -138,7 +138,7 @@ class RequerimentoController extends Controller
         "message" => "new-requirement"
       ]);
 
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
       foreach($atestadoFiles as $file) {
         unlink(storage_path('app/public/atestados/'.$file));
       }
@@ -180,7 +180,7 @@ class RequerimentoController extends Controller
             Mail::to($requerimento->email)->send(new ReagendamentoRecusadoMail($requerimento, $latestReagendamento));
             $latestReagendamento->envio_avaliacao = 1;
   
-          } catch (Exception $e) {
+          } catch (\Exception $e) {
             $latestReagendamento->envio_avaliacao = 0;
           }
 
@@ -199,7 +199,7 @@ class RequerimentoController extends Controller
               Mail::to($requerimento->email)->send(new ReagendamentoAgendadoMail($requerimento, $latestReagendamento));
               $latestReagendamento->envio_avaliacao = 1;
     
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
               $latestReagendamento->envio_avaliacao = 0;
             }
 
@@ -214,7 +214,7 @@ class RequerimentoController extends Controller
               Mail::to($requerimento->email)->send(new ReagendamentoNaoPresencialMail($requerimento, $latestReagendamento));
               $latestReagendamento->envio_avaliacao = 1;
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
               $latestReagendamento->envio_avaliacao = 0;
             }
           }
@@ -237,7 +237,7 @@ class RequerimentoController extends Controller
           try {
             Mail::to($requerimento->email)->send(new RequerimentoRecusadoMail($requerimento));
             $requerimento->envio_avaliacao = 1;
-          } catch (Exception $e) {
+          } catch (\Exception $e) {
             $requerimento->envio_avaliacao = 0;
           }
 
@@ -256,7 +256,7 @@ class RequerimentoController extends Controller
               Mail::to($requerimento->email)->send(new RequerimentoAgendadoMail($requerimento));
               $requerimento->envio_avaliacao = 1;
     
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
               $requerimento->envio_avaliacao = 0;
             }
 
@@ -271,7 +271,7 @@ class RequerimentoController extends Controller
               Mail::to($requerimento->email)->send(new RequerimentoNaoPresencialMail($requerimento));
               $requerimento->envio_avaliacao = 1;
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
               $requerimento->envio_avaliacao = 0;
             }
           }
@@ -283,7 +283,7 @@ class RequerimentoController extends Controller
       DB::commit();
       return ["message" => "ok"];
 
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
       DB::rollBack();
       return response()->json([ "message" => "error" ], 400);
     }
@@ -360,7 +360,7 @@ class RequerimentoController extends Controller
             Mail::to($requerimento->email)->send(new ReagendamentoCreateMail($requerimento, $newReagendamento));
             $newReagendamento->envio_create = 1;
   
-          } catch (Exception $e) {
+          } catch (\Exception $e) {
             $newReagendamento->envio_create = 0;
           }
 
@@ -405,7 +405,7 @@ class RequerimentoController extends Controller
             Mail::to($requerimento->email)->send(new ReagendamentoCreateMail($requerimento, $newReagendamento));
             $newReagendamento->envio_create = 1;
             
-          } catch (Exception $e) {
+          } catch (\Exception $e) {
             $newReagendamento->envio_create = 0;
           }
           
@@ -616,7 +616,7 @@ class RequerimentoController extends Controller
               $requerimento->envio_realocacao = 1;
               $newRealocacao->envio_create = 1;
               
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
               $newRealocacao->envio_create = 0;
               $requerimento->envio_realocacao = 0;
             }
@@ -653,7 +653,7 @@ class RequerimentoController extends Controller
               $reagendamento->envio_realocacao = 1;
               $newRealocacao->envio_create = 1;
               
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
               $reagendamento->envio_realocacao = 0;
               $newRealocacao->envio_create = 0;
             }
@@ -667,7 +667,7 @@ class RequerimentoController extends Controller
       DB::commit();
       return ["message" => "ok"];
 
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
       DB::rollBack();
       return response()->json(["message" => "error", "e" => $e], 400);
     }
@@ -723,7 +723,7 @@ class RequerimentoController extends Controller
             Mail::to($requerimento->email)->send(new RequerimentoCreateMail($requerimento));
             $requerimento->envio_create = 1;
     
-          } catch (Exception $e) {
+          } catch (\Exception $e) {
             $requerimento->envio_create = 0;
           }
           $requerimento->save();
@@ -734,7 +734,7 @@ class RequerimentoController extends Controller
             try {
               Mail::to($requerimento->email)->send(new RequerimentoRecusadoMail($requerimento));
               $requerimento->envio_avaliacao = 1;
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
               $requerimento->envio_avaliacao = 0;
             }
             $requerimento->save();
@@ -744,7 +744,7 @@ class RequerimentoController extends Controller
               Mail::to($requerimento->email)->send(new RequerimentoAgendadoMail($requerimento));
               $requerimento->envio_avaliacao = 1;
     
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
               $requerimento->envio_avaliacao = 0;
             }
             $requerimento->save();
@@ -754,7 +754,7 @@ class RequerimentoController extends Controller
               Mail::to($requerimento->email)->send(new RequerimentoNaoPresencialMail($requerimento));
               $requerimento->envio_avaliacao = 1;
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
               $requerimento->envio_avaliacao = 0;
             }
             $requerimento->save();
@@ -783,7 +783,7 @@ class RequerimentoController extends Controller
                 $reagendamento->requerimento->envio_realocacao = 1;
                 $reagendamento->envio_create = 1;
                 
-              } catch (Exception $e) {
+              } catch (\Exception $e) {
                 $reagendamento->envio_create = 0;
                 $reagendamento->requerimento->envio_realocacao = 0;
               }
@@ -795,7 +795,7 @@ class RequerimentoController extends Controller
                 Mail::to($reagendamento->requerimento->email)->send(new ReagendamentoCreateMail($reagendamento->requerimento, $reagendamento));
                 $reagendamento->envio_create = 1;
       
-              } catch (Exception $e) {
+              } catch (\Exception $e) {
                 $reagendamento->envio_create = 0;
               }
               $reagendamento->save();
@@ -810,7 +810,7 @@ class RequerimentoController extends Controller
                 $upperReagendamento->envio_realocacao = 1;
                 $reagendamento->envio_create = 1;
                 
-              } catch (Exception $e) {
+              } catch (\Exception $e) {
                 $upperReagendamento->envio_realocacao = 0;
                 $reagendamento->envio_create = 0;
               }
@@ -822,7 +822,7 @@ class RequerimentoController extends Controller
                 Mail::to($reagendamento->requerimento->email)->send(new ReagendamentoCreateMail($reagendamento->requerimento, $reagendamento));
                 $reagendamento->envio_create = 1;
       
-              } catch (Exception $e) {
+              } catch (\Exception $e) {
                 $reagendamento->envio_create = 0;
               }
               $reagendamento->save();
@@ -834,7 +834,7 @@ class RequerimentoController extends Controller
             try {
               Mail::to($reagendamento->requerimento->email)->send(new ReagendamentoRecusadoMail($reagendamento->requerimento, $reagendamento));
               $reagendamento->envio_avaliacao = 1;
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
               $reagendamento->envio_avaliacao = 0;
             }
             $reagendamento->save();
@@ -844,7 +844,7 @@ class RequerimentoController extends Controller
               Mail::to($reagendamento->requerimento->email)->send(new ReagendamentoAgendadoMail($reagendamento->requerimento, $reagendamento));
               $reagendamento->envio_avaliacao = 1;
     
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
               $reagendamento->envio_avaliacao = 0;
             }
             $reagendamento->save();
@@ -854,7 +854,7 @@ class RequerimentoController extends Controller
               Mail::to($reagendamento->requerimento->email)->send(new ReagendamentoNaoPresencialMail($reagendamento->requerimento, $reagendamento));
               $reagendamento->envio_avaliacao = 1;
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
               $reagendamento->envio_avaliacao = 0;
             }
             $reagendamento->save();
@@ -865,7 +865,7 @@ class RequerimentoController extends Controller
       DB::commit();
       return ["message" => "ok"];
 
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
       DB::rollBack();
       return response()->json(["message" => "error", "e" => $e]);
     }
@@ -1126,7 +1126,7 @@ class RequerimentoController extends Controller
       DB::commit();
       return ["message" => "ok"];
 
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
       DB::rollBack();
       return $e;
     }
