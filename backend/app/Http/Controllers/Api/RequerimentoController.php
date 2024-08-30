@@ -774,7 +774,7 @@ class RequerimentoController extends Controller
       // foreach, resend failed emails
       foreach($reagendamentos as $reagendamento) {
         if ($reagendamento->envio_create === 0) {
-          $firstReagendamento = RequerimentoReagendamentos::where("requerimento_id", $reagendamento->requerimento_id)->first();
+          $firstReagendamento = RequerimentoReagendamento::where("requerimento_id", $reagendamento->requerimento_id)->first();
 
           if ($firstReagendamento->id === $reagendamento->id) {
             if ($reagendamento->requerimento->realocado_at) {
@@ -802,7 +802,7 @@ class RequerimentoController extends Controller
             }
 
           } else {
-            $upperReagendamento = RequerimentoReagendamentos::where("requerimento_id", $reagendamento->requerimento_id)->where("id", "<", $reagendamento->id)->latest();
+            $upperReagendamento = RequerimentoReagendamento::where("requerimento_id", $reagendamento->requerimento_id)->where("id", "<", $reagendamento->id)->latest();
 
             if ($upperReagendamento->realocado_at) {
               try {
